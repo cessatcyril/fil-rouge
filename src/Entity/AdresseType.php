@@ -10,12 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AdresseType
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
 
     /**
      * @ORM\Column(type="smallint")
@@ -23,21 +17,18 @@ class AdresseType
     private $typAdresse;
 
     /**
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity=Client::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $client;
 
     /**
+     * @ORM\Id
      * @ORM\OneToOne(targetEntity=Adresse::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $adresse;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getTypAdresse(): ?int
     {
