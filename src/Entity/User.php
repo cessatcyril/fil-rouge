@@ -42,7 +42,7 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToOne(targetEntity=Employe::class, inversedBy="user", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $employe;
 
