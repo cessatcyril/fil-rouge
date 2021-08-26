@@ -72,7 +72,6 @@ class Produit
 
     public function __construct()
     {
-        $this->fournisseur = new ArrayCollection();
         $this->fournisseurs = new ArrayCollection();
     }
 

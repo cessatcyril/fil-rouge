@@ -60,11 +60,6 @@ class Fournisseur
     private $fouDate;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Produit::class, mappedBy="fournisseur")
-     */
-    private $produit;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Produit::class, mappedBy="fournisseurs")
      */
     private $produits;
@@ -72,7 +67,6 @@ class Fournisseur
     public function __construct()
     {
         $this->ContactFournisseur = new ArrayCollection();
-        $this->produit = new ArrayCollection();
         $this->produits = new ArrayCollection();
     }
 
@@ -173,33 +167,6 @@ class Fournisseur
     public function setFouDate(\DateTimeInterface $fouDate): self
     {
         $this->fouDate = $fouDate;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Produit[]
-     */
-    public function getProduit(): Collection
-    {
-        return $this->produit;
-    }
-
-    public function addProduit(Produit $produit): self
-    {
-        if (!$this->produit->contains($produit)) {
-            $this->produit[] = $produit;
-            $produit->addFournisseur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduit(Produit $produit): self
-    {
-        if ($this->produit->removeElement($produit)) {
-            $produit->removeFournisseur($this);
-        }
 
         return $this;
     }
