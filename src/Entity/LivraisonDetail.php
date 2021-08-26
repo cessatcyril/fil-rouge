@@ -11,33 +11,24 @@ use Doctrine\ORM\Mapping as ORM;
 class LivraisonDetail
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $detQuantiteLivree;
 
     /**
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity=Livraison::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $livraison;
 
     /**
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity=Produit::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $produit;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getDetQuantiteLivree(): ?int
     {
