@@ -34,16 +34,6 @@ class Employe
      */
     private $empTel;
 
-    /**
-     * @ORM\OneToOne(targetEntity=User::class, mappedBy="employe", cascade={"persist", "remove"})
-     */
-    private $user;
-
-    public function __construct()
-    {
-        $this->Client = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -81,23 +71,6 @@ class Employe
     public function setEmpTel(string $empTel): self
     {
         $this->empTel = $empTel;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): self
-    {
-        // set the owning side of the relation if necessary
-        if ($user->getEmploye() !== $this) {
-            $user->setEmploye($this);
-        }
-
-        $this->user = $user;
 
         return $this;
     }

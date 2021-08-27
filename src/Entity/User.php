@@ -34,17 +34,6 @@ class User implements UserInterface
      */
     private $password;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Client::class, inversedBy="user", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $client;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Employe::class, inversedBy="user", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $employe;
 
     public function getId(): ?int
     {
@@ -125,29 +114,5 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function getClient(): ?Client
-    {
-        return $this->client;
-    }
-
-    public function setClient(Client $client): self
-    {
-        $this->client = $client;
-
-        return $this;
-    }
-
-    public function getEmploye(): ?Employe
-    {
-        return $this->employe;
-    }
-
-    public function setEmploye(Employe $employe): self
-    {
-        $this->employe = $employe;
-
-        return $this;
     }
 }

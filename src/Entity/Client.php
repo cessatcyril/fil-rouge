@@ -59,20 +59,10 @@ class Client
      */
     private $entreprise;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Employe::class)
-     */
-    private $employe;
-
-    /**
-     * @ORM\OneToOne(targetEntity=User::class, mappedBy="client", cascade={"persist", "remove"})
-     */
-    private $user;
 
     public function __construct()
     {
         $this->Commande = new ArrayCollection();
-        $this->client = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,35 +162,6 @@ class Client
     public function setEntreprise(?Entreprise $entreprise): self
     {
         $this->entreprise = $entreprise;
-
-        return $this;
-    }
-
-    public function getEmploye(): ?Employe
-    {
-        return $this->employe;
-    }
-
-    public function setEmploye(?Employe $employe): self
-    {
-        $this->employe = $employe;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): self
-    {
-        // set the owning side of the relation if necessary
-        if ($user->getClient() !== $this) {
-            $user->setClient($this);
-        }
-
-        $this->user = $user;
 
         return $this;
     }
