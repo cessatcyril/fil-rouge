@@ -37,7 +37,7 @@ class Employe
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      */
-    private $utilisateur;
+    private $user;
 
     public function getId(): ?int
     {
@@ -80,14 +80,14 @@ class Employe
         return $this;
     }
 
-    public function getUtilisateur(): ?User
+    public function getUser(): ?User
     {
-        return $this->utilisateur;
+        return $this->user;
     }
 
-    public function setUtilisateur(?User $utilisateur): self
+    public function setUser(?User $user): self
     {
-        $this->utilisateur = $utilisateur;
+        $this->user = $user;
 
         return $this;
     }
