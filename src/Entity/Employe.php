@@ -34,6 +34,11 @@ class Employe
      */
     private $empTel;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     */
+    private $utilisateur;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +76,18 @@ class Employe
     public function setEmpTel(string $empTel): self
     {
         $this->empTel = $empTel;
+
+        return $this;
+    }
+
+    public function getUtilisateur(): ?User
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(?User $utilisateur): self
+    {
+        $this->utilisateur = $utilisateur;
 
         return $this;
     }
