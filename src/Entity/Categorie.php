@@ -24,6 +24,11 @@ class Categorie
      */
     private $catNom;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $catImage;
+
     public function __construct()
     {
         $this->SousCategorie = new ArrayCollection();
@@ -42,6 +47,18 @@ class Categorie
     public function setCatNom(string $catNom): self
     {
         $this->catNom = $catNom;
+
+        return $this;
+    }
+
+    public function getCatImage(): ?string
+    {
+        return $this->catImage;
+    }
+
+    public function setCatImage(string $catImage): self
+    {
+        $this->catImage = $catImage;
 
         return $this;
     }

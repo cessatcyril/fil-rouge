@@ -30,6 +30,11 @@ class SousCategorie
      */
     private $categorie;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $souImage;
+
     public function __construct()
     {
         $this->Produit = new ArrayCollection();
@@ -60,6 +65,18 @@ class SousCategorie
     public function setCategorie(?Categorie $categorie): self
     {
         $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getSouImage(): ?string
+    {
+        return $this->souImage;
+    }
+
+    public function setSouImage(string $souImage): self
+    {
+        $this->souImage = $souImage;
 
         return $this;
     }
