@@ -70,9 +70,15 @@ class Produit
      */
     private $fournisseurs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="produit")
+     */
+    private $image;
+
     public function __construct()
     {
         $this->fournisseurs = new ArrayCollection();
+        $this->image = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -194,5 +200,35 @@ class Produit
     public function getFournisseurs(): Collection
     {
         return $this->fournisseurs;
+    }
+
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImage(): Collection
+    {
+        return $this->image;
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->image->contains($image)) {
+            $this->image[] = $image;
+            $image->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->image->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getProduit() === $this) {
+                $image->setProduit(null);
+            }
+        }
+
+        return $this;
     }
 }
