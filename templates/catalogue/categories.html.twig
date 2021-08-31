@@ -14,8 +14,10 @@
     
     {% for categorie in categories %}
         <div>
-            <img src="/images/categorie/{{ categorie.catImage }}" alt="">
-            {{categorie.catNom}}
+            <a href="/categorie/{{categorie.Id}}">
+                <img src="/images/categorie/{{ categorie.catImage }}" alt="">
+                {{categorie.catNom}}
+            </a>
         </div>
     {% endfor %}
 </div>

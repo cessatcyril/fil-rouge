@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Categorie;
+use App\Entity\SousCategorie;
 use App\Repository\CategorieRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CatalogueController extends AbstractController
 {
@@ -24,20 +26,25 @@ class CatalogueController extends AbstractController
     }
 
     /**
-     * @Route("/categorie", name="categorie")
+     * @Route("/categorie/{categorie}", name="categorie")
      */
-    public function categorie(): Response
+    public function categorie(Categorie $categorie): Response
     {
+        $sousCategories = $categorie->getSousCategories();
+
         return $this->render('catalogue/sous_categories.html.twig', [
             'controller_name' => 'CatalogueController',
+            'sousCategories' => $sousCategories
         ]);
     }
 
     /**
      * @Route("/souscategorie", name="souscategorie")
      */
-    public function sousCategorie(): Response
+    public function sousCategorie(SousCategorie $sousCategorie): Response
     {
+        $produits = $sousCategorie->getProduits();
+
         return $this->render('catalogue/liste_produits.html.twig', [
             'controller_name' => 'CatalogueController',
         ]);
@@ -60,6 +67,4 @@ class CatalogueController extends AbstractController
     {
         return new BinaryFileResponse("../image/produit/" . $fichier);
     }
-
-
 }

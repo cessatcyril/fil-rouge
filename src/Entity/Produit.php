@@ -59,11 +59,11 @@ class Produit
      */
     private $proStockC;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=SousCategorie::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $sousCategorie;
+    // /**
+    //  * @ORM\ManyToOne(targetEntity=SousCategorie::class)
+    //  * @ORM\JoinColumn(nullable=false)
+    //  */
+    // private $sousCategorie;
 
     /**
      * @ORM\ManyToMany(targetEntity=Fournisseur::class, inversedBy="produits")
@@ -74,6 +74,12 @@ class Produit
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="produit")
      */
     private $image;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=SousCategorie::class, inversedBy="produits")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $sousCategorie;
 
     public function __construct()
     {
@@ -182,17 +188,17 @@ class Produit
         return $this;
     }
 
-    public function getSousCategorie(): ?SousCategorie
-    {
-        return $this->sousCategorie;
-    }
+    // public function getSousCategorie(): ?SousCategorie
+    // {
+    //     return $this->sousCategorie;
+    // }
 
-    public function setSousCategorie(?SousCategorie $sousCategorie): self
-    {
-        $this->sousCategorie = $sousCategorie;
+    // public function setSousCategorie(?SousCategorie $sousCategorie): self
+    // {
+    //     $this->sousCategorie = $sousCategorie;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * @return Collection|Fournisseur[]
@@ -228,6 +234,18 @@ class Produit
                 $image->setProduit(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSousCategorie(): ?SousCategorie
+    {
+        return $this->sousCategorie;
+    }
+
+    public function setSousCategorie(?SousCategorie $sousCategorie): self
+    {
+        $this->sousCategorie = $sousCategorie;
 
         return $this;
     }

@@ -24,20 +24,32 @@ class SousCategorie
      */
     private $souNom;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Categorie::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $categorie;
+    // /**
+    //  * @ORM\ManyToOne(targetEntity=Categorie::class)
+    //  * @ORM\JoinColumn(nullable=false)
+    //  */
+    // private $categorie;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $souImage;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="sousCategories")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $categorie;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Produit::class, mappedBy="sousCategorie")
+     */
+    private $produits;
+
     public function __construct()
     {
         $this->Produit = new ArrayCollection();
+        $this->produits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -57,6 +69,30 @@ class SousCategorie
         return $this;
     }
 
+    // public function getCategorie(): ?Categorie
+    // {
+    //     return $this->categorie;
+    // }
+
+    // public function setCategorie(?Categorie $categorie): self
+    // {
+    //     $this->categorie = $categorie;
+
+    //     return $this;
+    // }
+
+    public function getSouImage(): ?string
+    {
+        return $this->souImage;
+    }
+
+    public function setSouImage(string $souImage): self
+    {
+        $this->souImage = $souImage;
+
+        return $this;
+    }
+
     public function getCategorie(): ?Categorie
     {
         return $this->categorie;
@@ -69,14 +105,32 @@ class SousCategorie
         return $this;
     }
 
-    public function getSouImage(): ?string
+    /**
+     * @return Collection|Produit[]
+     */
+    public function getProduits(): Collection
     {
-        return $this->souImage;
+        return $this->produits;
     }
 
-    public function setSouImage(string $souImage): self
+    public function addProduit(Produit $produit): self
     {
-        $this->souImage = $souImage;
+        if (!$this->produits->contains($produit)) {
+            $this->produits[] = $produit;
+            $produit->setSousCategorie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduit(Produit $produit): self
+    {
+        if ($this->produits->removeElement($produit)) {
+            // set the owning side to null (unless already changed)
+            if ($produit->getSousCategorie() === $this) {
+                $produit->setSousCategorie(null);
+            }
+        }
 
         return $this;
     }
