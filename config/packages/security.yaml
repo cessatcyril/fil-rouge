@@ -43,3 +43,5 @@ security:
         - { path: ^/professionnel, roles: ROLE_PROFESSIONNEL }
         - { path: ^/particulier, roles: ROLE_PARTICULIER }
         - { path: ^/anonyme, roles: ROLE_ANONYME }
+        - { path: ^/private_pic, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
