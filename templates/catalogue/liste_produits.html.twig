@@ -11,10 +11,16 @@
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/magash/Dev/Symfony/Greenvalley/src/Controller/CatalogueController.php'|file_link(0) }}">src/Controller/CatalogueController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/magash/Dev/Symfony/Greenvalley/templates/catalogue/index.html.twig'|file_link(0) }}">templates/catalogue/index.html.twig</a></code></li>
-    </ul>
+
+    
+    {% for produit in listeProduits %}
+        <div>
+            
+            <a href="/produit/{{produit.Id}}">
+                <img src="/images/produit/{{ produit.imagePrincipale }}" alt="image du produit">
+                {{produit.proAccroche}}
+            </a>
+        </div>
+    {% endfor %}
 </div>
 {% endblock %}

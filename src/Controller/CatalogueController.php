@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Categorie;
+use App\Entity\Image;
+use App\Entity\Produit;
 use App\Entity\SousCategorie;
 use App\Repository\CategorieRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,9 +15,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class CatalogueController extends AbstractController
 {
     /**
-     * @Route("/", name="accueil")
+     * @Route("/", name="categorie")
      */
-    public function accueil(CategorieRepository $repo): Response
+    public function categories(CategorieRepository $repo): Response
     {
         $categories = $repo->findAll();
 
@@ -26,9 +28,9 @@ class CatalogueController extends AbstractController
     }
 
     /**
-     * @Route("/categorie/{categorie}", name="categorie")
+     * @Route("/sous_categories/{categorie}", name="sous_categories")
      */
-    public function categorie(Categorie $categorie): Response
+    public function sousCategories(Categorie $categorie): Response
     {
         $sousCategories = $categorie->getSousCategories();
 
@@ -39,28 +41,31 @@ class CatalogueController extends AbstractController
     }
 
     /**
-     * @Route("/souscategorie", name="souscategorie")
+     * @Route("/liste_produits/{sousCategorie}", name="liste_produits")
      */
-    public function sousCategorie(SousCategorie $sousCategorie): Response
+    public function listeProduits(SousCategorie $sousCategorie): Response
     {
-        $produits = $sousCategorie->getProduits();
+        $listeProduits = $sousCategorie->getProduits();
 
         return $this->render('catalogue/liste_produits.html.twig', [
             'controller_name' => 'CatalogueController',
+            'listeProduits' => $listeProduits
         ]);
     }
 
     /**
-     * @Route("/produit", name="produit")
+     * @Route("/produit/{produit}", name="produit")
      */
-    public function produit(): Response
+    public function produit(Produit $produit): Response
     {
         return $this->render('catalogue/detail_produit.html.twig', [
             'controller_name' => 'CatalogueController',
+            'produit' => $produit
         ]);
     }
 
     /**
+     * Affiche une image dans un dossier privé
      * @Route("/private_pic/{fichier}", name="private_pic")
      */
     public function private_pic($fichier): Response

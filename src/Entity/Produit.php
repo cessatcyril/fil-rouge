@@ -188,18 +188,6 @@ class Produit
         return $this;
     }
 
-    // public function getSousCategorie(): ?SousCategorie
-    // {
-    //     return $this->sousCategorie;
-    // }
-
-    // public function setSousCategorie(?SousCategorie $sousCategorie): self
-    // {
-    //     $this->sousCategorie = $sousCategorie;
-
-    //     return $this;
-    // }
-
     /**
      * @return Collection|Fournisseur[]
      */
@@ -248,5 +236,21 @@ class Produit
         $this->sousCategorie = $sousCategorie;
 
         return $this;
+    }
+
+    public function getImagePrincipale() {
+        foreach ($this->image as $i) {
+            return $i->getImaNom();
+        }
+        return "";
+    }
+
+    public function getImages() {
+        $liste = null;
+        
+        foreach ($this->image as $key) {
+            $liste[] = $key->getImaNom();
+        }
+        return $liste;
     }
 }

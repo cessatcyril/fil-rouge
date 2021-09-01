@@ -13,8 +13,11 @@
 
     This friendly message is coming from:
     <ul>
-        <li>Your controller at <code><a href="{{ '/home/magash/Dev/Symfony/Greenvalley/src/Controller/CatalogueController.php'|file_link(0) }}">src/Controller/CatalogueController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/magash/Dev/Symfony/Greenvalley/templates/catalogue/index.html.twig'|file_link(0) }}">templates/catalogue/index.html.twig</a></code></li>
+        {% for row in produit.images %}
+            <li><img src="/images/produit/{{ row }}" alt="N'affiche pas d'image"></li>
+        {% endfor %}
+        <li>{{ produit.proProduit }}</li>
+        <li>{{ produit.proDescription }}</li>
     </ul>
 </div>
 {% endblock %}
