@@ -3,18 +3,17 @@
 {% block title %}Hello PanierController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% for ligne in panier %}
+{{ ligne.nom}} <br>
+{{ ligne.accroche }} <br>
+<a href="/panier/reduire/{{ligne.id}}">--</a>
+{{ ligne.quantite }}
+<a href="/panier/ajouter/{{ligne.id}}">++</a>
+<br>
+<a href="/panier/supprimer/{{ligne.id}}">supprimer</a>
+<hr>
+{% endfor %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/magash/Dev/Symfony/Greenvalley/src/Controller/PanierController.php'|file_link(0) }}">src/Controller/PanierController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/magash/Dev/Symfony/Greenvalley/templates/panier/index.html.twig'|file_link(0) }}">templates/panier/index.html.twig</a></code></li>
-    </ul>
-</div>
+
 {% endblock %}
