@@ -2,29 +2,58 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\CarteCreditType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PaiementController extends AbstractController
 {
     /**
-     * @Route("/paiement", name="paiement")
+     * @Route("/paiement/moyen_de_paiement", name="paiement_moyen")
      */
-    public function paiement(): Response
+    public function paiementMoyen(): Response
     {
-        return $this->render('paiement/paiement.html.twig', [
-            'controller_name' => 'PaiementController',
+        return $this->render('paiement/moyen.html.twig', [
+            'controller_name' => 'GestionCompteController',
         ]);
     }
 
     /**
-     * @Route("/validation-paiement", name="validation_paiement")
+     * @Route("/paiement/moyen_de_paiement/carte_de_credit", name="paiement_carte")
      */
-    public function validationPaiement(): Response
+    public function paiementCarte(Request $request): Response
     {
-        return $this->render('paiement/validation.html.twig', [
-            'controller_name' => 'PaiementController',
+        $form = $this->createForm(CarteCreditType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->redirectToRoute();
+        }
+
+        return $this->render('paiement/carte.html.twig', [
+            'controller_name' => 'GestionCompteController',
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/paiement/moyen_de_paiement/virement", name="paiement_virement")
+     */
+    public function paiementVirement(): Response
+    {
+        return $this->render('paiement/virement.html.twig', [
+            'controller_name' => 'GestionCompteController',
+        ]);
+    }
+
+    /**
+     * @Route("/paiement/moyen_de_paiement/paypal", name="paiement_paypal")
+     */
+    public function paiementPaypal(): Response
+    {
+        return $this->render('paiement/paypal.html.twig', [
+            'controller_name' => 'GestionCompteController',
         ]);
     }
 }

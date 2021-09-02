@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -51,13 +52,35 @@ class CarteCreditType extends AbstractType
                     ])
                 ]
             ])
-            ->add('expiration', DateType::class, [
-                'widget' => 'choice',
-                'required' => true,
-                'html5' => true,
+            ->add('mois', ChoiceType::class, [
+                'required' => true, 
+                'choices' => [
+                    'janvier' => 1,
+                    'février' => 2,
+                    'mars' => 3,
+                    'avril' => 4,
+                    'mai' => 5,
+                    'juin' => 6,
+                    'juillet' => 7,
+                    'août' => 8,
+                    'septembre' => 9,
+                    'octobre' => 10,
+                    'novembre' => 11,
+                    'décembre' => 12,
+                ]
             ])
-
+            ->add('annee', ChoiceType::class, [
+                'required' => true, 
+                'choices' => $this->choixAnnee(),
+            ])
         ;
+    }
+
+    public function choixAnnee() {
+        $distance = 5;
+        $yearsBefore = date('Y', mktime(0, 0, 0, date("m"), date("d"), date("Y")));
+        $yearsAfter = date('Y', mktime(0, 0, 0, date("m"), date("d"), date("Y") + $distance));
+        return array_combine(range($yearsBefore, $yearsAfter), range($yearsBefore, $yearsAfter));
     }
 
     public function configureOptions(OptionsResolver $resolver)
