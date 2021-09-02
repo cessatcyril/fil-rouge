@@ -28,7 +28,7 @@ class PaiementController extends AbstractController
         $form = $this->createForm(CarteCreditType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute();
+            return $this->redirectToRoute('commande_creer');
         }
 
         return $this->render('paiement/carte.html.twig', [
