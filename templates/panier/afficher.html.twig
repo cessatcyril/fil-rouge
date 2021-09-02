@@ -4,7 +4,69 @@
 
 {% block body %}
 
-{% for ligne in panier %}
+<header>
+    <div class="content">
+        <h1>mon panier :</h1>
+    </div>
+</header>
+
+<section>
+    <div class="columns">
+        <div class="column is-1"></div>
+        <div class="column is-10">
+            <div class="columns is-multiline">
+
+                {% for ligne in panier %}
+
+                <div class="column is-half">
+
+                    <div class="columns is-multiline">
+                        <div class="column is-half">
+                            <figure class="image is-480x480">
+                                <img src="/pic/{{ ligne.id }}" />
+                            </figure>
+                        </div>
+
+                        <div class="column is-half">
+                            <div>
+                                <b>
+                                    {{ ligne.nom}}
+                                </b>
+                            </div>
+                            <div>
+                                <b>
+                                    {{ ligne.accroche }}
+                                </b>
+                            </div>
+                            <div>
+                                <a href="/panier/reduire/{{ligne.id}}">
+                                    <button class="button is-link">--</button>
+                                </a>
+                                {{ ligne.quantite }}
+                                <a href="/panier/ajouter/{{ligne.id}}">
+                                    <button class="button is-link">++</button>
+                                </a>
+                            </div>
+                            <br>
+                            <div>
+                                <a href="/panier/supprimer/{{ligne.id}}">
+                                    <button class="button is-link">supprimer</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+<div class="column is-1"></div>
+</div>
+
+
+
+<!-- {% for ligne in panier %}
 {{ ligne.nom}} <br>
 {{ ligne.accroche }} <br>
 <a href="/panier/reduire/{{ligne.id}}">--</a>
@@ -13,7 +75,14 @@
 <br>
 <a href="/panier/supprimer/{{ligne.id}}">supprimer</a>
 <hr>
-{% endfor %}
+{% endfor %} -->
+
+
+
+
+
+
+
 
 
 {% endblock %}
