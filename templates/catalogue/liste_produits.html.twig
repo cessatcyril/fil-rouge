@@ -3,13 +3,20 @@
 {% block title %}Hello CatalogueController!{% endblock %}
 
 {% block body %}
-    {% for produit in listeProduits %}
-        <div>
-            
-            <a href="/produit/{{produit.Id}}">
-                <img src="/images/produit/{{ produit.imagePrincipale }}" alt="image du produit">
-                {{produit.proAccroche}}
-            </a>
-        </div>
-    {% endfor %}
-{% endblock %}
+{% for produit in listeProduits %}
+<div>
+
+    <a href="/produit/{{produit.Id}}">
+        <img src="/images/produit/{{ produit.imagePrincipale }}" alt="image du produit" />
+        {{produit.proAccroche}}
+    </a>
+</div>
+{% endfor %}
+{% if page>0 %}
+<a
+    href="{{ path('liste_produits', { sousCategorie: listeProduits[0].sousCategorie.id , page: previous} ) }}">previous</a>
+{% endif %}
+{% if page<nombrePages %} <a
+    href="{{ path('liste_produits', { sousCategorie: listeProduits[0].sousCategorie.id , page: next} ) }}">next</a>
+    {% endif %}
+    {% endblock %}
