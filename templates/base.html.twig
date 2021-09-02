@@ -7,13 +7,67 @@
            and uncomment the following Encore helpers to start using Symfony UX #}
         {% block stylesheets %}
             {#{{ encore_entry_link_tags('app') }}#}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
+        <script src="https://kit.fontawesome.com/b8a4a1dff5.js" crossorigin="anonymous"></script>
         {% endblock %}
 
         {% block javascripts %}
             {#{{ encore_entry_script_tags('app') }}#}
         {% endblock %}
     </head>
-    <body>
+    <body class="has-background-dark">
+        <section class="hero is-info">
+            <!-- Hero head: will stick at the top -->
+            <div class="hero-head">
+                
+            </div>
+
+            <!-- Hero content: will be in the middle -->
+            <div class="hero-body">
+                <div class="container has-text-centered">
+                    <p class="title">
+                        <h1 class="title is-1">Titre</h1>
+                    </p>
+                    <p class="subtitle">
+                        Sous-titre
+                    </p>
+                </div>
+            </div>
+
+            <!-- Hero footer: will stick at the bottom -->
+            <div class="hero-foot">
+                <nav class="navbar">
+                    <div class="container">
+                        <div class="navbar-brand">
+                            <span class="navbar-burger" data-target="navbarMenuHeroA">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                        </div>
+                        <div id="navbarMenuHeroA" class="navbar-menu">
+                            <div class="navbar-end">
+                                <a href="{{ path('categorie') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                                    Accueil
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </section>
+        <div class="has-background-light">
         {% block body %}{% endblock %}
+        </div>
+        <footer class="footer has-background-dark">
+            <div class="content has-text-centered has-text-grey-light">
+                <p>
+                    Créé par Samier Fabien. Le code source est sous licence
+                    <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. Le contenu du site est sous licence <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+                </p>
+            </div>
+        </footer>
+        <script src="{{ asset('js/navBurger.js') }}"></script>
     </body>
 </html>

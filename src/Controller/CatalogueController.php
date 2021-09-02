@@ -22,7 +22,7 @@ class CatalogueController extends AbstractController
         $categories = $repo->findAll();
 
         return $this->render('catalogue/categories.html.twig', [
-            'controller_name' => 'CatalogueController',
+            'menu_actuel' => 'accueil',
             'categories' => $categories
         ]);
     }
