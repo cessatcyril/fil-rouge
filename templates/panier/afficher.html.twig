@@ -70,31 +70,14 @@
                     {{ panier[0]["prixCommande"]}}
                 </h3>
             </div>
+            <div>
+                <a href="/commande/afficher/">
+                    <button class="button is-link">Passer commande</button>
+                </a>
+            </div>
         </div>
     </div>
 </section>
 <div class="column is-1"></div>
 </div>
-
-
-
-<!-- {% for ligne in panier %}
-{{ ligne.nom}} <br>
-{{ ligne.accroche }} <br>
-<a href="/panier/reduire/{{ligne.id}}">--</a>
-{{ ligne.quantite }}
-<a href="/panier/ajouter/{{ligne.id}}">++</a>
-<br>
-<a href="/panier/supprimer/{{ligne.id}}">supprimer</a>
-<hr>
-{% endfor %} -->
-
-
-
-
-
-
-
-
-
 {% endblock %}
