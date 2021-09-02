@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\CarteCreditType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,8 +24,11 @@ class GestionCommandesController extends AbstractController
      */
     public function commandeCarte(): Response
     {
+        $form = $this->createForm(CarteCreditType::class);
+
         return $this->render('gestion_commandes/carte.html.twig', [
             'controller_name' => 'GestionCompteController',
+            'form' => $form->createView()
         ]);
     }
 
