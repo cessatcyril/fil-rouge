@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CatalogueController!{% endblock %}
+
+{% block body %}
+    <ul>
+        <a href="/commande/moyen_de_paiement/carte_de_credit" class="button">
+            <li>Carte de crédit</li>
+        </a>
+        <a href="/commande/moyen_de_paiement/virement" class="button">
+            <li>Virement</li>
+        </a>
+        <a href="/commande/moyen_de_paiement/paypal" class="button">
+            <li>Paypal</li>
+        </a>
+    </ul>
+{% endblock %}
