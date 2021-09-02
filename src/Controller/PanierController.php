@@ -17,7 +17,23 @@ class PanierController extends AbstractController
     public function panierListe(Session $session): Response
     {
         $panier = $session->get("panier");
-        // dd($panier);
+        //$test = $panier[0]["id"];
+
+        if ($panier != null) {
+            foreach ($panier as $i => $ligne) {
+                $panier[$i]["prixTotal"] = $panier[$i]["quantite"] * $panier[$i]["prix"];
+            }
+        }
+        if ($panier != null) {
+            $commande = 0;
+            foreach ($panier as $i => $ligne) {
+                $commande = $commande + $panier[$i]["prixTotal"];
+                $panier[0]["prixCommande"] = $commande;
+            }
+        }
+
+        $session->set("panier", $panier);
+        //dd($panier);
         if ($panier == null) $panier = [];
         return $this->render('panier/afficher.html.twig', [
             'controller_name' => 'PanierController',
@@ -63,6 +79,10 @@ class PanierController extends AbstractController
                 "id" => $id->getId(),
                 "nom" => $id->getProProduit(),
                 "accroche" => $id->getProAccroche(),
+                "imageNom" => $id->getImagePrincipale(),
+                "prix" => $id->getProPrixV(),
+                "prixTotal" => 0,
+                "prixCommande" => 0,
             ];
             $panier[] = $elt;
         } else {
