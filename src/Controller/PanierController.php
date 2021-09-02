@@ -30,7 +30,7 @@ class PanierController extends AbstractController
      */
     public function panierRaz(SessionInterface $session): Response
     {
-        $session->invalidate();
+        $session->remove("panier");
         $session->set("panier", []);
 
         return $this->render('panier/afficher.html.twig', [
