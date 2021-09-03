@@ -50,4 +50,14 @@ class GestionCommandesController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/commande/recapitulatif", name="commande_recapitulatif")
+     */
+    public function commandeRecapitulatif(): Response
+    {
+        return $this->render('gestion_commandes/recapitulatif.html.twig', [
+            'controller_name' => 'GestionCompteController',
+        ]);
+    }
+
 }

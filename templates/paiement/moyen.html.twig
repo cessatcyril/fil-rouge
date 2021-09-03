@@ -4,13 +4,13 @@
 
 {% block body %}
     <ul>
-        <a href="/paiement/moyen_de_paiement/carte_de_credit" class="button">
+        <a href="{{ path('paiement_carte') }}" class="button">
             <li>Carte de crédit</li>
         </a>
-        <a href="/commande/commander" class="button">
+        <a href="{{ path('commande_creer') }}" class="button">
             <li>Virement</li>
         </a>
-        <a href="/commande/commander" class="button">
+        <a href="{{ path('commande_creer') }}" class="button">
             <li>Paypal</li>
         </a>
     </ul>
