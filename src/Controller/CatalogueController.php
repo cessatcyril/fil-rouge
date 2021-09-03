@@ -7,6 +7,7 @@ use App\Entity\Image;
 use App\Entity\Produit;
 use App\Entity\SousCategorie;
 use App\Repository\CategorieRepository;
+use App\Repository\ProduitRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -41,15 +42,26 @@ class CatalogueController extends AbstractController
     }
 
     /**
-     * @Route("/liste_produits/{sousCategorie}", name="liste_produits")
+     * @Route("/liste_produits/{sousCategorie}/{page}", name="liste_produits")
      */
-    public function listeProduits(SousCategorie $sousCategorie): Response
+    public function listeProduits(SousCategorie $sousCategorie, $page = 0, ProduitRepository $repo): Response
     {
-        $listeProduits = $sousCategorie->getProduits();
+
+        $nombreProduits = $repo->countProduits($sousCategorie);
+        $nombrePages = intval($nombreProduits / 5);
+
+        $listeProduits = $repo->findByPage($sousCategorie, $page);
+        $previous = ($page > 0) ? $page - 1 : 0;
+        $next = ($page >= $nombrePages) ? $nombrePages : $page + 1;
+
 
         return $this->render('catalogue/liste_produits.html.twig', [
             'controller_name' => 'CatalogueController',
-            'listeProduits' => $listeProduits
+            'listeProduits' => $listeProduits,
+            "nombrePages" => $nombrePages,
+            "page" => $page,
+            "previous" => $previous,
+            "next" => $next
         ]);
     }
 

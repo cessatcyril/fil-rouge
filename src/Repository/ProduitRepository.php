@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Produit;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\SousCategorie;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Produit|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,28 @@ class ProduitRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Produit::class);
+    }
+
+    public function findByPage(SousCategorie $ssc, $page_number = 0, $number_products = 5)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.sousCategorie = :ssc')
+            ->setParameter('ssc', $ssc)
+            //->orderBy('p.id', 'ASC')
+            ->setFirstResult($page_number * $number_products)
+            ->setMaxResults($number_products)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countProduits(SousCategorie $ssc)
+    {
+        return count($this->createQueryBuilder('p')
+            ->andWhere('p.sousCategorie = :ssc')
+            ->setParameter('ssc', $ssc)
+            //->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult());
     }
 
     // /**

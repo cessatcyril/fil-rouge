@@ -16,47 +16,64 @@
         <div class="column is-10">
             <div class="columns is-multiline">
 
+
                 {% for ligne in panier %}
 
                 <div class="column is-half">
 
                     <div class="columns is-multiline">
                         <div class="column is-half">
-                            <figure class="image is-480x480">
-                                <img src="/pic/{{ ligne.id }}" />
+                            <figure class="image is-240x240 is-square">
+                                <img src="/images/produit/{{ ligne.imageNom }}" />
                             </figure>
                         </div>
 
                         <div class="column is-half">
-                            <div>
+                            <div class="content">
                                 <b>
-                                    {{ ligne.nom}}
+                                    <h2>{{ ligne.nom}} </h2>
                                 </b>
                             </div>
-                            <div>
-                                <b>
-                                    {{ ligne.accroche }}
-                                </b>
+                            <div class="content">
+                                {{ ligne.accroche }} <br><br>
                             </div>
-                            <div>
+                            <div class="content">
                                 <a href="/panier/reduire/{{ligne.id}}">
                                     <button class="button is-link">--</button>
                                 </a>
-                                {{ ligne.quantite }}
+                                <b>{{ ligne.quantite }}</b>
                                 <a href="/panier/ajouter/{{ligne.id}}">
                                     <button class="button is-link">++</button>
-                                </a>
+                                </a> <br>
                             </div>
-                            <br>
+
                             <div>
                                 <a href="/panier/supprimer/{{ligne.id}}">
                                     <button class="button is-link">supprimer</button>
                                 </a>
                             </div>
+                            <br><br>
+                            <div>
+                                <b>
+                                    <b>Prix : </b>
+                                    {{ ligne.prixTotal }} <br><br>
+                                </b>
+                            </div>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
+            </div>
+            <div class="content">
+                <h3>
+                    Prix total de la commande :
+                    {{ panier[0]["prixCommande"]}}
+                </h3>
+            </div>
+            <div>
+                <a href="/commande/afficher/">
+                    <button class="button is-link">Passer commande</button>
+                </a>
             </div>
         </div>
     </div>
@@ -64,26 +81,4 @@
 </section>
 <div class="column is-1"></div>
 </div>
-
-
-
-<!-- {% for ligne in panier %}
-{{ ligne.nom}} <br>
-{{ ligne.accroche }} <br>
-<a href="/panier/reduire/{{ligne.id}}">--</a>
-{{ ligne.quantite }}
-<a href="/panier/ajouter/{{ligne.id}}">++</a>
-<br>
-<a href="/panier/supprimer/{{ligne.id}}">supprimer</a>
-<hr>
-{% endfor %} -->
-
-
-
-
-
-
-
-
-
 {% endblock %}
