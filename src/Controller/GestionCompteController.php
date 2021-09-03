@@ -8,9 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GestionCompteController extends AbstractController
 {
-    
+
     /**
-     * @Route("/compte/afficher", name="compte_afficher")
+     * @Route("/particulier/compte/afficher", name="compte_afficher")
      */
     public function compteAfficher(): Response
     {
