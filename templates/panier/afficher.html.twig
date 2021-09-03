@@ -38,9 +38,14 @@
                                 {{ ligne.accroche }} <br><br>
                             </div>
                             <div class="content">
+
+                                {% if ligne.quantite > 1 %}
                                 <a href="/panier/reduire/{{ligne.id}}">
                                     <button class="button is-link">--</button>
                                 </a>
+                                {% else %}
+                                <button class="button is-link" disabled>--</button>
+                                {% endif %}
                                 <b>{{ ligne.quantite }}</b>
                                 <a href="/panier/ajouter/{{ligne.id}}">
                                     <button class="button is-link">++</button>
@@ -71,13 +76,12 @@
                 </h3>
             </div>
             <div>
-                <a href="/commande/afficher/">
+                <a href="/paiement/moyen_de_paiement">
                     <button class="button is-link">Passer commande</button>
                 </a>
             </div>
         </div>
     </div>
-    <a href="/paiement/moyen_de_paiement" class="button">Passer commande</a>
 </section>
 <div class="column is-1"></div>
 </div>
