@@ -1,0 +1,10 @@
+Ligne directrice : 
+
+panier
+resume de commande
+paiement validation
+creer commande
+recap' + mise en base de donnees + pdf
+
+TODO 
+re-router paiment en fonciton de la ligne directrice

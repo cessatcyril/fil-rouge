@@ -38,6 +38,7 @@ class PaiementController extends AbstractController
     }
 
     /**
+     * A SUPPRIMER SI PAS DE FORMULAIRE DANS virement.html.twig
      * @Route("/paiement/moyen_de_paiement/virement", name="paiement_virement")
      */
     public function paiementVirement(): Response
@@ -48,6 +49,7 @@ class PaiementController extends AbstractController
     }
 
     /**
+     * A SUPPRIMER SI PAS DE FORMULAIRE DANS paypal.html.twig
      * @Route("/paiement/moyen_de_paiement/paypal", name="paiement_paypal")
      */
     public function paiementPaypal(): Response
