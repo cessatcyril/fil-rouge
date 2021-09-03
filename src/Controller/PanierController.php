@@ -33,11 +33,26 @@ class PanierController extends AbstractController
         }
 
         $session->set("panier", $panier);
-        //dd($panier);
-        if ($panier == null) $panier = [];
-        return $this->render('panier/afficher.html.twig', [
-            'controller_name' => 'PanierController',
-            "panier" => $panier
+
+        if ($panier == null) {
+            return $this->redirectToRoute("panier_vide");
+        } else {
+
+
+            return $this->render('panier/afficher.html.twig', [
+                'controller_name' => 'PanierController',
+                "panier" => $panier
+            ]);
+        }
+    }
+
+    /**
+     * @Route("/panier/vide", name="panier_vide")
+     */
+    public function paniervide(): Response
+    {
+        return $this->render('panier/panierVide.html.twig', [
+            'controller_name' => 'PanierVideController',
         ]);
     }
 
