@@ -49,10 +49,24 @@
                         </span>
                     </div>
                     <div id="navbarMenuHeroA" class="navbar-menu">
-                        <div class="navbar-end">
+                        <div class="navbar-start">
                             <a href="{{ path('categorie') }}"
                                 class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
                                 Accueil
+                            </a>
+                            <a href="{{ path('commande_afficher') }}"
+                                class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                                Ma commande
+                            </a>
+                        </div>
+                        <div class="navbar-end">
+                            <a href="{{ path('panier_liste') }}"
+                                class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                                Mon panier
+                            </a>
+                            <a href="{{ path('compte_afficher') }}"
+                                class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                                log-in
                             </a>
                         </div>
                     </div>
