@@ -18,6 +18,9 @@ class PanierController extends AbstractController
     {
         $panier = $session->get("panier");
         //$test = $panier[0]["id"];
+        if ($panier == null) {
+            return $this->redirectToRoute("panier_vide");
+        }
 
         if ($panier != null) {
             foreach ($panier as $i => $ligne) {
@@ -34,16 +37,12 @@ class PanierController extends AbstractController
 
         $session->set("panier", $panier);
 
-        if ($panier == null) {
-            return $this->redirectToRoute("panier_vide");
-        } else {
 
 
-            return $this->render('panier/afficher.html.twig', [
-                'controller_name' => 'PanierController',
-                "panier" => $panier
-            ]);
-        }
+        return $this->render('panier/afficher.html.twig', [
+            'controller_name' => 'PanierController',
+            "panier" => $panier
+        ]);
     }
 
     /**
