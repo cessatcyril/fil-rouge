@@ -3,5 +3,85 @@
 {% block title %}Hello CatalogueController!{% endblock %}
 
 {% block body %}
+<section>
+    <div class="columns">
+        <div class="column is-1"></div>
+        <div class="column is-10">
+            <div class="columns is-multiline">
 
+
+                {% for ligne in panier %}
+
+                <div class="column is-half">
+
+                    <div class="columns is-multiline">
+                        <div class="column is-half">
+                            <figure class="image is-240x240 is-square">
+                                <img src="/images/produit/{{ ligne.imageNom }}" />
+                            </figure>
+                        </div>
+
+                        <div class="column is-half">
+                            <div class="content">
+                                <b>
+                                    <h2>{{ ligne.nom}} </h2>
+                                </b>
+                            </div>
+                            <div class="content">
+                                {{ ligne.accroche }} <br><br>
+                            </div>
+                            <div class="content">
+
+                                {% if ligne.quantite > 1 %}
+                                <a href="/panier/reduire/{{ligne.id}}">
+                                    <button class="button is-link">--</button>
+                                </a>
+                                {% else %}
+                                <button class="button is-link" disabled>--</button>
+                                {% endif %}
+                                <b>{{ ligne.quantite }}</b>
+                                <a href="/panier/ajouter/{{ligne.id}}">
+                                    <button class="button is-link">++</button>
+                                </a> <br>
+                            </div>
+
+                            <div>
+                                <a href="/panier/supprimer/{{ligne.id}}">
+                                    <button class="button is-link">supprimer</button>
+                                </a>
+                            </div>
+                            <br><br>
+                            <div>
+                                <b>
+                                    <b>Prix : </b>
+                                    {{ ligne.prixTotal }} <br><br>
+                                </b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="content">
+                <h3>
+                    Prix total de la commande :
+                    {{ panier[0]["prixCommande"]}}
+                </h3>
+            </div>
+            <div>
+                {% for row in array %}
+                    {#Afficher les differentes adresses du client#}
+                {% endfor %}
+            </div>
+            <div>
+                <a href="{{ path('paiement_moyen') }}">
+                    <button class="button is-link">Valider les informations</button>
+                </a>
+                <a href="{{ path('compte_modifier') }}">
+                    <button class="button is-link">Modifier les informations</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}
