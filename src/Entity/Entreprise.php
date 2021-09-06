@@ -49,10 +49,11 @@ class Entreprise
      */
     private $entSiret;
 
-    public function __construct()
-    {
-        $this->Client = new ArrayCollection();
-    }
+    /**
+     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="entreprises")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $client;
 
     public function getId(): ?int
     {
@@ -127,6 +128,18 @@ class Entreprise
     public function setEntSiret(string $entSiret): self
     {
         $this->entSiret = $entSiret;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

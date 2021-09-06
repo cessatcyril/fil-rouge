@@ -59,17 +59,6 @@ class Produit
      */
     private $proStockC;
 
-    // /**
-    //  * @ORM\ManyToOne(targetEntity=SousCategorie::class)
-    //  * @ORM\JoinColumn(nullable=false)
-    //  */
-    // private $sousCategorie;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Fournisseur::class, inversedBy="produits")
-     */
-    private $fournisseurs;
-
     /**
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="produit")
      */
@@ -81,10 +70,27 @@ class Produit
      */
     private $sousCategorie;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=LivraisonDetail::class, inversedBy="produit")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $livraisonDetail;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=CommandeDetail::class, inversedBy="produit")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $commandeDetail;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Fournisseur::class, mappedBy="produit")
+     */
+    private $fournisseurs;
+
     public function __construct()
     {
-        $this->fournisseurs = new ArrayCollection();
         $this->image = new ArrayCollection();
+        $this->fournisseurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -189,14 +195,6 @@ class Produit
     }
 
     /**
-     * @return Collection|Fournisseur[]
-     */
-    public function getFournisseurs(): Collection
-    {
-        return $this->fournisseurs;
-    }
-
-    /**
      * @return Collection|Image[]
      */
     public function getImage(): Collection
@@ -238,19 +236,72 @@ class Produit
         return $this;
     }
 
-    public function getImagePrincipale() {
+    public function getImagePrincipale()
+    {
         foreach ($this->image as $i) {
             return $i->getImaNom();
         }
         return "";
     }
 
-    public function getImages() {
+    public function getImages()
+    {
         $liste = null;
-        
+
         foreach ($this->image as $key) {
             $liste[] = $key->getImaNom();
         }
         return $liste;
+    }
+
+    public function getLivraisonDetail(): ?LivraisonDetail
+    {
+        return $this->livraisonDetail;
+    }
+
+    public function setLivraisonDetail(?LivraisonDetail $livraisonDetail): self
+    {
+        $this->livraisonDetail = $livraisonDetail;
+
+        return $this;
+    }
+
+    public function getCommandeDetail(): ?CommandeDetail
+    {
+        return $this->commandeDetail;
+    }
+
+    public function setCommandeDetail(?CommandeDetail $commandeDetail): self
+    {
+        $this->commandeDetail = $commandeDetail;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Fournisseur[]
+     */
+    public function getFournisseurs(): Collection
+    {
+        return $this->fournisseurs;
+    }
+
+    public function addFournisseur(Fournisseur $fournisseur): self
+    {
+        if (!$this->fournisseurs->contains($fournisseur)) {
+            $this->fournisseurs[] = $fournisseur;
+            $fournisseur->addProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFournisseur(Fournisseur $fournisseur): self
+    {
+        if ($this->fournisseurs->removeElement($fournisseur)) {
+            $fournisseur->removeProduit($this);
+        }
+
+        return $this;
     }
 }

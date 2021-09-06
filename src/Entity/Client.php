@@ -55,19 +55,39 @@ class Client
     private $cliDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Entreprise::class)
+     * @ORM\OneToMany(targetEntity=Entreprise::class, mappedBy="client")
      */
-    private $entreprise;
+    private $entreprises;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Employe::class, mappedBy="client")
+     */
+    private $employe;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Commande::class, inversedBy="clients")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $commande;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=AdresseType::class, inversedBy="client")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $adresseType;
 
 
     public function __construct()
     {
         $this->Commande = new ArrayCollection();
+        $this->entreprises = new ArrayCollection();
+        $this->employe = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -159,14 +179,32 @@ class Client
         return $this;
     }
 
-    public function getEntreprise(): ?Entreprise
+    /**
+     * @return Collection|Entreprise[]
+     */
+    public function getEntreprises(): Collection
     {
-        return $this->entreprise;
+        return $this->entreprises;
     }
 
-    public function setEntreprise(?Entreprise $entreprise): self
+    public function addEntreprise(Entreprise $entreprise): self
     {
-        $this->entreprise = $entreprise;
+        if (!$this->entreprises->contains($entreprise)) {
+            $this->entreprises[] = $entreprise;
+            $entreprise->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEntreprise(Entreprise $entreprise): self
+    {
+        if ($this->entreprises->removeElement($entreprise)) {
+            // set the owning side to null (unless already changed)
+            if ($entreprise->getClient() === $this) {
+                $entreprise->setClient(null);
+            }
+        }
 
         return $this;
     }
@@ -176,9 +214,63 @@ class Client
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Employe[]
+     */
+    public function getEmploye(): Collection
+    {
+        return $this->employe;
+    }
+
+    public function addEmploye(Employe $employe): self
+    {
+        if (!$this->employe->contains($employe)) {
+            $this->employe[] = $employe;
+            $employe->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmploye(Employe $employe): self
+    {
+        if ($this->employe->removeElement($employe)) {
+            // set the owning side to null (unless already changed)
+            if ($employe->getClient() === $this) {
+                $employe->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCommande(): ?Commande
+    {
+        return $this->commande;
+    }
+
+    public function setCommande(?Commande $commande): self
+    {
+        $this->commande = $commande;
+
+        return $this;
+    }
+
+    public function getAdresseType(): ?AdresseType
+    {
+        return $this->adresseType;
+    }
+
+    public function setAdresseType(?AdresseType $adresseType): self
+    {
+        $this->adresseType = $adresseType;
 
         return $this;
     }

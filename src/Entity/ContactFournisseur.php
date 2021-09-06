@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ContactFournisseurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -63,10 +65,14 @@ class ContactFournisseur
     private $conDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Fournisseur::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToMany(targetEntity=Fournisseur::class, mappedBy="contactFournisseur")
      */
-    private $fournisseur;
+    private $fournisseurs;
+
+    public function __construct()
+    {
+        $this->fournisseurs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -181,14 +187,32 @@ class ContactFournisseur
         return $this;
     }
 
-    public function getFournisseur(): ?Fournisseur
+    /**
+     * @return Collection|Fournisseur[]
+     */
+    public function getFournisseurs(): Collection
     {
-        return $this->fournisseur;
+        return $this->fournisseurs;
     }
 
-    public function setFournisseur(?Fournisseur $fournisseur): self
+    public function addFournisseur(Fournisseur $fournisseur): self
     {
-        $this->fournisseur = $fournisseur;
+        if (!$this->fournisseurs->contains($fournisseur)) {
+            $this->fournisseurs[] = $fournisseur;
+            $fournisseur->setContactFournisseur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFournisseur(Fournisseur $fournisseur): self
+    {
+        if ($this->fournisseurs->removeElement($fournisseur)) {
+            // set the owning side to null (unless already changed)
+            if ($fournisseur->getContactFournisseur() === $this) {
+                $fournisseur->setContactFournisseur(null);
+            }
+        }
 
         return $this;
     }

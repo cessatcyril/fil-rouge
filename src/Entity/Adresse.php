@@ -37,6 +37,13 @@ class Adresse
      */
     private $adrAdresse;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=AdresseType::class, inversedBy="adresse")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $adresseType;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +93,18 @@ class Adresse
     public function setAdrAdresse(string $adrAdresse): self
     {
         $this->adrAdresse = $adrAdresse;
+
+        return $this;
+    }
+
+    public function getAdresseType(): ?AdresseType
+    {
+        return $this->adresseType;
+    }
+
+    public function setAdresseType(?AdresseType $adresseType): self
+    {
+        $this->adresseType = $adresseType;
 
         return $this;
     }
