@@ -51,7 +51,7 @@ class GestionCommandesController extends AbstractController
     }
 
     /**
-     * @Route("/commande/recapitulatif", name="commande_recapitulatif")
+     * @Route("/particulier/commande/recapitulatif", name="commande_recapitulatif")
      */
     public function commandeRecapitulatif(): Response
     {
