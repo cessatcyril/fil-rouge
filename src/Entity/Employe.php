@@ -35,16 +35,20 @@ class Employe
     private $empTel;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="employe")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $client;
-
-    /**
      * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Client::class, mappedBy="employe")
+     */
+    private $clients;
+
+    public function __construct()
+    {
+        $this->clients = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -87,18 +91,6 @@ class Employe
         return $this;
     }
 
-    public function getClient(): ?Client
-    {
-        return $this->client;
-    }
-
-    public function setClient(?Client $client): self
-    {
-        $this->client = $client;
-
-        return $this;
-    }
-
     public function getUser(): ?User
     {
         return $this->user;
@@ -107,6 +99,36 @@ class Employe
     public function setUser(User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Client[]
+     */
+    public function getClients(): Collection
+    {
+        return $this->clients;
+    }
+
+    public function addClient(Client $client): self
+    {
+        if (!$this->clients->contains($client)) {
+            $this->clients[] = $client;
+            $client->setEmploye($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClient(Client $client): self
+    {
+        if ($this->clients->removeElement($client)) {
+            // set the owning side to null (unless already changed)
+            if ($client->getEmploye() === $this) {
+                $client->setEmploye(null);
+            }
+        }
 
         return $this;
     }

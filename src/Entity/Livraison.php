@@ -25,19 +25,19 @@ class Livraison
     private $livQuantite;
 
     /**
-     * @ORM\ManyToOne(targetEntity=LivraisonDetail::class, inversedBy="livraison")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToMany(targetEntity=LivraisonDetail::class, mappedBy="livraison")
      */
-    private $livraisonDetail;
+    private $livraisonDetails;
 
     /**
-     * @ORM\OneToMany(targetEntity=Commande::class, mappedBy="livraison")
+     * @ORM\ManyToOne(targetEntity=Commande::class, inversedBy="livraisons")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $commandes;
+    private $commande;
 
     public function __construct()
     {
-        $this->commandes = new ArrayCollection();
+        $this->livraisonDetails = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -57,44 +57,44 @@ class Livraison
         return $this;
     }
 
-    public function getLivraisonDetail(): ?LivraisonDetail
-    {
-        return $this->livraisonDetail;
-    }
-
-    public function setLivraisonDetail(?LivraisonDetail $livraisonDetail): self
-    {
-        $this->livraisonDetail = $livraisonDetail;
-
-        return $this;
-    }
-
     /**
-     * @return Collection|Commande[]
+     * @return Collection|LivraisonDetail[]
      */
-    public function getCommandes(): Collection
+    public function getLivraisonDetails(): Collection
     {
-        return $this->commandes;
+        return $this->livraisonDetails;
     }
 
-    public function addCommande(Commande $commande): self
+    public function addLivraisonDetail(LivraisonDetail $livraisonDetail): self
     {
-        if (!$this->commandes->contains($commande)) {
-            $this->commandes[] = $commande;
-            $commande->setLivraison($this);
+        if (!$this->livraisonDetails->contains($livraisonDetail)) {
+            $this->livraisonDetails[] = $livraisonDetail;
+            $livraisonDetail->setLivraison($this);
         }
 
         return $this;
     }
 
-    public function removeCommande(Commande $commande): self
+    public function removeLivraisonDetail(LivraisonDetail $livraisonDetail): self
     {
-        if ($this->commandes->removeElement($commande)) {
+        if ($this->livraisonDetails->removeElement($livraisonDetail)) {
             // set the owning side to null (unless already changed)
-            if ($commande->getLivraison() === $this) {
-                $commande->setLivraison(null);
+            if ($livraisonDetail->getLivraison() === $this) {
+                $livraisonDetail->setLivraison(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCommande(): ?Commande
+    {
+        return $this->commande;
+    }
+
+    public function setCommande(?Commande $commande): self
+    {
+        $this->commande = $commande;
 
         return $this;
     }

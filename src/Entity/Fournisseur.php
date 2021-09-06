@@ -65,17 +65,14 @@ class Fournisseur
     private $produit;
 
     /**
-     * @ORM\ManyToOne(targetEntity=contactFournisseur::class, inversedBy="fournisseurs")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToMany(targetEntity=ContactFournisseur::class, mappedBy="fournisseur")
      */
     private $contactFournisseur;
 
-
-
     public function __construct()
     {
-        $this->ContactFournisseur = new ArrayCollection();
         $this->produit = new ArrayCollection();
+        $this->contactFournisseur = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -203,14 +200,32 @@ class Fournisseur
         return $this;
     }
 
-    public function getContactFournisseur(): ?contactFournisseur
+    /**
+     * @return Collection|ContactFournisseur[]
+     */
+    public function getContactFournisseur(): Collection
     {
         return $this->contactFournisseur;
     }
 
-    public function setContactFournisseur(?contactFournisseur $contactFournisseur): self
+    public function addContactFournisseur(ContactFournisseur $contactFournisseur): self
     {
-        $this->contactFournisseur = $contactFournisseur;
+        if (!$this->contactFournisseur->contains($contactFournisseur)) {
+            $this->contactFournisseur[] = $contactFournisseur;
+            $contactFournisseur->setFournisseur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContactFournisseur(ContactFournisseur $contactFournisseur): self
+    {
+        if ($this->contactFournisseur->removeElement($contactFournisseur)) {
+            // set the owning side to null (unless already changed)
+            if ($contactFournisseur->getFournisseur() === $this) {
+                $contactFournisseur->setFournisseur(null);
+            }
+        }
 
         return $this;
     }

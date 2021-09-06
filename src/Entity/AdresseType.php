@@ -25,20 +25,16 @@ class AdresseType
     private $typAdresse;
 
     /**
-     * @ORM\OneToMany(targetEntity=Client::class, mappedBy="adresseType")
-     */
-    private $client;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Adresse::class, mappedBy="adresseType")
+     * @ORM\ManyToOne(targetEntity=Adresse::class, inversedBy="adresseTypes")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $adresse;
 
-    public function __construct()
-    {
-        $this->client = new ArrayCollection();
-        $this->adresse = new ArrayCollection();
-    }
+    /**
+     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="adresseTypes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $client;
 
     public function getId(): ?int
     {
@@ -57,62 +53,26 @@ class AdresseType
         return $this;
     }
 
-    /**
-     * @return Collection|Client[]
-     */
-    public function getClient(): Collection
-    {
-        return $this->client;
-    }
-
-    public function addClient(Client $client): self
-    {
-        if (!$this->client->contains($client)) {
-            $this->client[] = $client;
-            $client->setAdresseType($this);
-        }
-
-        return $this;
-    }
-
-    public function removeClient(Client $client): self
-    {
-        if ($this->client->removeElement($client)) {
-            // set the owning side to null (unless already changed)
-            if ($client->getAdresseType() === $this) {
-                $client->setAdresseType(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Adresse[]
-     */
-    public function getAdresse(): Collection
+    public function getAdresse(): ?Adresse
     {
         return $this->adresse;
     }
 
-    public function addAdresse(Adresse $adresse): self
+    public function setAdresse(?Adresse $adresse): self
     {
-        if (!$this->adresse->contains($adresse)) {
-            $this->adresse[] = $adresse;
-            $adresse->setAdresseType($this);
-        }
+        $this->adresse = $adresse;
 
         return $this;
     }
 
-    public function removeAdresse(Adresse $adresse): self
+    public function getClient(): ?Client
     {
-        if ($this->adresse->removeElement($adresse)) {
-            // set the owning side to null (unless already changed)
-            if ($adresse->getAdresseType() === $this) {
-                $adresse->setAdresseType(null);
-            }
-        }
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

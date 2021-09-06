@@ -50,10 +50,14 @@ class Entreprise
     private $entSiret;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="entreprises")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToMany(targetEntity=Client::class, mappedBy="entreprise")
      */
-    private $client;
+    private $clients;
+
+    public function __construct()
+    {
+        $this->clients = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -132,14 +136,32 @@ class Entreprise
         return $this;
     }
 
-    public function getClient(): ?Client
+    /**
+     * @return Collection|Client[]
+     */
+    public function getClients(): Collection
     {
-        return $this->client;
+        return $this->clients;
     }
 
-    public function setClient(?Client $client): self
+    public function addClient(Client $client): self
     {
-        $this->client = $client;
+        if (!$this->clients->contains($client)) {
+            $this->clients[] = $client;
+            $client->setEntreprise($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClient(Client $client): self
+    {
+        if ($this->clients->removeElement($client)) {
+            // set the owning side to null (unless already changed)
+            if ($client->getEntreprise() === $this) {
+                $client->setEntreprise(null);
+            }
+        }
 
         return $this;
     }

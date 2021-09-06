@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AdresseRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,11 +40,14 @@ class Adresse
     private $adrAdresse;
 
     /**
-     * @ORM\ManyToOne(targetEntity=AdresseType::class, inversedBy="adresse")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToMany(targetEntity=AdresseType::class, mappedBy="adresse")
      */
-    private $adresseType;
+    private $adresseTypes;
 
+    public function __construct()
+    {
+        $this->adresseTypes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -97,14 +102,32 @@ class Adresse
         return $this;
     }
 
-    public function getAdresseType(): ?AdresseType
+    /**
+     * @return Collection|AdresseType[]
+     */
+    public function getAdresseTypes(): Collection
     {
-        return $this->adresseType;
+        return $this->adresseTypes;
     }
 
-    public function setAdresseType(?AdresseType $adresseType): self
+    public function addAdresseType(AdresseType $adresseType): self
     {
-        $this->adresseType = $adresseType;
+        if (!$this->adresseTypes->contains($adresseType)) {
+            $this->adresseTypes[] = $adresseType;
+            $adresseType->setAdresse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdresseType(AdresseType $adresseType): self
+    {
+        if ($this->adresseTypes->removeElement($adresseType)) {
+            // set the owning side to null (unless already changed)
+            if ($adresseType->getAdresse() === $this) {
+                $adresseType->setAdresse(null);
+            }
+        }
 
         return $this;
     }

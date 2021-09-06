@@ -65,14 +65,10 @@ class ContactFournisseur
     private $conDate;
 
     /**
-     * @ORM\OneToMany(targetEntity=Fournisseur::class, mappedBy="contactFournisseur")
+     * @ORM\ManyToOne(targetEntity=Fournisseur::class, inversedBy="contactFournisseur")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $fournisseurs;
-
-    public function __construct()
-    {
-        $this->fournisseurs = new ArrayCollection();
-    }
+    private $fournisseur;
 
     public function getId(): ?int
     {
@@ -187,32 +183,14 @@ class ContactFournisseur
         return $this;
     }
 
-    /**
-     * @return Collection|Fournisseur[]
-     */
-    public function getFournisseurs(): Collection
+    public function getFournisseur(): ?Fournisseur
     {
-        return $this->fournisseurs;
+        return $this->fournisseur;
     }
 
-    public function addFournisseur(Fournisseur $fournisseur): self
+    public function setFournisseur(?Fournisseur $fournisseur): self
     {
-        if (!$this->fournisseurs->contains($fournisseur)) {
-            $this->fournisseurs[] = $fournisseur;
-            $fournisseur->setContactFournisseur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFournisseur(Fournisseur $fournisseur): self
-    {
-        if ($this->fournisseurs->removeElement($fournisseur)) {
-            // set the owning side to null (unless already changed)
-            if ($fournisseur->getContactFournisseur() === $this) {
-                $fournisseur->setContactFournisseur(null);
-            }
-        }
+        $this->fournisseur = $fournisseur;
 
         return $this;
     }

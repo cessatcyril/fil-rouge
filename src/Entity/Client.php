@@ -55,39 +55,38 @@ class Client
     private $cliDate;
 
     /**
-     * @ORM\OneToMany(targetEntity=Entreprise::class, mappedBy="client")
-     */
-    private $entreprises;
-
-    /**
      * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=Employe::class, mappedBy="client")
+     * @ORM\OneToMany(targetEntity=AdresseType::class, mappedBy="client")
      */
-    private $employe;
+    private $adresseTypes;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Commande::class, inversedBy="clients")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToMany(targetEntity=Commande::class, mappedBy="client")
      */
     private $commande;
 
     /**
-     * @ORM\ManyToOne(targetEntity=AdresseType::class, inversedBy="client")
+     * @ORM\ManyToOne(targetEntity=Entreprise::class, inversedBy="clients")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $adresseType;
+    private $entreprise;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Employe::class, inversedBy="clients")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $employe;
 
 
     public function __construct()
     {
-        $this->Commande = new ArrayCollection();
-        $this->entreprises = new ArrayCollection();
-        $this->employe = new ArrayCollection();
+        $this->adresseTypes = new ArrayCollection();
+        $this->commande = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -179,36 +178,6 @@ class Client
         return $this;
     }
 
-    /**
-     * @return Collection|Entreprise[]
-     */
-    public function getEntreprises(): Collection
-    {
-        return $this->entreprises;
-    }
-
-    public function addEntreprise(Entreprise $entreprise): self
-    {
-        if (!$this->entreprises->contains($entreprise)) {
-            $this->entreprises[] = $entreprise;
-            $entreprise->setClient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEntreprise(Entreprise $entreprise): self
-    {
-        if ($this->entreprises->removeElement($entreprise)) {
-            // set the owning side to null (unless already changed)
-            if ($entreprise->getClient() === $this) {
-                $entreprise->setClient(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getUser(): ?User
     {
         return $this->user;
@@ -221,56 +190,88 @@ class Client
         return $this;
     }
 
+
+
     /**
-     * @return Collection|Employe[]
+     * @return Collection|AdresseType[]
      */
-    public function getEmploye(): Collection
+    public function getAdresseTypes(): Collection
     {
-        return $this->employe;
+        return $this->adresseTypes;
     }
 
-    public function addEmploye(Employe $employe): self
+    public function addAdresseType(AdresseType $adresseType): self
     {
-        if (!$this->employe->contains($employe)) {
-            $this->employe[] = $employe;
-            $employe->setClient($this);
+        if (!$this->adresseTypes->contains($adresseType)) {
+            $this->adresseTypes[] = $adresseType;
+            $adresseType->setClient($this);
         }
 
         return $this;
     }
 
-    public function removeEmploye(Employe $employe): self
+    public function removeAdresseType(AdresseType $adresseType): self
     {
-        if ($this->employe->removeElement($employe)) {
+        if ($this->adresseTypes->removeElement($adresseType)) {
             // set the owning side to null (unless already changed)
-            if ($employe->getClient() === $this) {
-                $employe->setClient(null);
+            if ($adresseType->getClient() === $this) {
+                $adresseType->setClient(null);
             }
         }
 
         return $this;
     }
 
-    public function getCommande(): ?Commande
+    /**
+     * @return Collection|Commande[]
+     */
+    public function getCommande(): Collection
     {
         return $this->commande;
     }
 
-    public function setCommande(?Commande $commande): self
+    public function addCommande(Commande $commande): self
     {
-        $this->commande = $commande;
+        if (!$this->commande->contains($commande)) {
+            $this->commande[] = $commande;
+            $commande->setClient($this);
+        }
 
         return $this;
     }
 
-    public function getAdresseType(): ?AdresseType
+    public function removeCommande(Commande $commande): self
     {
-        return $this->adresseType;
+        if ($this->commande->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getClient() === $this) {
+                $commande->setClient(null);
+            }
+        }
+
+        return $this;
     }
 
-    public function setAdresseType(?AdresseType $adresseType): self
+    public function getEntreprise(): ?Entreprise
     {
-        $this->adresseType = $adresseType;
+        return $this->entreprise;
+    }
+
+    public function setEntreprise(?Entreprise $entreprise): self
+    {
+        $this->entreprise = $entreprise;
+
+        return $this;
+    }
+
+    public function getEmploye(): ?Employe
+    {
+        return $this->employe;
+    }
+
+    public function setEmploye(?Employe $employe): self
+    {
+        $this->employe = $employe;
 
         return $this;
     }

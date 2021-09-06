@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\CommandeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Client;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CommandeRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=CommandeRepository::class)
@@ -60,20 +61,26 @@ class Commande
     private $clients;
 
     /**
-     * @ORM\ManyToOne(targetEntity=CommandeDetail::class, inversedBy="commande")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToMany(targetEntity=CommandeDetail::class, mappedBy="commande")
      */
-    private $commandeDetail;
+    private $commandeDetails;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Livraison::class, inversedBy="commandes")
+     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="commande")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $livraison;
+    private $client;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Livraison::class, mappedBy="commande")
+     */
+    private $livraisons;
 
     public function __construct()
     {
         $this->clients = new ArrayCollection();
+        $this->commandeDetails = new ArrayCollection();
+        $this->livraisons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -195,26 +202,74 @@ class Commande
         return $this;
     }
 
-    public function getCommandeDetail(): ?CommandeDetail
+    /**
+     * @return Collection|CommandeDetail[]
+     */
+    public function getCommandeDetails(): Collection
     {
-        return $this->commandeDetail;
+        return $this->commandeDetails;
     }
 
-    public function setCommandeDetail(?CommandeDetail $commandeDetail): self
+    public function addCommandeDetail(CommandeDetail $commandeDetail): self
     {
-        $this->commandeDetail = $commandeDetail;
+        if (!$this->commandeDetails->contains($commandeDetail)) {
+            $this->commandeDetails[] = $commandeDetail;
+            $commandeDetail->setCommande($this);
+        }
 
         return $this;
     }
 
-    public function getLivraison(): ?Livraison
+    public function removeCommandeDetail(CommandeDetail $commandeDetail): self
     {
-        return $this->livraison;
+        if ($this->commandeDetails->removeElement($commandeDetail)) {
+            // set the owning side to null (unless already changed)
+            if ($commandeDetail->getCommande() === $this) {
+                $commandeDetail->setCommande(null);
+            }
+        }
+
+        return $this;
     }
 
-    public function setLivraison(?Livraison $livraison): self
+    public function getClient(): ?Client
     {
-        $this->livraison = $livraison;
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Livraison[]
+     */
+    public function getLivraisons(): Collection
+    {
+        return $this->livraisons;
+    }
+
+    public function addLivraison(Livraison $livraison): self
+    {
+        if (!$this->livraisons->contains($livraison)) {
+            $this->livraisons[] = $livraison;
+            $livraison->setCommande($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivraison(Livraison $livraison): self
+    {
+        if ($this->livraisons->removeElement($livraison)) {
+            // set the owning side to null (unless already changed)
+            if ($livraison->getCommande() === $this) {
+                $livraison->setCommande(null);
+            }
+        }
 
         return $this;
     }

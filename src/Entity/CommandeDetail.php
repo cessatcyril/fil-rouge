@@ -26,16 +26,6 @@ class CommandeDetail
     private $detQuantite;
 
     /**
-     * @ORM\OneToMany(targetEntity=Commande::class, mappedBy="commandeDetail")
-     */
-    private $commande;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Produit::class, mappedBy="commandeDetail")
-     */
-    private $produit;
-
-    /**
      * @ORM\Column(type="decimal", precision=13, scale=2)
      */
     private $detRemise;
@@ -45,11 +35,17 @@ class CommandeDetail
      */
     private $detPrixVente;
 
-    public function __construct()
-    {
-        $this->commande = new ArrayCollection();
-        $this->produit = new ArrayCollection();
-    }
+    /**
+     * @ORM\ManyToOne(targetEntity=Produit::class, inversedBy="commandeDetails")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $produit;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Commande::class, inversedBy="commandeDetails")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $commande;
 
     public function getId(): ?int
     {
@@ -64,66 +60,6 @@ class CommandeDetail
     public function setDetQuantite(int $detQuantite): self
     {
         $this->detQuantite = $detQuantite;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Commande[]
-     */
-    public function getCommande(): Collection
-    {
-        return $this->commande;
-    }
-
-    public function addCommande(Commande $commande): self
-    {
-        if (!$this->commande->contains($commande)) {
-            $this->commande[] = $commande;
-            $commande->setCommandeDetail($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCommande(Commande $commande): self
-    {
-        if ($this->commande->removeElement($commande)) {
-            // set the owning side to null (unless already changed)
-            if ($commande->getCommandeDetail() === $this) {
-                $commande->setCommandeDetail(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Produit[]
-     */
-    public function getProduit(): Collection
-    {
-        return $this->produit;
-    }
-
-    public function addProduit(Produit $produit): self
-    {
-        if (!$this->produit->contains($produit)) {
-            $this->produit[] = $produit;
-            $produit->setCommandeDetail($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduit(Produit $produit): self
-    {
-        if ($this->produit->removeElement($produit)) {
-            // set the owning side to null (unless already changed)
-            if ($produit->getCommandeDetail() === $this) {
-                $produit->setCommandeDetail(null);
-            }
-        }
 
         return $this;
     }
@@ -148,6 +84,30 @@ class CommandeDetail
     public function setDetPrixVente(string $detPrixVente): self
     {
         $this->detPrixVente = $detPrixVente;
+
+        return $this;
+    }
+
+    public function getProduit(): ?Produit
+    {
+        return $this->produit;
+    }
+
+    public function setProduit(?Produit $produit): self
+    {
+        $this->produit = $produit;
+
+        return $this;
+    }
+
+    public function getCommande(): ?Commande
+    {
+        return $this->commande;
+    }
+
+    public function setCommande(?Commande $commande): self
+    {
+        $this->commande = $commande;
 
         return $this;
     }
