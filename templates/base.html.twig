@@ -68,6 +68,10 @@
                                 class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
                                 log-in
                             </a>
+                            <a href="{{ path('app_logout') }}"
+                                class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                                log-out
+                            </a>
                         </div>
                     </div>
                 </div>
