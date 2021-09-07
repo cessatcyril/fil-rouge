@@ -55,19 +55,38 @@ class Client
     private $cliDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Entreprise::class)
+     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=AdresseType::class, mappedBy="client")
+     */
+    private $adresseTypes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Commande::class, mappedBy="client")
+     */
+    private $commande;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Entreprise::class, inversedBy="clients")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $entreprise;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\ManyToOne(targetEntity=Employe::class, inversedBy="clients")
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $user;
+    private $employe;
 
 
     public function __construct()
     {
-        $this->Commande = new ArrayCollection();
+        $this->adresseTypes = new ArrayCollection();
+        $this->commande = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -159,6 +178,80 @@ class Client
         return $this;
     }
 
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return Collection|AdresseType[]
+     */
+    public function getAdresseTypes(): Collection
+    {
+        return $this->adresseTypes;
+    }
+
+    public function addAdresseType(AdresseType $adresseType): self
+    {
+        if (!$this->adresseTypes->contains($adresseType)) {
+            $this->adresseTypes[] = $adresseType;
+            $adresseType->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdresseType(AdresseType $adresseType): self
+    {
+        if ($this->adresseTypes->removeElement($adresseType)) {
+            // set the owning side to null (unless already changed)
+            if ($adresseType->getClient() === $this) {
+                $adresseType->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Commande[]
+     */
+    public function getCommande(): Collection
+    {
+        return $this->commande;
+    }
+
+    public function addCommande(Commande $commande): self
+    {
+        if (!$this->commande->contains($commande)) {
+            $this->commande[] = $commande;
+            $commande->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(Commande $commande): self
+    {
+        if ($this->commande->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getClient() === $this) {
+                $commande->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getEntreprise(): ?Entreprise
     {
         return $this->entreprise;
@@ -171,14 +264,14 @@ class Client
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getEmploye(): ?Employe
     {
-        return $this->user;
+        return $this->employe;
     }
 
-    public function setUser(?User $user): self
+    public function setEmploye(?Employe $employe): self
     {
-        $this->user = $user;
+        $this->employe = $employe;
 
         return $this;
     }

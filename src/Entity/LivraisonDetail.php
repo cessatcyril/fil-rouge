@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LivraisonDetailRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,24 +12,35 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class LivraisonDetail
 {
+
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
     /**
      * @ORM\Column(type="integer")
      */
     private $detQuantiteLivree;
 
     /**
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity=Livraison::class)
+     * @ORM\ManyToOne(targetEntity=Produit::class, inversedBy="livraisonDetails")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $produit;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Livraison::class, inversedBy="livraisonDetails")
      * @ORM\JoinColumn(nullable=false)
      */
     private $livraison;
 
-    /**
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity=Produit::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $produit;
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
 
     public function getDetQuantiteLivree(): ?int
@@ -42,18 +55,6 @@ class LivraisonDetail
         return $this;
     }
 
-    public function getLivraison(): ?Livraison
-    {
-        return $this->livraison;
-    }
-
-    public function setLivraison(?Livraison $livraison): self
-    {
-        $this->livraison = $livraison;
-
-        return $this;
-    }
-
     public function getProduit(): ?Produit
     {
         return $this->produit;
@@ -62,6 +63,18 @@ class LivraisonDetail
     public function setProduit(?Produit $produit): self
     {
         $this->produit = $produit;
+
+        return $this;
+    }
+
+    public function getLivraison(): ?Livraison
+    {
+        return $this->livraison;
+    }
+
+    public function setLivraison(?Livraison $livraison): self
+    {
+        $this->livraison = $livraison;
 
         return $this;
     }

@@ -59,17 +59,6 @@ class Produit
      */
     private $proStockC;
 
-    // /**
-    //  * @ORM\ManyToOne(targetEntity=SousCategorie::class)
-    //  * @ORM\JoinColumn(nullable=false)
-    //  */
-    // private $sousCategorie;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Fournisseur::class, inversedBy="produits")
-     */
-    private $fournisseurs;
-
     /**
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="produit")
      */
@@ -81,10 +70,27 @@ class Produit
      */
     private $sousCategorie;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Fournisseur::class, mappedBy="produit")
+     */
+    private $fournisseurs;
+
+    /**
+     * @ORM\OneToMany(targetEntity=LivraisonDetail::class, mappedBy="produit")
+     */
+    private $livraisonDetails;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CommandeDetail::class, mappedBy="produit")
+     */
+    private $commandeDetails;
+
     public function __construct()
     {
-        $this->fournisseurs = new ArrayCollection();
         $this->image = new ArrayCollection();
+        $this->fournisseurs = new ArrayCollection();
+        $this->livraisonDetails = new ArrayCollection();
+        $this->commandeDetails = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -189,14 +195,6 @@ class Produit
     }
 
     /**
-     * @return Collection|Fournisseur[]
-     */
-    public function getFournisseurs(): Collection
-    {
-        return $this->fournisseurs;
-    }
-
-    /**
      * @return Collection|Image[]
      */
     public function getImage(): Collection
@@ -238,19 +236,108 @@ class Produit
         return $this;
     }
 
-    public function getImagePrincipale() {
+    public function getImagePrincipale()
+    {
         foreach ($this->image as $i) {
             return $i->getImaNom();
         }
         return "";
     }
 
-    public function getImages() {
+    public function getImages()
+    {
         $liste = null;
-        
+
         foreach ($this->image as $key) {
             $liste[] = $key->getImaNom();
         }
         return $liste;
+    }
+
+    /**
+     * @return Collection|Fournisseur[]
+     */
+    public function getFournisseurs(): Collection
+    {
+        return $this->fournisseurs;
+    }
+
+    public function addFournisseur(Fournisseur $fournisseur): self
+    {
+        if (!$this->fournisseurs->contains($fournisseur)) {
+            $this->fournisseurs[] = $fournisseur;
+            $fournisseur->addProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFournisseur(Fournisseur $fournisseur): self
+    {
+        if ($this->fournisseurs->removeElement($fournisseur)) {
+            $fournisseur->removeProduit($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|LivraisonDetail[]
+     */
+    public function getLivraisonDetails(): Collection
+    {
+        return $this->livraisonDetails;
+    }
+
+    public function addLivraisonDetail(LivraisonDetail $livraisonDetail): self
+    {
+        if (!$this->livraisonDetails->contains($livraisonDetail)) {
+            $this->livraisonDetails[] = $livraisonDetail;
+            $livraisonDetail->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivraisonDetail(LivraisonDetail $livraisonDetail): self
+    {
+        if ($this->livraisonDetails->removeElement($livraisonDetail)) {
+            // set the owning side to null (unless already changed)
+            if ($livraisonDetail->getProduit() === $this) {
+                $livraisonDetail->setProduit(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CommandeDetail[]
+     */
+    public function getCommandeDetails(): Collection
+    {
+        return $this->commandeDetails;
+    }
+
+    public function addCommandeDetail(CommandeDetail $commandeDetail): self
+    {
+        if (!$this->commandeDetails->contains($commandeDetail)) {
+            $this->commandeDetails[] = $commandeDetail;
+            $commandeDetail->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommandeDetail(CommandeDetail $commandeDetail): self
+    {
+        if ($this->commandeDetails->removeElement($commandeDetail)) {
+            // set the owning side to null (unless already changed)
+            if ($commandeDetail->getProduit() === $this) {
+                $commandeDetail->setProduit(null);
+            }
+        }
+
+        return $this;
     }
 }

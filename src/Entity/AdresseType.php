@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AdresseTypeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AdresseType
 {
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
 
     /**
      * @ORM\Column(type="smallint")
@@ -17,18 +25,21 @@ class AdresseType
     private $typAdresse;
 
     /**
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity=Client::class)
+     * @ORM\ManyToOne(targetEntity=Adresse::class, inversedBy="adresseTypes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $adresse;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="adresseTypes")
      * @ORM\JoinColumn(nullable=false)
      */
     private $client;
 
-    /**
-     * @ORM\Id
-     * @ORM\OneToOne(targetEntity=Adresse::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $adresse;
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getTypAdresse(): ?int
     {
@@ -42,6 +53,18 @@ class AdresseType
         return $this;
     }
 
+    public function getAdresse(): ?Adresse
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(?Adresse $adresse): self
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
     public function getClient(): ?Client
     {
         return $this->client;
@@ -50,18 +73,6 @@ class AdresseType
     public function setClient(?Client $client): self
     {
         $this->client = $client;
-
-        return $this;
-    }
-
-    public function getAdresse(): ?Adresse
-    {
-        return $this->adresse;
-    }
-
-    public function setAdresse(Adresse $adresse): self
-    {
-        $this->adresse = $adresse;
 
         return $this;
     }

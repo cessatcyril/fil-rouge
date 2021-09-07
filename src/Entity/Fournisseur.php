@@ -60,14 +60,19 @@ class Fournisseur
     private $fouDate;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Produit::class, mappedBy="fournisseurs")
+     * @ORM\ManyToMany(targetEntity=Produit::class, inversedBy="fournisseurs")
      */
-    private $produits;
+    private $produit;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ContactFournisseur::class, mappedBy="fournisseur")
+     */
+    private $contactFournisseur;
 
     public function __construct()
     {
-        $this->ContactFournisseur = new ArrayCollection();
-        $this->produits = new ArrayCollection();
+        $this->produit = new ArrayCollection();
+        $this->contactFournisseur = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,8 +179,54 @@ class Fournisseur
     /**
      * @return Collection|Produit[]
      */
-    public function getProduits(): Collection
+    public function getProduit(): Collection
     {
-        return $this->produits;
+        return $this->produit;
+    }
+
+    public function addProduit(Produit $produit): self
+    {
+        if (!$this->produit->contains($produit)) {
+            $this->produit[] = $produit;
+        }
+
+        return $this;
+    }
+
+    public function removeProduit(Produit $produit): self
+    {
+        $this->produit->removeElement($produit);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ContactFournisseur[]
+     */
+    public function getContactFournisseur(): Collection
+    {
+        return $this->contactFournisseur;
+    }
+
+    public function addContactFournisseur(ContactFournisseur $contactFournisseur): self
+    {
+        if (!$this->contactFournisseur->contains($contactFournisseur)) {
+            $this->contactFournisseur[] = $contactFournisseur;
+            $contactFournisseur->setFournisseur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContactFournisseur(ContactFournisseur $contactFournisseur): self
+    {
+        if ($this->contactFournisseur->removeElement($contactFournisseur)) {
+            // set the owning side to null (unless already changed)
+            if ($contactFournisseur->getFournisseur() === $this) {
+                $contactFournisseur->setFournisseur(null);
+            }
+        }
+
+        return $this;
     }
 }

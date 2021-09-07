@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ContactFournisseurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -63,7 +65,7 @@ class ContactFournisseur
     private $conDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Fournisseur::class)
+     * @ORM\ManyToOne(targetEntity=Fournisseur::class, inversedBy="contactFournisseur")
      * @ORM\JoinColumn(nullable=false)
      */
     private $fournisseur;
