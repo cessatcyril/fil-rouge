@@ -66,6 +66,10 @@
                             </a>
                             {% if app.user %}
                             <div class="navbar-item">{{ app.user.email }}</div>
+                            <a href="{{ path('compte_afficher') }}"
+                                class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                                Mon Compte
+                            </a>
                             <a href="{{ path('app_logout') }}"
                                 class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
                                 log-out

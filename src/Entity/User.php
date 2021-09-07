@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
+use App\Entity\Employe;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -33,6 +34,16 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Client::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $client;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Employe::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $employe;
 
 
     public function getId(): ?int
@@ -114,5 +125,49 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($client === null && $this->client !== null) {
+            $this->client->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($client !== null && $client->getUser() !== $this) {
+            $client->setUser($this);
+        }
+
+        $this->client = $client;
+
+        return $this;
+    }
+
+    public function getEmploye(): ?Employe
+    {
+        return $this->employe;
+    }
+
+    public function setEmploye(?Employe $employe): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($employe === null && $this->employe !== null) {
+            $this->employe->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($employe !== null && $employe->getUser() !== $this) {
+            $employe->setUser($this);
+        }
+
+        $this->employe = $employe;
+
+        return $this;
     }
 }

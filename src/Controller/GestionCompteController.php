@@ -15,8 +15,8 @@ class GestionCompteController extends AbstractController
     public function compteAfficher(): Response
     {
         $obj = $this->getUser()->getClient();
-        //dd($obj);
-        return $this->render('disc_acceuil/index.html.twig', [
+        dd($obj);
+        return $this->render('gestion_compte//afficher.html.twig', [
             'infoClient' => $obj,
         ]);
     }

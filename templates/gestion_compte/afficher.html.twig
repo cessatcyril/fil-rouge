@@ -23,8 +23,7 @@
                     <div class="field">
                         <label class="label" for="artist">Prenom</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="artist"
-                                value="{{ infoClient.artist?disk.artist.artistName:'' }}" disabled>
+                            <input class="input" type="text" name="artist" value="{{ infoClient.cliPrenom }}" disabled>
                         </div>
                     </div>
                 </div>
@@ -37,14 +36,15 @@
                     <div class="field">
                         <label class="label" for="year">Year</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="year" value="{{ infoClient.discYear  }}" disabled>
+                            <input class="input" type="text" name="year" value="{{ infoClient.cliNaissance  }}"
+                                disabled>
                         </div>
                     </div>
                     <!-- form genre-->
                     <div class="field">
                         <label class="label" for="genre">Genre</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="genre" value="{{ infoClient.discGenre }}" disabled>
+                            <input class="input" type="text" name="genre" value="{{ infoClient.cliSexe }}" disabled>
                         </div>
                     </div>
                 </div>
@@ -55,17 +55,16 @@
                 <div class="field-body">
                     <!-- form label -->
                     <div class="field">
-                        <label class="label" for="labelDisc">Label</label>
+                        <label class="label" for="tel">Label</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="labelDisc" value="{{ infoClient.discLabel }}"
-                                disabled>
+                            <input class="input" type="text" name="tel" value="{{ infoClient.cliTel }}" disabled>
                         </div>
                     </div>
                     <!-- form price-->
                     <div class="field">
                         <label class="label" for="price">Price</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="price" value="{{ infoClient.discPrice }}" disabled>
+                            <input class="input" type="text" name="price" value="{{ infoClient.cliFax }}" disabled>
                         </div>
                     </div>
                 </div>
@@ -75,29 +74,22 @@
                 <div class="columns">
                     <div class="column is-half">
 
-                        <!-- block affichage image-->
-                        <div class="block">
-                            <figure class="image is-480x480">
-                                <img src="/pic/{{infoClient.id}}">
-                            </figure>
-                        </div>
-
-                        <!-- block affichage buton de lien CRUD -->
                         <div class="block">
                             <div class="field is-grouped">
                                 <p class="control">
-                                    <a class="button is-link" href="{{ path('disc_modif', {'obj': infoClient.id}) }}">
+                                    <a class="button is-link"
+                                        href="{{ path('compte_modifier', {'obj': infoClient.id}) }}">
                                         Modifier
                                     </a>
                                 </p>
                                 <p class="control">
                                     <a class="button is-link"
-                                        href="{{ path('disc_supprimer', {'obj': infoClient.id}) }}">
+                                        href="{{ path('compte_supprimer', {'obj': infoClient.id}) }}">
                                         Supprimer
                                     </a>
                                 </p>
                                 <p class="control">
-                                    <a class="button is-link" href="{{ path('disc_acceuil') }}">
+                                    <a class="button is-link" href="{{ path('/') }}">
                                         Retour
                                     </a>
                                 </p>
