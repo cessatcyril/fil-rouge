@@ -63,7 +63,7 @@ class GestionCommandesController extends AbstractController
     public function commandeRecapitulatif(): Response
     {
         $panier = $this->getPanier();
-        $adressesClient = $this->getUser()->getClient();//->getTypeAdresse(); ??
+        $adressesClient = $this->getUser();//->getTypeAdresse(); ??
 
         return $this->render('gestion_commandes/recapitulatif.html.twig', [
             'controller_name' => 'GestionCompteController',
