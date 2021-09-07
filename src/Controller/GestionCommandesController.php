@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\Session;
+use App\Service\ToolBox;
 
 class GestionCommandesController extends AbstractController
 {
@@ -69,12 +70,12 @@ class GestionCommandesController extends AbstractController
     /**
      * @Route("/particulier/commande/recapitulatif", name="commande_recapitulatif")
      */
-    public function commandeRecapitulatif(AdresseTypeRepository $repo): Response
+    public function commandeRecapitulatif(AdresseTypeRepository $repo, ToolBox $tb): Response
     {
         return $this->render('gestion_commandes/recapitulatif.html.twig', [
             'controller_name' => 'GestionCompteController',
             'panier' => $this->getPanier(),
-            'adresses' => $this->getAdresses()
+            'adresses' => $tb->getAdresses($this->getUser())
         ]);
     }
 
@@ -103,20 +104,20 @@ class GestionCommandesController extends AbstractController
         return $panier;
     }
 
-    public function getAdresses()
-    {
-        $adresses = [
-            "domicile"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['domicile'], 'client'=>$this->getUser()->getClient()]),
-            "livraison"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['livraison'], 'client'=>$this->getUser()->getClient()]),
-            "facturation"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['facturation'], 'client'=>$this->getUser()->getClient()])
-        ];
-        return $adresses;
-    }
+    // public function getAdresses()
+    // {
+    //     $adresses = [
+    //         "domicile"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['domicile'], 'client'=>$this->getUser()->getClient()]),
+    //         "livraison"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['livraison'], 'client'=>$this->getUser()->getClient()]),
+    //         "facturation"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['facturation'], 'client'=>$this->getUser()->getClient()])
+    //     ];
+    //     return $adresses;
+    // }
 
 
     /**
      * Get the value of session
-     */ 
+     */
     public function getSession()
     {
         return new Session();
@@ -126,7 +127,7 @@ class GestionCommandesController extends AbstractController
      * Set the value of session
      *
      * @return  self
-     */ 
+     */
     public function setSession($session)
     {
         $this->session = $session;
@@ -136,7 +137,7 @@ class GestionCommandesController extends AbstractController
 
     /**
      * Get the value of adresseRepository
-     */ 
+     */
     public function getAdresseRepository()
     {
         return $this->adresseRepository;
@@ -146,7 +147,7 @@ class GestionCommandesController extends AbstractController
      * Set the value of adresseRepository
      *
      * @return  self
-     */ 
+     */
     public function setAdresseRepository($value)
     {
         $this->adresseRepository = $value;

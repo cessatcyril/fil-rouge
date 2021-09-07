@@ -39,8 +39,7 @@
                     <div class="field">
                         <label class="label" for="DDN">Date de naissance</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="DDN" value="{{ infoClient.cliNaissance | date("
-                                d/m/Y") }}" disabled>
+                            <input class="input" type="text" name="DDN" value="{{ infoClient.cliNaissance | date(" d/m/Y") }}" disabled>
                         </div>
                     </div>
                     <!-- form genre-->
@@ -91,15 +90,13 @@
                     <div class="field">
                         <label class="label" for="adresse">adresse</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="adresse" value="{{ value.adresse.adrAdresse }}"
-                                disabled>
+                            <input class="input" type="text" name="adresse" value="{{ value.adresse.adrAdresse }}" disabled>
                         </div>
                     </div>
                     <div class="field">
                         <label class="label" for="postal">code postal</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="postal" value="{{ value.adresse.adrPostal }}"
-                                disabled>
+                            <input class="input" type="text" name="postal" value="{{ value.adresse.adrPostal }}" disabled>
                         </div>
                     </div>
                 </div>
@@ -133,15 +130,13 @@
                     <div class="field">
                         <label class="label" for="adresse">adresse</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="adresse" value="{{ value.adresse.adrAdresse }}"
-                                disabled>
+                            <input class="input" type="text" name="adresse" value="{{ value.adresse.adrAdresse }}" disabled>
                         </div>
                     </div>
                     <div class="field">
                         <label class="label" for="postal">code postal</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="postal" value="{{ value.adresse.adrPostal }}"
-                                disabled>
+                            <input class="input" type="text" name="postal" value="{{ value.adresse.adrPostal }}" disabled>
                         </div>
                     </div>
                 </div>
@@ -175,15 +170,13 @@
                     <div class="field">
                         <label class="label" for="adresse">adresse</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="adresse" value="{{ value.adresse.adrAdresse }}"
-                                disabled>
+                            <input class="input" type="text" name="adresse" value="{{ value.adresse.adrAdresse }}" disabled>
                         </div>
                     </div>
                     <div class="field">
                         <label class="label" for="postal">code postal</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="postal" value="{{ value.adresse.adrPostal }}"
-                                disabled>
+                            <input class="input" type="text" name="postal" value="{{ value.adresse.adrPostal }}" disabled>
                         </div>
                     </div>
                 </div>
@@ -216,14 +209,12 @@
                         <div class="block">
                             <div class="field is-grouped">
                                 <p class="control">
-                                    <a class="button is-link"
-                                        href="{{ path('compte_modifier', {'obj': infoClient.id}) }}">
+                                    <a class="button is-link" href="{{ path('compte_modifier', {'obj': infoClient.id}) }}">
                                         Modifier
                                     </a>
                                 </p>
                                 <p class="control">
-                                    <a class="button is-link"
-                                        href="{{ path('compte_supprimer', {'obj': infoClient.id}) }}">
+                                    <a class="button is-link" href="{{ path('compte_supprimer', {'obj': infoClient.id}) }}">
                                         Supprimer
                                     </a>
                                 </p>
