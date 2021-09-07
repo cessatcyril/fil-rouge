@@ -15,12 +15,6 @@ use App\Service\ToolBox;
 
 class GestionCommandesController extends AbstractController
 {
-    private $adresseRepository;
-
-    public function __construct(AdresseTypeRepository $adresseRepository)
-    {
-        $this->adresseRepository = $adresseRepository;
-    }
 
     /**
      * @Route("/commande/commander", name="commande_creer")
@@ -104,17 +98,6 @@ class GestionCommandesController extends AbstractController
         return $panier;
     }
 
-    // public function getAdresses()
-    // {
-    //     $adresses = [
-    //         "domicile"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['domicile'], 'client'=>$this->getUser()->getClient()]),
-    //         "livraison"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['livraison'], 'client'=>$this->getUser()->getClient()]),
-    //         "facturation"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['facturation'], 'client'=>$this->getUser()->getClient()])
-    //     ];
-    //     return $adresses;
-    // }
-
-
     /**
      * Get the value of session
      */
@@ -131,26 +114,6 @@ class GestionCommandesController extends AbstractController
     public function setSession($session)
     {
         $this->session = $session;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of adresseRepository
-     */
-    public function getAdresseRepository()
-    {
-        return $this->adresseRepository;
-    }
-
-    /**
-     * Set the value of adresseRepository
-     *
-     * @return  self
-     */
-    public function setAdresseRepository($value)
-    {
-        $this->adresseRepository = $value;
 
         return $this;
     }
