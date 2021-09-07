@@ -35,15 +35,14 @@ class Employe
     private $empTel;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $user;
-
-    /**
      * @ORM\OneToMany(targetEntity=Client::class, mappedBy="employe")
      */
     private $clients;
+
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="employe", cascade={"persist", "remove"})
+     */
+    private $user;
 
     public function __construct()
     {
@@ -91,17 +90,6 @@ class Employe
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Client[]
@@ -129,6 +117,18 @@ class Employe
                 $client->setEmploye(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

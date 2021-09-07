@@ -55,12 +55,6 @@ class Client
     private $cliDate;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $user;
-
-    /**
      * @ORM\OneToMany(targetEntity=AdresseType::class, mappedBy="client")
      */
     private $adresseTypes;
@@ -82,6 +76,10 @@ class Client
      */
     private $employe;
 
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="client", cascade={"persist", "remove"})
+     */
+    private $user;
 
     public function __construct()
     {
@@ -178,20 +176,6 @@ class Client
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-
-
     /**
      * @return Collection|AdresseType[]
      */
@@ -272,6 +256,18 @@ class Client
     public function setEmploye(?Employe $employe): self
     {
         $this->employe = $employe;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

@@ -14,8 +14,10 @@ class GestionCompteController extends AbstractController
      */
     public function compteAfficher(): Response
     {
-        return $this->render('gestion_compte/afficher.html.twig', [
-            'controller_name' => 'GestionCompteController',
+        $obj = $this->getUser()->getClient();
+        dd($obj);
+        return $this->render('gestion_compte//afficher.html.twig', [
+            'infoClient' => $obj,
         ]);
     }
 
