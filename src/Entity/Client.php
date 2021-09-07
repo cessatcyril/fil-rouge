@@ -56,7 +56,7 @@ class Client
 
     /**
      * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $user;
 
@@ -72,13 +72,13 @@ class Client
 
     /**
      * @ORM\ManyToOne(targetEntity=Entreprise::class, inversedBy="clients")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $entreprise;
 
     /**
      * @ORM\ManyToOne(targetEntity=Employe::class, inversedBy="clients")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $employe;
 
