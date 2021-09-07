@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\AdresseType;
 use App\Form\CarteCreditType;
+use App\Repository\AdresseTypeRepository;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,6 +14,12 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class GestionCommandesController extends AbstractController
 {
+    private $adresseRepository;
+
+    public function __construct(AdresseTypeRepository $adresseRepository)
+    {
+        $this->adresseRepository = $adresseRepository;
+    }
 
     /**
      * @Route("/commande/commander", name="commande_creer")
@@ -60,15 +69,12 @@ class GestionCommandesController extends AbstractController
     /**
      * @Route("/particulier/commande/recapitulatif", name="commande_recapitulatif")
      */
-    public function commandeRecapitulatif(): Response
+    public function commandeRecapitulatif(AdresseTypeRepository $repo): Response
     {
-        $panier = $this->getPanier();
-        $adressesClient = $this->getUser();//->getTypeAdresse(); ??
-
         return $this->render('gestion_commandes/recapitulatif.html.twig', [
             'controller_name' => 'GestionCompteController',
-            'panier' => $panier,
-            'infos_client' => $adressesClient
+            'panier' => $this->getPanier(),
+            'adresses' => $this->getAdresses()
         ]);
     }
 
@@ -97,6 +103,16 @@ class GestionCommandesController extends AbstractController
         return $panier;
     }
 
+    public function getAdresses()
+    {
+        $adresses = [
+            "domicile"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['domicile'], 'client'=>$this->getUser()->getClient()]),
+            "livraison"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['livraison'], 'client'=>$this->getUser()->getClient()]),
+            "facturation"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['facturation'], 'client'=>$this->getUser()->getClient()])
+        ];
+        return $adresses;
+    }
+
 
     /**
      * Get the value of session
@@ -114,6 +130,26 @@ class GestionCommandesController extends AbstractController
     public function setSession($session)
     {
         $this->session = $session;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of adresseRepository
+     */ 
+    public function getAdresseRepository()
+    {
+        return $this->adresseRepository;
+    }
+
+    /**
+     * Set the value of adresseRepository
+     *
+     * @return  self
+     */ 
+    public function setAdresseRepository($value)
+    {
+        $this->adresseRepository = $value;
 
         return $this;
     }

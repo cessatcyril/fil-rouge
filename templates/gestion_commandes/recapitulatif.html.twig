@@ -69,11 +69,6 @@
                 </h3>
             </div>
             <div>
-                {% for row in infos_client %}
-                    {#Afficher les differentes adresses du client#}
-                {% endfor %}
-            </div>
-            <div>
                 <a href="{{ path('paiement_moyen') }}">
                     <button class="button is-link">Valider les informations</button>
                 </a>
@@ -82,6 +77,141 @@
                 </a>
             </div>
         </div>
+    </div>
+
+
+
+
+    <div>
+        {% for key,value in adresses %}
+
+        {% if key == 'domicile' %}
+        <div class="content">
+            <h3>adresse du domicile</h3>
+        </div>
+        <div class="field is-horizontal">
+        </div>
+        <div class="field-body">
+            <!-- form label -->
+            <div class="field">
+                <label class="label" for="adresse">adresse</label>
+                <div class="control is-expanded">
+                    <input class="input" type="text" name="adresse" value="{{ value.adresse.adrAdresse }}"
+                        disabled>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="postal">code postal</label>
+                <div class="control is-expanded">
+                    <input class="input" type="text" name="postal" value="{{ value.adresse.adrPostal }}"
+                        disabled>
+                </div>
+            </div>
+        </div>
+        <div class="field is-horizontal">
+        </div>
+        <div class="field-body">
+            <!-- form label -->
+            <div class="field">
+                <label class="label" for="ville">ville</label>
+                <div class="control is-expanded">
+                    <input class="input" type="text" name="ville" value="{{ value.adresse.adrVille }}" disabled>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="pays">pays</label>
+                <div class="control is-expanded">
+                    <input class="input" type="text" name="pays" value="{{ value.adresse.adrPays }}" disabled>
+                </div>
+            </div>
+        </div>
+        <br>
+        {% endif %}
+        {% if key == 'livraison' %}
+        <div class="content">
+            <h3>adresse de livraison</h3>
+        </div>
+        <div class="field is-horizontal">
+        </div>
+        <div class="field-body">
+            <!-- form label -->
+            <div class="field">
+                <label class="label" for="adresse">adresse</label>
+                <div class="control is-expanded">
+                    <input class="input" type="text" name="adresse" value="{{ value.adresse.adrAdresse }}"
+                        disabled>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="postal">code postal</label>
+                <div class="control is-expanded">
+                    <input class="input" type="text" name="postal" value="{{ value.adresse.adrPostal }}"
+                        disabled>
+                </div>
+            </div>
+        </div>
+        <div class="field is-horizontal">
+        </div>
+        <div class="field-body">
+            <!-- form label -->
+            <div class="field">
+                <label class="label" for="ville">ville</label>
+                <div class="control is-expanded">
+                    <input class="input" type="text" name="ville" value="{{ value.adresse.adrVille }}" disabled>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="pays">pays</label>
+                <div class="control is-expanded">
+                    <input class="input" type="text" name="pays" value="{{ value.adresse.adrPays }}" disabled>
+                </div>
+            </div>
+        </div>
+        <br>
+        {% endif %}
+        {% if key == 'facturation' %}
+        <div class="content">
+            <h3>adresse de facturation</h3>
+        </div>
+        <div class="field is-horizontal">
+        </div>
+        <div class="field-body">
+            <!-- form label -->
+            <div class="field">
+                <label class="label" for="adresse">adresse</label>
+                <div class="control is-expanded">
+                    <input class="input" type="text" name="adresse" value="{{ value.adresse.adrAdresse }}"
+                        disabled>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="postal">code postal</label>
+                <div class="control is-expanded">
+                    <input class="input" type="text" name="postal" value="{{ value.adresse.adrPostal }}"
+                        disabled>
+                </div>
+            </div>
+        </div>
+        <div class="field is-horizontal">
+        </div>
+        <div class="field-body">
+            <!-- form label -->
+            <div class="field">
+                <label class="label" for="ville">ville</label>
+                <div class="control is-expanded">
+                    <input class="input" type="text" name="ville" value="{{ value.adresse.adrVille }}" disabled>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="pays">pays</label>
+                <div class="control is-expanded">
+                    <input class="input" type="text" name="pays" value="{{ value.adresse.adrPays }}" disabled>
+                </div>
+            </div>
+        </div>
+        <br>
+        {% endif %}
+        {% endfor %}
     </div>
 </section>
 {% endblock %}
