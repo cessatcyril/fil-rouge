@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\AdresseType;
+use App\Repository\AdresseTypeRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class GestionCompteController extends AbstractController
 {
@@ -12,12 +14,21 @@ class GestionCompteController extends AbstractController
     /**
      * @Route("/particulier/compte/afficher", name="compte_afficher")
      */
-    public function compteAfficher(): Response
+    public function compteAfficher(AdresseTypeRepository $adresseType): Response
     {
         $obj = $this->getUser()->getClient();
-        dd($obj);
+
+        //$adresse = $this->getUser()->getClient()->getAdresseTypes();
+
+        //dd($adresse);
+        // $clientId = $this->getUser()->getClient()->getId();
+        // $est = ["client" => $clientId];
+        // //dd($est);
+        // $adresseType->findby($est);
+        // dd($adresseType->findby($est));
         return $this->render('gestion_compte//afficher.html.twig', [
             'infoClient' => $obj,
+            //'adresse' => $adresse
         ]);
     }
 

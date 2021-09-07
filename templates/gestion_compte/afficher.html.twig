@@ -8,22 +8,25 @@
         <div class="column is-10 is-offset-1">
 
             <div class="block">
+                <div class="content">
+                    <h3>Coordonnées personnelles</h3>
+                </div>
                 <!-- form en 2 morceaux-->
                 <div class="field is-horizontal">
                 </div>
                 <div class="field-body">
                     <!--form titre -->
                     <div class="field">
-                        <label class="label" for="title">Nom</label>
+                        <label class="label" for="nom">Nom</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="title" value="{{ infoClient.cliNom  }}" disabled>
+                            <input class="input" type="text" name="nom" value="{{ infoClient.cliNom  }}" disabled>
                         </div>
                     </div>
                     <!-- form artiste-->
                     <div class="field">
-                        <label class="label" for="artist">Prenom</label>
+                        <label class="label" for="prenom">Prenom</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="artist" value="{{ infoClient.cliPrenom }}" disabled>
+                            <input class="input" type="text" name="prenom" value="{{ infoClient.cliPrenom }}" disabled>
                         </div>
                     </div>
                 </div>
@@ -34,17 +37,21 @@
                 <div class="field-body">
                     <!-- form année-->
                     <div class="field">
-                        <label class="label" for="year">Year</label>
+                        <label class="label" for="DDN">Date de naissance</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="year" value="{{ infoClient.cliNaissance  }}"
-                                disabled>
+                            <input class="input" type="text" name="DDN" value="{{ infoClient.cliNaissance | date("
+                                d/m/Y") }}" disabled>
                         </div>
                     </div>
                     <!-- form genre-->
                     <div class="field">
                         <label class="label" for="genre">Genre</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="genre" value="{{ infoClient.cliSexe }}" disabled>
+                            {% if infoClient.cliSexe %}
+                            <input class="input" type="text" name="genre" value="Femme" disabled>
+                            {% else %}
+                            <input class="input" type="text" name="genre" value="Homme" disabled>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -55,19 +62,151 @@
                 <div class="field-body">
                     <!-- form label -->
                     <div class="field">
-                        <label class="label" for="tel">Label</label>
+                        <label class="label" for="tel">Telephone</label>
                         <div class="control is-expanded">
                             <input class="input" type="text" name="tel" value="{{ infoClient.cliTel }}" disabled>
                         </div>
                     </div>
                     <!-- form price-->
                     <div class="field">
-                        <label class="label" for="price">Price</label>
+                        <label class="label" for="fax">Fax</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="price" value="{{ infoClient.cliFax }}" disabled>
+                            <input class="input" type="text" name="fax" value="{{ infoClient.cliFax }}" disabled>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div>
+                {% for key,value in infoClient.adresseTypes %}
+
+                {% if key == 0 %}
+                <div class="content">
+                    <h3>adresse du domicile</h3>
+                </div>
+                <div class="field is-horizontal">
+                </div>
+                <div class="field-body">
+                    <!-- form label -->
+                    <div class="field">
+                        <label class="label" for="adresse">adresse</label>
+                        <div class="control is-expanded">
+                            <input class="input" type="text" name="adresse" value="{{ value.adresse.adrAdresse }}"
+                                disabled>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="postal">code postal</label>
+                        <div class="control is-expanded">
+                            <input class="input" type="text" name="postal" value="{{ value.adresse.adrPostal }}"
+                                disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                </div>
+                <div class="field-body">
+                    <!-- form label -->
+                    <div class="field">
+                        <label class="label" for="ville">ville</label>
+                        <div class="control is-expanded">
+                            <input class="input" type="text" name="ville" value="{{ value.adresse.adrVille }}" disabled>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="pays">pays</label>
+                        <div class="control is-expanded">
+                            <input class="input" type="text" name="pays" value="{{ value.adresse.adrPays }}" disabled>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                {% endif %}
+                {% if key == 1 %}
+                <div class="content">
+                    <h3>adresse de livraison</h3>
+                </div>
+                <div class="field is-horizontal">
+                </div>
+                <div class="field-body">
+                    <!-- form label -->
+                    <div class="field">
+                        <label class="label" for="adresse">adresse</label>
+                        <div class="control is-expanded">
+                            <input class="input" type="text" name="adresse" value="{{ value.adresse.adrAdresse }}"
+                                disabled>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="postal">code postal</label>
+                        <div class="control is-expanded">
+                            <input class="input" type="text" name="postal" value="{{ value.adresse.adrPostal }}"
+                                disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                </div>
+                <div class="field-body">
+                    <!-- form label -->
+                    <div class="field">
+                        <label class="label" for="ville">ville</label>
+                        <div class="control is-expanded">
+                            <input class="input" type="text" name="ville" value="{{ value.adresse.adrVille }}" disabled>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="pays">pays</label>
+                        <div class="control is-expanded">
+                            <input class="input" type="text" name="pays" value="{{ value.adresse.adrPays }}" disabled>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                {% endif %}
+                {% if key == 2 %}
+                <div class="content">
+                    <h3>adresse de facturation</h3>
+                </div>
+                <div class="field is-horizontal">
+                </div>
+                <div class="field-body">
+                    <!-- form label -->
+                    <div class="field">
+                        <label class="label" for="adresse">adresse</label>
+                        <div class="control is-expanded">
+                            <input class="input" type="text" name="adresse" value="{{ value.adresse.adrAdresse }}"
+                                disabled>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="postal">code postal</label>
+                        <div class="control is-expanded">
+                            <input class="input" type="text" name="postal" value="{{ value.adresse.adrPostal }}"
+                                disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                </div>
+                <div class="field-body">
+                    <!-- form label -->
+                    <div class="field">
+                        <label class="label" for="ville">ville</label>
+                        <div class="control is-expanded">
+                            <input class="input" type="text" name="ville" value="{{ value.adresse.adrVille }}" disabled>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="pays">pays</label>
+                        <div class="control is-expanded">
+                            <input class="input" type="text" name="pays" value="{{ value.adresse.adrPays }}" disabled>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                {% endif %}
+                {% endfor %}
             </div>
 
             <div class="block">
@@ -89,7 +228,7 @@
                                     </a>
                                 </p>
                                 <p class="control">
-                                    <a class="button is-link" href="{{ path('/') }}">
+                                    <a class="button is-link" href="{{ path('categorie') }}">
                                         Retour
                                     </a>
                                 </p>
@@ -99,8 +238,17 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
+
+
+
+
+
+
+
+
+
+
 {% endblock %}
