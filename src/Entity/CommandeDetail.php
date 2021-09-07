@@ -13,13 +13,12 @@ use App\Entity\Produit;
  */
 class CommandeDetail
 {
-
     /**
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity=Commande::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private $commande;
+    private $id;
 
     /**
      * @ORM\Column(type="integer")
@@ -27,27 +26,30 @@ class CommandeDetail
     private $detQuantite;
 
     /**
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity=Produit::class)
+     * @ORM\Column(type="decimal", precision=13, scale=2)
+     */
+    private $detRemise;
+
+    /**
+     * @ORM\Column(type="decimal", precision=13, scale=2)
+     */
+    private $detPrixVente;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Produit::class, inversedBy="commandeDetails")
      * @ORM\JoinColumn(nullable=false)
      */
     private $produit;
 
-    public function __construct()
-    {
-        $this->produit = new ArrayCollection();
-    }
+    /**
+     * @ORM\ManyToOne(targetEntity=Commande::class, inversedBy="commandeDetails")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $commande;
 
-    public function getCommande(): ?Commande
+    public function getId(): ?int
     {
-        return $this->commande;
-    }
-
-    public function setCommande(?Commande $commande): self
-    {
-        $this->commande = $commande;
-
-        return $this;
+        return $this->id;
     }
 
     public function getDetQuantite(): ?int
@@ -62,6 +64,30 @@ class CommandeDetail
         return $this;
     }
 
+    public function getDetRemise(): ?string
+    {
+        return $this->detRemise;
+    }
+
+    public function setDetRemise(string $detRemise): self
+    {
+        $this->detRemise = $detRemise;
+
+        return $this;
+    }
+
+    public function getDetPrixVente(): ?string
+    {
+        return $this->detPrixVente;
+    }
+
+    public function setDetPrixVente(string $detPrixVente): self
+    {
+        $this->detPrixVente = $detPrixVente;
+
+        return $this;
+    }
+
     public function getProduit(): ?Produit
     {
         return $this->produit;
@@ -70,6 +96,18 @@ class CommandeDetail
     public function setProduit(?Produit $produit): self
     {
         $this->produit = $produit;
+
+        return $this;
+    }
+
+    public function getCommande(): ?Commande
+    {
+        return $this->commande;
+    }
+
+    public function setCommande(?Commande $commande): self
+    {
+        $this->commande = $commande;
 
         return $this;
     }
