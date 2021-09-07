@@ -12,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AdresseType
 {
+    const TYPES = [
+        "domicile"=>1,
+        "livraison"=>2,
+        "facturation"=>3
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
