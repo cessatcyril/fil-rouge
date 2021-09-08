@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Client;
+use App\Form\ClientType;
+use App\Service\ToolBox;
 use App\Entity\AdresseType;
 use App\Repository\AdresseTypeRepository;
-use App\Service\ToolBox;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,12 +37,22 @@ class GestionCompteController extends AbstractController
     }
 
     /**
-     * @Route("/compte/modifier", name="compte_modifier")
+     * @Route("/compte/modifier/{id}", name="compte_modifier")
      */
-    public function compteModifier(): Response
+    public function compteModifier(Request $request, Client $client): Response
     {
-        return $this->render('gestion_compte/modifierCompte.html.twig', [
-            'controller_name' => 'GestionCompteController',
+        $form = $this->createForm(ClientType::class, $client);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('client_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('client/edit.html.twig', [
+            'client' => $client,
+            'form' => $form->createView(),
         ]);
     }
 

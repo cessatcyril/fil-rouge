@@ -56,11 +56,6 @@ class Commande
     private $comButoir;
 
     /**
-     * @ORM\OneToMany(targetEntity=Client::class, mappedBy="commande")
-     */
-    private $clients;
-
-    /**
      * @ORM\OneToMany(targetEntity=CommandeDetail::class, mappedBy="commande")
      */
     private $commandeDetails;
@@ -78,7 +73,6 @@ class Commande
 
     public function __construct()
     {
-        $this->clients = new ArrayCollection();
         $this->commandeDetails = new ArrayCollection();
         $this->livraisons = new ArrayCollection();
     }
@@ -172,13 +166,13 @@ class Commande
         return $this;
     }
 
-    /**
-     * @return Collection|Client[]
-     */
-    public function getClients(): Collection
-    {
-        return $this->clients;
-    }
+    // /**
+    //  * @return Collection|Client[]
+    //  */
+    // public function getClients(): Collection
+    // {
+    //     return $this->clients;
+    // }
 
     // public function addClient(Client $client): self
     // {
