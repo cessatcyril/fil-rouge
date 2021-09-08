@@ -1,4 +1,21 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+
+{{ form_label(form.adrPays) }}
+{{ form_widget(form.adrPays) }}
+{{ form_errors(form.adrPays) }}
+<br>
+{{ form_label(form.adrVille) }}
+{{ form_widget(form.adrVille) }}
+{{ form_errors(form.adrVille) }}
+<br>
+{{ form_label(form.adrPostal) }}
+{{ form_widget(form.adrPostal) }}
+{{ form_errors(form.adrPostal) }}
+<br>
+{{ form_label(form.adrAdresse) }}
+{{ form_widget(form.adrAdresse) }}
+{{ form_errors(form.adrAdresse) }}
+<br>
+<button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

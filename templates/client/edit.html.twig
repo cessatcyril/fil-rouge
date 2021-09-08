@@ -3,11 +3,8 @@
 {% block title %}Edit Client{% endblock %}
 
 {% block body %}
-    <h1>Edit Client</h1>
+<h1>Modifier ses données personnelles</h1>
 
-    {{ include('client/_form.html.twig', {'button_label': 'Update'}) }}
+{{ include('client/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('client_index') }}">back to list</a>
-
-    {{ include('client/_delete_form.html.twig') }}
 {% endblock %}

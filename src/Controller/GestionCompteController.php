@@ -47,7 +47,7 @@ class GestionCompteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('client_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('compte_afficher', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('client/edit.html.twig', [
