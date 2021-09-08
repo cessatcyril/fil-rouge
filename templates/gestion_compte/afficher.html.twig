@@ -11,18 +11,45 @@
                 <div class="content">
                     <h3>Coordonnées personnelles</h3>
                 </div>
+
                 <!-- form en 2 morceaux-->
                 <div class="field is-horizontal">
                 </div>
                 <div class="field-body">
-                    <!--form titre -->
+                    <!--form email -->
+                    <div class="field">
+                        <label class="label" for="mail">Votre Email</label>
+                        <div class="control is-expanded">
+                            <input class="input" type="email" name="mail" value="{{ email }}" disabled>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <p class="control">
+                            <a class="button is-link" href="{{ path('compte_modifier_email', {'obj': infoClient.id}) }}">
+                                Modifier Email
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
+                <p class="control">
+                    <a class="button is-link" href="{{ path('compte_modifier_password', {'obj': infoClient.id}) }}">
+                        Modifier votre mot de passe
+                    </a>
+                </p>
+
+                <!-- form en 2 morceaux-->
+                <div class="field is-horizontal">
+                </div>
+                <div class="field-body">
+                    <!--form nom -->
                     <div class="field">
                         <label class="label" for="nom">Nom</label>
                         <div class="control is-expanded">
-                            <input class="input" type="text" name="nom" value="{{ infoClient.cliNom  }}" disabled>
+                            <input class="input" type="text" name="nom" value="{{ infoClient.cliNom }}" disabled>
                         </div>
                     </div>
-                    <!-- form artiste-->
+                    <!-- form prenom-->
                     <div class="field">
                         <label class="label" for="prenom">Prenom</label>
                         <div class="control is-expanded">
@@ -35,7 +62,7 @@
                 <div class="field is-horizontal">
                 </div>
                 <div class="field-body">
-                    <!-- form année-->
+                    <!-- form naissance-->
                     <div class="field">
                         <label class="label" for="DDN">Date de naissance</label>
                         <div class="control is-expanded">
@@ -59,14 +86,14 @@
                 <div class="field is-horizontal">
                 </div>
                 <div class="field-body">
-                    <!-- form label -->
+                    <!-- form telephone -->
                     <div class="field">
                         <label class="label" for="tel">Telephone</label>
                         <div class="control is-expanded">
                             <input class="input" type="text" name="tel" value="{{ infoClient.cliTel }}" disabled>
                         </div>
                     </div>
-                    <!-- form price-->
+                    <!-- form fax-->
                     <div class="field">
                         <label class="label" for="fax">Fax</label>
                         <div class="control is-expanded">
@@ -74,19 +101,20 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <div>
-                {% for key,value in infoClient.adresseTypes %}
+                {% for key,value in adresse %}
 
-                {% if key == 0 %}
+                {% if key == 'domicile' %}
                 <div class="content">
                     <h3>adresse du domicile</h3>
                 </div>
                 <div class="field is-horizontal">
                 </div>
                 <div class="field-body">
-                    <!-- form label -->
+                    <!-- form adresse de domicile -->
                     <div class="field">
                         <label class="label" for="adresse">adresse</label>
                         <div class="control is-expanded">
@@ -103,7 +131,6 @@
                 <div class="field is-horizontal">
                 </div>
                 <div class="field-body">
-                    <!-- form label -->
                     <div class="field">
                         <label class="label" for="ville">ville</label>
                         <div class="control is-expanded">
@@ -119,14 +146,15 @@
                 </div>
                 <br>
                 {% endif %}
-                {% if key == 1 %}
+
+                {% if key == 'livraison' %}
                 <div class="content">
                     <h3>adresse de livraison</h3>
                 </div>
                 <div class="field is-horizontal">
                 </div>
                 <div class="field-body">
-                    <!-- form label -->
+                    <!-- form adresse de livraison -->
                     <div class="field">
                         <label class="label" for="adresse">adresse</label>
                         <div class="control is-expanded">
@@ -143,7 +171,6 @@
                 <div class="field is-horizontal">
                 </div>
                 <div class="field-body">
-                    <!-- form label -->
                     <div class="field">
                         <label class="label" for="ville">ville</label>
                         <div class="control is-expanded">
@@ -159,14 +186,15 @@
                 </div>
                 <br>
                 {% endif %}
-                {% if key == 2 %}
+
+                {% if key == 'facturation' %}
                 <div class="content">
                     <h3>adresse de facturation</h3>
                 </div>
                 <div class="field is-horizontal">
                 </div>
                 <div class="field-body">
-                    <!-- form label -->
+                    <!-- form adresse de facturation -->
                     <div class="field">
                         <label class="label" for="adresse">adresse</label>
                         <div class="control is-expanded">
@@ -183,7 +211,6 @@
                 <div class="field is-horizontal">
                 </div>
                 <div class="field-body">
-                    <!-- form label -->
                     <div class="field">
                         <label class="label" for="ville">ville</label>
                         <div class="control is-expanded">
