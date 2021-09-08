@@ -37,13 +37,13 @@ class CommandeDetail
 
     /**
      * @ORM\ManyToOne(targetEntity=Produit::class, inversedBy="commandeDetails")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $produit;
 
     /**
      * @ORM\ManyToOne(targetEntity=Commande::class, inversedBy="commandeDetails")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $commande;
 

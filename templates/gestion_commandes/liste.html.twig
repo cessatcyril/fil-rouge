@@ -7,30 +7,33 @@
 {% for commande in commandes %}
     {#dump(commande)#}
     <div style="margin-bottom: 50px;border: 5px solid;">
-        Id commande : {{commande.id}}<br/>
-        Commande du : {{commande.comCommande | date("d/m/Y")}}<br/>
-        Livrée le : {{commande.comLivraison | date("d/m/Y")}}<br/>
+        <ul>
+            <li>Id commande : {{commande.id}}</li>
+            <li>Commande du : {{commande.comCommande | date("d/m/Y")}}</li>
+            <li>Livrée le : {{commande.comLivraison | date("d/m/Y")}}</li>
 
 
-        {% for row in commande.livraisons %}
-            Quantité livrée : {{row.livQuantite}}<br/>
-            {{ dump(row) }}
+        {% for livraison in commande.livraisons %}
+
+            {% for livraisonDetail in livraison.livraisonDetails %}
+                <li>detQuantiteLivree : {{livraisonDetail.detQuantiteLivree}}</li>
+                <li>Id produit livré : {{livraisonDetail.produit.id}}</li>
+                {{ dump(livraisonDetail) }}
+            {% endfor %}
         {% endfor %}
 
 
         {% for commandedetail in commande.commandeDetails %}
-            <p>
-                Id commandeDetail : {{commandedetail.id}}<br/>
-                Quantité : {{commandedetail.detQuantite}}<br>
-                Remise : {{commandedetail.detRemise}}<br>
-                Prix unitaire : {{commandedetail.detPrixVente}}<br>
-                Prix des {{commandedetail.detQuantite}} articles : {{commandedetail.detPrixVente * commandedetail.detQuantite - commandedetail.detRemise}}<br/>
-                Article : {{commandedetail.produit.proProduit}}<br/>
-                Description : {{commandedetail.produit.proDescription | nl2br}}<br/>
-                Accroche : {{commandedetail.produit.proAccroche}}
-
-            </p>
+                <li>Id commandeDetail : {{commandedetail.id}}</li>
+                <li>Quantité : {{commandedetail.detQuantite}}</li>
+                <li>Remise : {{commandedetail.detRemise}}</li>
+                <li>Prix unitaire : {{commandedetail.detPrixVente}}</li>
+                <li>Prix des {{commandedetail.detQuantite}} articles : {{commandedetail.detPrixVente * commandedetail.detQuantite - commandedetail.detRemise}}</li>
+                <li>Article : {{commandedetail.produit.proProduit}}</li>
+                <li>Description : {{commandedetail.produit.proDescription | nl2br}}</li>
+                <li>Accroche : {{commandedetail.produit.proAccroche}}</li>
         {% endfor %}
+        </ul>
     </div>
 {% endfor %}
 {% endblock %}

@@ -31,7 +31,7 @@ class Livraison
 
     /**
      * @ORM\ManyToOne(targetEntity=Commande::class, inversedBy="livraisons")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $commande;
 
