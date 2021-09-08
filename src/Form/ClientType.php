@@ -27,7 +27,8 @@ class ClientType extends AbstractType
                         'max' => 50,
                         "maxMessage" => "trop long",
                     ]),
-                ]
+                ],
+                "label" => "Nom :",
             ])
 
             ->add('cliPrenom', TextType::class, [
@@ -39,11 +40,13 @@ class ClientType extends AbstractType
                         'max' => 50,
                         "maxMessage" => "trop long",
                     ]),
-                ]
+                ],
+                "label" => "Prenom :",
             ])
 
             ->add('cliNaissance', DateType::class, [
                 'widget' => 'single_text',
+                "label" => "Date de naissance :",
             ])
 
             ->add('cliTel', TextType::class, [
@@ -55,7 +58,8 @@ class ClientType extends AbstractType
                         'max' => 15,
                         "maxMessage" => "trop long",
                     ]),
-                ]
+                ],
+                "label" => "Téléphone :",
             ])
 
             ->add('cliFax', TextType::class, [
@@ -67,7 +71,8 @@ class ClientType extends AbstractType
                         'max' => 15,
                         "maxMessage" => "trop long",
                     ]),
-                ]
+                ],
+                "label" => "Fax :",
             ])
 
             ->add('cliSexe', ChoiceType::class, [
@@ -75,6 +80,7 @@ class ClientType extends AbstractType
                     'Femme' => true,
                     'Homme' => false,
                 ],
+                "label" => "Sexe :",
             ]);
     }
 

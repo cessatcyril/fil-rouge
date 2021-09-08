@@ -24,7 +24,9 @@ class AdresseType extends AbstractType
                         'max' => 50,
                         "maxMessage" => "trop long",
                     ]),
-                ]
+                ],
+                "label" => "Pays :",
+
             ])
             ->add('adrVille', TextType::class, [
                 'constraints' => [
@@ -35,7 +37,8 @@ class AdresseType extends AbstractType
                         'max' => 50,
                         "maxMessage" => "trop long",
                     ]),
-                ]
+                ],
+                "label" => "Ville :",
             ])
             ->add('adrPostal', TextType::class, [
                 'constraints' => [
@@ -46,7 +49,8 @@ class AdresseType extends AbstractType
                         'max' => 15,
                         "maxMessage" => "trop long",
                     ]),
-                ]
+                ],
+                "label" => "Code postal :",
             ])
             ->add('adrAdresse', TextType::class, [
                 'constraints' => [
@@ -57,7 +61,8 @@ class AdresseType extends AbstractType
                         'max' => 255,
                         "maxMessage" => "trop long",
                     ]),
-                ]
+                ],
+                "label" => "Adresse :",
             ]);
     }
 
