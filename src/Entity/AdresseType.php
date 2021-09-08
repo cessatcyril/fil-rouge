@@ -37,7 +37,7 @@ class AdresseType
 
     /**
      * @ORM\ManyToOne(targetEntity=Adresse::class, inversedBy="adresseTypes")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $adresse;
 

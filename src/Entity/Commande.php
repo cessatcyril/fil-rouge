@@ -67,7 +67,7 @@ class Commande
 
     /**
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="commande")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $client;
 
@@ -180,27 +180,27 @@ class Commande
         return $this->clients;
     }
 
-    public function addClient(Client $client): self
-    {
-        if (!$this->clients->contains($client)) {
-            $this->clients[] = $client;
-            $client->setCommande($this);
-        }
+    // public function addClient(Client $client): self
+    // {
+    //     if (!$this->clients->contains($client)) {
+    //         $this->clients[] = $client;
+    //         $client->setCommande($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeClient(Client $client): self
-    {
-        if ($this->clients->removeElement($client)) {
-            // set the owning side to null (unless already changed)
-            if ($client->getCommande() === $this) {
-                $client->setCommande(null);
-            }
-        }
+    // public function removeClient(Client $client): self
+    // {
+    //     if ($this->clients->removeElement($client)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($client->getCommande() === $this) {
+    //             $client->setCommande(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * @return Collection|CommandeDetail[]

@@ -27,13 +27,13 @@ class LivraisonDetail
 
     /**
      * @ORM\ManyToOne(targetEntity=Produit::class, inversedBy="livraisonDetails")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $produit;
 
     /**
      * @ORM\ManyToOne(targetEntity=Livraison::class, inversedBy="livraisonDetails")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $livraison;
 
