@@ -12,26 +12,18 @@
                     <h3>Coordonnées personnelles</h3>
                 </div>
 
-                <!-- form en 2 morceaux-->
-                <div class="field is-horizontal">
-                </div>
-                <div class="field-body">
-                    <!--form email -->
-                    <div class="field">
-                        <label class="label" for="mail">Votre Email</label>
-                        <div class="control is-expanded">
-                            <input class="input" type="email" name="mail" value="{{ email }}" disabled>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <p class="control">
-                            <a class="button is-link" href="{{ path('compte_modifier_email', {'obj': infoClient.id}) }}">
-                                Modifier Email
-                            </a>
-                        </p>
+                <!--form email -->
+                <div class="field">
+                    <label class="label" for="mail">Votre Email</label>
+                    <div class="control is-expanded">
+                        <input class="input" type="email" name="mail" value="{{ email }}" disabled>
                     </div>
                 </div>
-
+                <p class="control">
+                    <a class="button is-link" href="{{ path('compte_modifier_email', {'obj': infoClient.id}) }}">
+                        Modifier Email
+                    </a>
+                </p>
                 <p class="control">
                     <a class="button is-link" href="{{ path('compte_modifier_password', {'obj': infoClient.id}) }}">
                         Modifier votre mot de passe
@@ -111,6 +103,13 @@
                 <div class="content">
                     <h3>adresse du domicile</h3>
                 </div>
+
+                <p class="control">
+                    <a class="button is-link" href="{{ path('adresse_edit', {'id': value.adresse.id}) }}">
+                        Modifier adresse
+                    </a>
+                </p>
+
                 <div class="field is-horizontal">
                 </div>
                 <div class="field-body">
@@ -151,6 +150,12 @@
                 <div class="content">
                     <h3>adresse de livraison</h3>
                 </div>
+
+                <p class="control">
+                    <a class="button is-link" href="{{ path('adresse_edit', {'id': value.adresse.id}) }}">
+                        Modifier adresse
+                    </a>
+
                 <div class="field is-horizontal">
                 </div>
                 <div class="field-body">
@@ -191,6 +196,12 @@
                 <div class="content">
                     <h3>adresse de facturation</h3>
                 </div>
+
+                <p class="control">
+                    <a class="button is-link" href="{{ path('adresse_edit', {'id': value.adresse.id}) }}">
+                        Modifier adresse
+                    </a>
+
                 <div class="field is-horizontal">
                 </div>
                 <div class="field-body">

@@ -20,6 +20,7 @@ class GestionCompteController extends AbstractController
         $obj = $this->getUser()->getClient();
         $adresse = $tb->getAdresses($this->getUser());
         $mail = $this->getUser()->getEmail();
+        //dd($adresse);
         //////////////////////////////////////////////
         //                                          //
         //  AJOUTER L'AFFICHAGE HISTORIQUE COMMANDE //
