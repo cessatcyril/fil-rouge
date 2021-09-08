@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CatalogueController!{% endblock %}
+
+{% block body %}
+
+{% for commande in commandes %}
+    {#dump(commande)#}
+    <div style="margin-bottom: 50px;border: 5px solid;">
+        Id commande : {{commande.id}}<br/>
+        Commande du : {{commande.comCommande | date("d/m/Y")}}<br/>
+        Livrée le : {{commande.comLivraison | date("d/m/Y")}}<br/>
+
+
+        {% for row in commande.livraisons %}
+            Quantité livrée : {{row.livQuantite}}<br/>
+            {{ dump(row) }}
+        {% endfor %}
+
+
+        {% for commandedetail in commande.commandeDetails %}
+            <p>
+                Id commandeDetail : {{commandedetail.id}}<br/>
+                Quantité : {{commandedetail.detQuantite}}<br>
+                Remise : {{commandedetail.detRemise}}<br>
+                Prix unitaire : {{commandedetail.detPrixVente}}<br>
+                Prix des {{commandedetail.detQuantite}} articles : {{commandedetail.detPrixVente * commandedetail.detQuantite - commandedetail.detRemise}}<br/>
+                Article : {{commandedetail.produit.proProduit}}<br/>
+                Description : {{commandedetail.produit.proDescription | nl2br}}<br/>
+                Accroche : {{commandedetail.produit.proAccroche}}
+
+            </p>
+        {% endfor %}
+    </div>
+{% endfor %}
+{% endblock %}

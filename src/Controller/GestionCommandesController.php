@@ -52,6 +52,26 @@ class GestionCommandesController extends AbstractController
     }
 
     /**
+     * @Route("/particulier/commande/liste", name="commande_lister")
+     */
+    public function commandeLister(): Response
+    {
+        $commandes = $this->getUser()->getClient()->getCommande();
+        // foreach ($commandes as $key => $value) {
+        //     dump($key);
+        //     dump($value);
+        // }
+        // dd($commandes);
+
+
+        return $this->render('gestion_commandes/liste.html.twig', [
+            'controller_name' => 'GestionCompteController',
+            'commandes' => $commandes
+        ]);
+    }
+
+
+    /**
      * @Route("/commande/afficher", name="commande_afficher")
      */
     public function commandeAfficher(): Response

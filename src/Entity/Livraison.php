@@ -45,14 +45,14 @@ class Livraison
         return $this->id;
     }
 
-    public function getLivQuantite(): ?\DateTimeInterface
+    public function getLivQuantite(): ?int
     {
-        return $this->quantiteLivree;
+        return $this->livQuantite;
     }
 
-    public function setLivQuantite(\DateTimeInterface $quantiteLivree): self
+    public function setLivQuantite(int $livQuantite): self
     {
-        $this->quantiteLivree = $quantiteLivree;
+        $this->livQuantite = $livQuantite;
 
         return $this;
     }
