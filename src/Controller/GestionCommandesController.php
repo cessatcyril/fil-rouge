@@ -68,34 +68,9 @@ class GestionCommandesController extends AbstractController
     {
         return $this->render('gestion_commandes/recapitulatif.html.twig', [
             'controller_name' => 'GestionCompteController',
-            'panier' => $this->getPanier(),
+            'panier' => $tb->getPanier($this->getSession()),
             'adresses' => $tb->getAdresses($this->getUser())
         ]);
-    }
-
-    public function getPanier()
-    {
-        $panier = $this->getSession()->get("panier");
-        //$test = $panier[0]["id"];
-        if ($panier == null) {
-            return $this->redirectToRoute("panier_vide");
-        }
-
-        if ($panier != null) {
-            foreach ($panier as $i => $ligne) {
-                $panier[$i]["prixTotal"] = $panier[$i]["quantite"] * $panier[$i]["prix"];
-            }
-        }
-        if ($panier != null) {
-            $commande = 0;
-            foreach ($panier as $i => $ligne) {
-                $commande = $commande + $panier[$i]["prixTotal"];
-                $panier[0]["prixCommande"] = $commande;
-            }
-        }
-        $this->getSession()->set("panier", $panier);
-
-        return $panier;
     }
 
     /**

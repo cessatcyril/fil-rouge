@@ -68,14 +68,6 @@
                     {{ panier[0]["prixCommande"]}}
                 </h3>
             </div>
-            <div>
-                <a href="{{ path('paiement_moyen') }}">
-                    <button class="button is-link">Valider les informations</button>
-                </a>
-                <a href="{{ path('compte_modifier') }}">
-                    <button class="button is-link">Modifier les informations</button>
-                </a>
-            </div>
         </div>
     </div>
 
@@ -212,6 +204,14 @@
         <br>
         {% endif %}
         {% endfor %}
+        <div>
+            <a href="{{ path('paiement_moyen') }}">
+                <button class="button is-link">Valider les informations</button>
+            </a>
+            <a href="{{ path('compte_modifier') }}">
+                <button class="button is-link">Modifier les informations</button>
+            </a>
+        </div>
     </div>
 </section>
 {% endblock %}
