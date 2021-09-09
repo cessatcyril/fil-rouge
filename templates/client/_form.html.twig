@@ -1,4 +1,30 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+
+{{ form_label(form.cliNom) }}
+{{ form_widget(form.cliNom) }}
+{{ form_errors(form.cliNom) }}
+<br>
+{{ form_label(form.cliPrenom) }}
+{{ form_widget(form.cliPrenom) }}
+{{ form_errors(form.cliPrenom) }}
+<br>
+{{ form_label(form.cliNaissance) }}
+{{ form_widget(form.cliNaissance) }}
+{{ form_errors(form.cliNaissance) }}
+<br>
+{{ form_label(form.cliTel) }}
+{{ form_widget(form.cliTel) }}
+{{ form_errors(form.cliTel) }}
+<br>
+{{ form_label(form.cliFax) }}
+{{ form_widget(form.cliFax) }}
+{{ form_errors(form.cliFax) }}
+<br>
+{{ form_label(form.cliSexe) }}
+{{ form_widget(form.cliSexe) }}
+{{ form_errors(form.cliSexe) }}
+<br>
+
+<button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

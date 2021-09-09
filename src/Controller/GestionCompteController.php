@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Client;
+use App\Form\UserType;
 use App\Form\ClientType;
 use App\Service\ToolBox;
 use App\Entity\AdresseType;
@@ -11,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class GestionCompteController extends AbstractController
 {
@@ -47,7 +50,7 @@ class GestionCompteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('client_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('compte_afficher', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('client/edit.html.twig', [
@@ -57,22 +60,32 @@ class GestionCompteController extends AbstractController
     }
 
     /**
-     * @Route("/compte/modifier/password", name="compte_modifier_password")
+     * @Route("/compte/modifier/user/{id}", name="compte_modifier_user")
      */
-    public function compteModifierPassword(): Response
+    public function compteModifierEmail(Request $request, User $user, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        return $this->render('gestion_compte/modifierPassword.html.twig', [
-            'controller_name' => 'GestionCompteController',
-        ]);
-    }
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+        //dd($form);
 
-    /**
-     * @Route("/compte/modifier/email", name="compte_modifier_email")
-     */
-    public function compteModifierEmail(): Response
-    {
-        return $this->render('gestion_compte/modifierEmail.html.twig', [
-            'controller_name' => 'GestionCompteController',
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('compte_afficher', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form->createView()
         ]);
     }
 

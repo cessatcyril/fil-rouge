@@ -20,11 +20,6 @@ class Livraison
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $livQuantite;
-
-    /**
      * @ORM\OneToMany(targetEntity=LivraisonDetail::class, mappedBy="livraison")
      */
     private $livraisonDetails;
@@ -35,6 +30,11 @@ class Livraison
      */
     private $commande;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $livQuantite;
+
     public function __construct()
     {
         $this->livraisonDetails = new ArrayCollection();
@@ -43,18 +43,6 @@ class Livraison
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getLivQuantite(): ?int
-    {
-        return $this->livQuantite;
-    }
-
-    public function setLivQuantite(int $livQuantite): self
-    {
-        $this->livQuantite = $livQuantite;
-
-        return $this;
     }
 
     /**
@@ -95,6 +83,18 @@ class Livraison
     public function setCommande(?Commande $commande): self
     {
         $this->commande = $commande;
+
+        return $this;
+    }
+
+    public function getLivQuantite(): ?int
+    {
+        return $this->livQuantite;
+    }
+
+    public function setLivQuantite(int $livQuantite): self
+    {
+        $this->livQuantite = $livQuantite;
 
         return $this;
     }

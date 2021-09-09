@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Employe;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -46,6 +47,13 @@ class User implements UserInterface
     private $employe;
 
 
+    /**
+     * @Assert\NotBlank()
+     * @Assert\Length(min=4, max=4096)
+     */
+    private $plainPassword;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +68,17 @@ class User implements UserInterface
     {
         $this->email = $email;
 
+        return $this;
+    }
+
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
         return $this;
     }
 
