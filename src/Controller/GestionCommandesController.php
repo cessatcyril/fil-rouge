@@ -2,21 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\AdresseType;
-use App\Form\CarteCreditType;
+use App\Entity\Commande;
+use App\Service\ToolBox;
+use App\Form\CommandeType;
 use App\Repository\AdresseTypeRepository;
-use App\Repository\CommandeDetailRepository;
-use App\Repository\CommandeRepository;
-use App\Repository\LivraisonDetailRepository;
-use App\Repository\LivraisonRepository;
-use App\Repository\ProduitRepository;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\Session;
-use App\Service\ToolBox;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class GestionCommandesController extends AbstractController
 {
@@ -24,15 +18,44 @@ class GestionCommandesController extends AbstractController
     /**
      * @Route("/commande/commander", name="commande_creer")
      */
-    public function commandeCreer(): Response
+    public function commandeCreer(Commande $commande, Request $request): Response
     {
         //creer commande
         //recap'
         //mise en base de donnees
         //pdf
+        
+        $form = $this->createForm(CommandeType::class, $commande);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $form->getData() holds the submitted values
+            // but, the original `$task` variable has also been updated
+            $commande = $form->getData();
+
+            // ... perform some action, such as saving the task to the database
+            // for example, if Task is a Doctrine entity, save it!
+            // $entityManager = $this->getDoctrine()->getManager();
+            // $entityManager->persist($task);
+            // $entityManager->flush();
+            $this->eMI->persist($commande);
+            $this->eMI->flush();
+
+            //return $this->redirectToRoute('edited');
+            return $this->redirectToRoute('showAdmin', ['id' => $property->getId()]);
+        }
 
         return $this->render('gestion_commandes/creer.html.twig', [
             'controller_name' => 'GestionCompteController',
+        ]);
+    }
+
+    /**
+     * @Route("commande/passee", name="commande_passee")
+     */
+    public function FunctionName(): Response
+    {
+        return $this->render('gestion_commandes/passee.html.twig', [
+            ////////////////////////////////////////////////////////////////////////////////
         ]);
     }
 
