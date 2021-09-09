@@ -3,67 +3,26 @@
 {% block title %}Hello CatalogueController!{% endblock %}
 
 {% block body %}
-
-    {% for commande in commandes %}
-        {#dump(commande)#}
-        <div style="margin-bottom: 50px;border: 5px solid;">
+{% for commande in commandes %}
+    <div>
+        <h1 class="title h1">Commande du {{ commande.date_commande }}</h1>
+        <div>
             <ul>
-                <li>Id commande : {{commande.id}}</li>
-                <li>Commande du : {{commande.comCommande | date("d/m/Y")}}</li>
-                <li>Livrée le : {{commande.comLivraison | date("d/m/Y")}}</li>
-
-
-            {% for livraison in commande.livraisons %}
-
-                {% for livraisonDetail in livraison.livraisonDetails %}
-                    <li>detQuantiteLivree : {{livraisonDetail.detQuantiteLivree}}</li>
-                    <li>Id produit livré : {{livraisonDetail.produit.id}}</li>
-                    {{ dump(livraisonDetail) }}
+                {% for produit in commande.produits %}
+                <li>Produit : {{produit.produit}}</li>
+                <li>{{produit.accroche}}</li>
+                <li>{{produit.description|nl2br}}</li>
+                <li>Prix unitaire : {{produit.prix_unitaire}}€</li>
+                <li>Quantité commandée : {{produit.quantite_commandee}}</li>
+                <li>Remise : {{produit.remise}}</li>
+                <li>Sous-total : {{produit.sous_total}}€</li>
+                <li>Quantité livrée : {{produit.quantite_livree}}</li>
+                <li>Quantité à livrer : {{produit.quantite_a_livrer}}</li>
                 {% endfor %}
-
-            {% endfor %}
-
-
-            {% for commandedetail in commande.commandeDetails %}
-                <li>Id commandeDetail : {{commandedetail.id}}</li>
-                {{ dump(commandedetail) }}
-                <li>Quantité : {{commandedetail.detQuantite}}</li>
-                <li>{% %}</li>
-                <li>Remise : {{commandedetail.detRemise}}</li>
-                <li>Prix unitaire : {{commandedetail.detPrixVente}}</li>
-                <li>Prix des {{commandedetail.detQuantite}} articles : {{commandedetail.detPrixVente * commandedetail.detQuantite - commandedetail.detRemise}}</li>
-                <li>Article : {{commandedetail.produit.proProduit}}</li>
-                <li>Description : {{commandedetail.produit.proDescription | nl2br}}</li>
-                <li>Accroche : {{commandedetail.produit.proAccroche}}</li>
-            {% endfor %}
-            
             </ul>
         </div>
-    {% endfor %}
+    </div>
 
-    {% for commande in commandes %}
-        {% set commande_id = {{commande.id}} %}
-        {% set commande_date_commande = {{commande.comCommande | date("d/m/Y")}} %}
-        {% set commande_date_livraison = {{commande.comLivraison | date("d/m/Y")}} %}
 
-        {% for livraison in commande.livraisons %}
-
-            {% for livraisonDetail in livraison.livraisonDetails %}
-                {% set commande_quantite_livree = {{livraisonDetail.detQuantiteLivree}} %}
-                {% set commande_quantite_livree_id = {{livraisonDetail.produit.id}} %}
-            {% endfor %}
-
-        {% endfor %}
-
-        {% for commandedetail in commande.commandeDetails %}
-            {% set commande_detail_id = {{commandedetail.id}} %}
-            {% set commande_detail_remise = {{commandedetail.detRemise}} %}
-            {% set command_detail_prix_vente = {{commandedetail.detPrixVente}} %}
-            {% set article_prix_total = {{commandedetail.detPrixVente * commandedetail.detQuantite - commandedetail.detRemise}} %}
-            {% set article_nom = {{commandedetail.produit.proProduit}} %}
-            {% set article_description = {{commandedetail.produit.proDescription | nl2br}} %}
-            {% set article_accroche = {{commandedetail.produit.proAccroche}} %}
-        {% endfor %}
-
-    {% endfor %}
+{% endfor %}
 {% endblock %}
