@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Employe;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -48,7 +49,7 @@ class User implements UserInterface
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Length(max=4096)
+     * @Assert\Length(min=4, max=4096)
      */
     private $plainPassword;
 
@@ -78,6 +79,7 @@ class User implements UserInterface
     public function setPlainPassword($password)
     {
         $this->plainPassword = $password;
+        return $this;
     }
 
     /**
