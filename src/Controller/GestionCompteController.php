@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Client;
 use App\Form\UserType;
+use App\Entity\Adresse;
 use App\Form\ClientType;
 use App\Service\ToolBox;
-use App\Entity\AdresseType;
+use App\Form\AdresseType;
+use App\Form\CreerCompteType;
 use App\Repository\AdresseTypeRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,8 +94,36 @@ class GestionCompteController extends AbstractController
     /**
      * @Route("/compte/creer", name="compte_creer")
      */
-    public function compteCreer(): Response
+    public function compteCreer(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
+
+        $user = new User();
+        $form = $this->createForm(CreerCompteType::class);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('/categorie', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('gestion_compte/creer.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
+
+
+
+
         return $this->render('gestion_compte/creer.html.twig', [
             'controller_name' => 'GestionCompteController',
         ]);
@@ -104,6 +134,7 @@ class GestionCompteController extends AbstractController
      */
     public function compteSupprimer(): Response
     {
+
         return $this->render('gestion_compte/supprimer.html.twig', [
             'controller_name' => 'GestionCompteController',
         ]);

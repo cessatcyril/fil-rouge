@@ -31,6 +31,7 @@ class UserType extends AbstractType
             ])
             ->add('plainPassword', PasswordType::class, [
                 // 'mapped' => false
+                "label" => "Password: :"
             ]);
     }
 

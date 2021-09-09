@@ -50,34 +50,31 @@
                     </div>
                     <div id="navbarMenuHeroA" class="navbar-menu">
                         <div class="navbar-start">
-                            <a href="{{ path('categorie') }}"
-                                class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                            <a href="{{ path('categorie') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
                                 Accueil
                             </a>
-                            <a href="{{ path('commande_afficher') }}"
-                                class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                            <a href="{{ path('commande_afficher') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
                                 Ma commande
                             </a>
                         </div>
                         <div class="navbar-end">
-                            <a href="{{ path('panier_liste') }}"
-                                class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                            <a href="{{ path('panier_liste') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
                                 Mon panier
                             </a>
                             {% if app.user %}
                             <div class="navbar-item">{{ app.user.email }}</div>
-                            <a href="{{ path('compte_afficher') }}"
-                                class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                            <a href="{{ path('compte_afficher') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
                                 Mon Compte
                             </a>
-                            <a href="{{ path('app_logout') }}"
-                                class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                            <a href="{{ path('app_logout') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
                                 log-out
                             </a>
                             {% else %}
-                            <a href="{{ path('compte_afficher') }}"
-                                class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                            <a href="{{ path('compte_afficher') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
                                 log-in
+                            </a>
+                            <a href="{{ path('compte_creer') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                                Creer un compte
                             </a>
                             {% endif %}
                         </div>
@@ -93,8 +90,7 @@
         <div class="content has-text-centered has-text-grey-light">
             <p>
                 Créé par Samier Fabien. Le code source est sous licence
-                <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. Le contenu du site est sous licence <a
-                    href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+                <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. Le contenu du site est sous licence <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
             </p>
         </div>
     </footer>

@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello GestionCompteController!{% endblock %}
+
+{% block body %}
+
+
+{{ form_start(form) }}
+
+{{ form_label(form.email) }}
+{{ form_widget(form.email) }}
+{{ form_errors(form.email) }}
+<br>
+{{ form_label(form.plainPassword) }}
+{{ form_widget(form.plainPassword) }}
+{{ form_errors(form.plainPassword) }}
+<br>
+{{ form_label(form.cliNom) }}
+{{ form_widget(form.cliNom) }}
+{{ form_errors(form.cliNom) }}
+<br>
+{{ form_label(form.cliPrenom) }}
+{{ form_widget(form.cliPrenom) }}
+{{ form_errors(form.cliPrenom) }}
+<br>
+{{ form_label(form.cliNaissance) }}
+{{ form_widget(form.cliNaissance) }}
+{{ form_errors(form.cliNaissance) }}
+<br>
+{{ form_label(form.cliTel) }}
+{{ form_widget(form.cliTel) }}
+{{ form_errors(form.cliTel) }}
+<br>
+{{ form_label(form.cliFax) }}
+{{ form_widget(form.cliFax) }}
+{{ form_errors(form.cliFax) }}
+<br>
+{{ form_label(form.cliSexe) }}
+{{ form_widget(form.cliSexe) }}
+{{ form_errors(form.cliSexe) }}
+<br>
+{{ form_label(form.adrPaysDomicile) }}
+{{ form_widget(form.adrPaysDomicile) }}
+{{ form_errors(form.adrPaysDomicile) }}
+<br>
+{{ form_label(form.adrVilleDomicile) }}
+{{ form_widget(form.adrVilleDomicile) }}
+{{ form_errors(form.adrVilleDomicile) }}
+<br>
+{{ form_label(form.adrPostalDomicile) }}
+{{ form_widget(form.adrPostalDomicile) }}
+{{ form_errors(form.adrPostalDomicile) }}
+<br>
+{{ form_label(form.adrAdresseDomicile) }}
+{{ form_widget(form.adrAdresseDomicile) }}
+{{ form_errors(form.adrAdresseDomicile) }}
+<br>
+{{ form_label(form.adrPaysLivraison) }}
+{{ form_widget(form.adrPaysLivraison) }}
+{{ form_errors(form.adrPaysLivraison) }}
+<br>
+{{ form_label(form.adrVilleLivraison) }}
+{{ form_widget(form.adrVilleLivraison) }}
+{{ form_errors(form.adrVilleLivraison) }}
+<br>
+{{ form_label(form.adrPostalLivraison) }}
+{{ form_widget(form.adrPostalLivraison) }}
+{{ form_errors(form.adrPostalLivraison) }}
+<br>
+{{ form_label(form.adrAdresseLivraison) }}
+{{ form_widget(form.adrAdresseLivraison) }}
+{{ form_errors(form.adrAdresseLivraison) }}
+<br>
+{{ form_label(form.adrPaysFacturation) }}
+{{ form_widget(form.adrPaysFacturation) }}
+{{ form_errors(form.adrPaysFacturation) }}
+<br>
+{{ form_label(form.adrVilleFacturation) }}
+{{ form_widget(form.adrVilleFacturation) }}
+{{ form_errors(form.adrVilleFacturation) }}
+<br>
+{{ form_label(form.adrPostalFacturation) }}
+{{ form_widget(form.adrPostalFacturation) }}
+{{ form_errors(form.adrPostalFacturation) }}
+<br>
+{{ form_label(form.adrAdresseFacturation) }}
+{{ form_widget(form.adrAdresseFacturation) }}
+{{ form_errors(form.adrAdresseFacturation) }}
+<br>
+<button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+
+
+
+
+
+{% endblock %}
