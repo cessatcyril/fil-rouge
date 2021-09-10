@@ -26,6 +26,7 @@ class GestionCompteController extends AbstractController
      */
     public function compteAfficher(AdresseTypeRepository $adresseType, ToolBox $tb): Response
     {
+        $userId = $this->getUser();
         $obj = $this->getUser()->getClient();
         $adresse = $tb->getAdresses($this->getUser());
         $mail = $this->getUser()->getEmail();
@@ -39,6 +40,7 @@ class GestionCompteController extends AbstractController
             'infoClient' => $obj,
             'adresse' => $adresse,
             'email' => $mail,
+            'userId' => $userId,
         ]);
     }
 
