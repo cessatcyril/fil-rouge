@@ -5,7 +5,11 @@ namespace App\Controller;
 use App\Entity\Commande;
 use App\Service\ToolBox;
 use App\Form\CommandeType;
+use App\Entity\CommandeDetail;
+use App\Repository\CommandeRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AdresseTypeRepository;
+use App\Repository\CommandeDetailRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,33 +20,27 @@ class GestionCommandesController extends AbstractController
 {
 
     /**
-     * @Route("/commande/commander", name="commande_creer")
+     * @Route("/particulier/commande/commander", name="commande_creer")
      */
-    public function commandeCreer(Commande $commande, Request $request): Response
+    public function commandeCreer(EntityManagerInterface $eMI, CommandeRepository $commandeRepo, CommandeDetailRepository $commandeDetailRepository, Toolbox $toolBox): Response
     {
-        //creer commande
-        //recap'
         //mise en base de donnees
-        //pdf
+        //pdf facture
+
         
-        $form = $this->createForm(CommandeType::class, $commande);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
-            $commande = $form->getData();
-
-            // ... perform some action, such as saving the task to the database
-            // for example, if Task is a Doctrine entity, save it!
-            // $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->persist($task);
-            // $entityManager->flush();
-            $this->eMI->persist($commande);
-            $this->eMI->flush();
-
-            //return $this->redirectToRoute('edited');
-            return $this->redirectToRoute('showAdmin', ['id' => $property->getId()]);
+        $panier = $toolBox->getPanier($this->getSession());
+        //dd($panier);
+        if ($panier==null) {
+            return $this->redirectToRoute("panier_vide");
         }
+        
+
+        //(try/catch ou if) ? redirectToRoute(succes) : redirectToRoute(erreur{message})
+        $commande = new Commande();
+        $commande->setClient($this->getUser()->getClient()->getId());
+        //$eMI->persist($commande);
+        //$eMI->flush();
+
 
         return $this->render('gestion_commandes/creer.html.twig', [
             'controller_name' => 'GestionCompteController',
@@ -104,12 +102,12 @@ class GestionCommandesController extends AbstractController
     /**
      * @Route("/particulier/commande/recapitulatif", name="commande_recapitulatif")
      */
-    public function commandeRecapitulatif(AdresseTypeRepository $repo, ToolBox $tb): Response
+    public function commandeRecapitulatif(AdresseTypeRepository $repo, ToolBox $toolBox): Response
     {
         return $this->render('gestion_commandes/recapitulatif.html.twig', [
             'controller_name' => 'GestionCompteController',
-            'panier' => $tb->getPanier($this->getSession()),
-            'adresses' => $tb->getAdresses($this->getUser())
+            'panier' => $toolBox->getPanier($this->getSession()),
+            'adresses' => $toolBox->getAdresses($this->getUser())
         ]);
     }
 
