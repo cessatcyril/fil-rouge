@@ -12,12 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AdresseType
 {
-    const TYPES = [
-        "domicile" => 1,
-        "livraison" => 2,
-        "facturation" => 3
-    ];
-
     const DOMICILE = 1;
     const LIVRAISON = 2;
     const FACTURATION = 3;

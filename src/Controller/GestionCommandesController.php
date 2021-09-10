@@ -5,6 +5,11 @@ namespace App\Controller;
 use App\Entity\AdresseType;
 use App\Form\CarteCreditType;
 use App\Repository\AdresseTypeRepository;
+use App\Repository\CommandeDetailRepository;
+use App\Repository\CommandeRepository;
+use App\Repository\LivraisonDetailRepository;
+use App\Repository\LivraisonRepository;
+use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,12 +20,6 @@ use App\Service\ToolBox;
 
 class GestionCommandesController extends AbstractController
 {
-    private $adresseRepository;
-
-    public function __construct(AdresseTypeRepository $adresseRepository)
-    {
-        $this->adresseRepository = $adresseRepository;
-    }
 
     /**
      * @Route("/commande/commander", name="commande_creer")
@@ -58,6 +57,18 @@ class GestionCommandesController extends AbstractController
     }
 
     /**
+     * @Route("/particulier/commande/liste", name="commande_lister")
+     */
+    public function commandeLister(): Response
+    {
+        return $this->render('gestion_commandes/liste.html.twig', [
+            'controller_name' => 'GestionCompteController',
+            'commandes' =>$this->getListe()
+        ]);
+    }
+
+
+    /**
      * @Route("/commande/afficher", name="commande_afficher")
      */
     public function commandeAfficher(): Response
@@ -74,46 +85,47 @@ class GestionCommandesController extends AbstractController
     {
         return $this->render('gestion_commandes/recapitulatif.html.twig', [
             'controller_name' => 'GestionCompteController',
-            'panier' => $this->getPanier(),
+            'panier' => $tb->getPanier($this->getSession()),
             'adresses' => $tb->getAdresses($this->getUser())
         ]);
     }
 
-    public function getPanier()
+    public function getListe()
     {
-        $panier = $this->getSession()->get("panier");
-        //$test = $panier[0]["id"];
-        if ($panier == null) {
-            return $this->redirectToRoute("panier_vide");
-        }
+        $commandes = $this->getUser()->getClient()->getCommande();
+        $donnees = [];
+        foreach ($commandes as $key => $commande) {
+            $donnees[$key]['id'] = $commande->getId();
+            $donnees[$key]['date_commande'] = $commande->getComCommande()->format('d/m/Y');
+            $donnees[$key]['date_livraison'] = $commande->getComLivraison()->format('d/m/Y');
 
-        if ($panier != null) {
-            foreach ($panier as $i => $ligne) {
-                $panier[$i]["prixTotal"] = $panier[$i]["quantite"] * $panier[$i]["prix"];
+            
+            $commande_details = $commande->getCommandeDetails();
+            foreach ($commande_details as $key3 => $commande_detail) {
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['id_produit'] = $commande_detail->getProduit()->getId();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['produit'] = $commande_detail->getProduit()->getProProduit();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['accroche'] = $commande_detail->getProduit()->getProAccroche();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['description'] = $commande_detail->getProduit()->getProDescription();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['remise'] = $commande_detail->getDetRemise();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['prix_unitaire'] = $commande_detail->getDetPrixVente();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'] = $commande_detail->getDetQuantite();/////////////////////
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['sous_total'] = $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise();
+            }
+
+            $livraisons = $commande->getLivraisons();
+            foreach ($livraisons as $key2 => $livraison) {
+
+                $livraison_detail = $livraison->getLivraisonDetails();
+                foreach ($livraison_detail as $key4 => $livraison_detail) {
+                    if (isset($donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['id_produit']) || isset($donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['quantite_commandee'])) {
+                        $donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['quantite_livree'] = $livraison_detail->getDetQuantiteLivree();
+                        $donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['quantite_a_livrer'] = $donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['quantite_commandee'] - $donnees[$key]['livraison'][$key4]['quantite_livree'] = $livraison_detail->getDetQuantiteLivree();
+                    }
+                }
             }
         }
-        if ($panier != null) {
-            $commande = 0;
-            foreach ($panier as $i => $ligne) {
-                $commande = $commande + $panier[$i]["prixTotal"];
-                $panier[0]["prixCommande"] = $commande;
-            }
-        }
-        $this->getSession()->set("panier", $panier);
-
-        return $panier;
+        return $donnees;
     }
-
-    // public function getAdresses()
-    // {
-    //     $adresses = [
-    //         "domicile"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['domicile'], 'client'=>$this->getUser()->getClient()]),
-    //         "livraison"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['livraison'], 'client'=>$this->getUser()->getClient()]),
-    //         "facturation"=>$this->getAdresseRepository()->findOneBy(['typAdresse'=>AdresseType::TYPES['facturation'], 'client'=>$this->getUser()->getClient()])
-    //     ];
-    //     return $adresses;
-    // }
-
 
     /**
      * Get the value of session
@@ -131,26 +143,6 @@ class GestionCommandesController extends AbstractController
     public function setSession($session)
     {
         $this->session = $session;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of adresseRepository
-     */
-    public function getAdresseRepository()
-    {
-        return $this->adresseRepository;
-    }
-
-    /**
-     * Set the value of adresseRepository
-     *
-     * @return  self
-     */
-    public function setAdresseRepository($value)
-    {
-        $this->adresseRepository = $value;
 
         return $this;
     }
