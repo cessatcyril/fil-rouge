@@ -11,6 +11,7 @@ use App\Service\ToolBox;
 use App\Form\AdresseType;
 use App\Form\CreerCompteType;
 use App\Repository\AdresseTypeRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -130,10 +131,15 @@ class GestionCompteController extends AbstractController
     }
 
     /**
-     * @Route("/compte/supprimer", name="compte_supprimer")
+     * @Route("/compte/supprimer/{id}", name="compte_supprimer")
      */
-    public function compteSupprimer(): Response
+    public function compteSupprimer(User $user): Response
     {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $em->remove($user);
+        $em->flush();
 
         return $this->render('gestion_compte/supprimer.html.twig', [
             'controller_name' => 'GestionCompteController',
