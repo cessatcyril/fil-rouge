@@ -10,8 +10,9 @@ use App\Form\ClientType;
 use App\Service\ToolBox;
 use App\Form\AdresseType;
 use App\Form\CreerCompteType;
-use App\Repository\AdresseTypeRepository;
+use App\Entity\AdresseType as AT;
 use App\Repository\UserRepository;
+use App\Repository\AdresseTypeRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -100,35 +101,51 @@ class GestionCompteController extends AbstractController
     public function compteCreer(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
 
-        $user = new User();
+        // $user = new User();
         $form = $this->createForm(CreerCompteType::class);
+        $form->handleRequest($request);
 
+        if ($request->isMethod("post")) {
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword(
+            $data = $form->getData();
+            // dd($data);
+
+            $u = new User();
+            $u->setEmail($data["email"]);
+
+            $u->setPassword(
                 $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
+                    $u,
+                    $data["plainPassword"]
                 )
             );
 
+            $c = new Client();
+            $c->setCliNom($data["cliNom"]);
+            $u->setRoles(["ROLE_PARTICULIER"]);
+
+            $c->setUser($u);
+
+            $a1 = new Adresse();
+            $a1->setAdrPays($data["adrPaysDomicile"]);
+
+            $at1 = new AT();
+            $at1->setClient($c);
+            $at1->setAdresse($a1);
+
+
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
+            $entityManager->persist($u);
+            $entityManager->persist($c);
+            $entityManager->persist($a1);
+            $entityManager->persist($at1);
             $entityManager->flush();
 
             return $this->redirectToRoute('/categorie', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('gestion_compte/creer.html.twig', [
-            'user' => $user,
             'form' => $form->createView(),
-        ]);
-
-
-
-
-        return $this->render('gestion_compte/creer.html.twig', [
-            'controller_name' => 'GestionCompteController',
         ]);
     }
 
@@ -140,7 +157,14 @@ class GestionCompteController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
 
+
+        foreach ($user->getClient()->getAdresseTypes() as $at) {
+            $em->remove($at->getAdresse());
+            $em->remove($at);
+        }
+
         $em->remove($user);
+
         $em->flush();
 
         return $this->render('gestion_compte/supprimer.html.twig', [
