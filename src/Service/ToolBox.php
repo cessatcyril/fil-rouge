@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
 
 class ToolBox
 {
-    use ControllerTrait;
+    // use ControllerTrait;
     private $adresseTypeRepository;
 
     public function __construct(AdresseTypeRepository $adresseTypeRepository)
@@ -36,7 +36,7 @@ class ToolBox
         $panier = $session->get("panier");
         //$test = $panier[0]["id"];
         if ($panier == null) {
-            return $this->redirectToRoute("panier_vide");
+            return null; // 
         }
 
         if ($panier != null) {
