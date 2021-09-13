@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Commande;
 use App\Service\ToolBox;
 use App\Form\CommandeType;
@@ -10,6 +11,8 @@ use App\Repository\CommandeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AdresseTypeRepository;
 use App\Repository\CommandeDetailRepository;
+use App\Repository\ProduitRepository;
+use DateInterval;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,23 +25,29 @@ class GestionCommandesController extends AbstractController
     /**
      * @Route("/particulier/commande/commander", name="commande_creer")
      */
-    public function commandeCreer(EntityManagerInterface $eMI, CommandeRepository $commandeRepo, CommandeDetailRepository $commandeDetailRepository, Toolbox $toolBox): Response
+    public function commandeCreer(EntityManagerInterface $eMI, ProduitRepository $produitRepo, CommandeRepository $commandeRepo, CommandeDetailRepository $commandeDetailRepository, ToolBox $toolBox): Response
     {
         //mise en base de donnees
         //pdf facture
 
-        
         $panier = $toolBox->getPanier($this->getSession());
         if ($panier==null) {
             return $this->redirectToRoute("panier_vide");
         }
 
+        $date = $this->getDate();
+        $dateButoir = $this->getDateButoir($date);
+
         $commande = new Commande();
         $commande->setClient($this->getUser()->getClient());
+        $commande->setComStatut(Commande::EN_COURS);
+        $commande->setComCommande($date);
+        $commande->setComButoir($dateButoir);
+        
         $eMI->persist($commande);
         $eMI->flush();
         $commande_id = $commande->getId();
-        $commande_client = $commande->getClient();
+        $commande_client = $commande->getClient()->getId();
         $commande->setComFiche($this->getFiche($commande_id, $commande_client));
         $commande->setComFacture($this->getFacture($commande_id, $commande_client));
         if ($eMI->persist($commande) || $eMI->flush()) {
@@ -46,9 +55,10 @@ class GestionCommandesController extends AbstractController
         }
 
         foreach ($panier as $key => $article) {
+            $produit = $produitRepo->findOneBy(['id' => $article["id"]]);
             $commande_detail = new CommandeDetail();
-            $commande_detail->setCommande($commande->getId());
-            $commande_detail->setProduit($article["id"]);
+            $commande_detail->setCommande($commande);
+            $commande_detail->setProduit($produit);
             $commande_detail->setDetQuantite($article["quantite"]);
             $commande_detail->setDetPrixVente($article["prix"]);
             $commande_detail->setDetRemise(0);//Ajouter variable "remise" dans panier
@@ -111,7 +121,7 @@ class GestionCommandesController extends AbstractController
     {
         return $this->render('gestion_commandes/liste.html.twig', [
             'controller_name' => 'GestionCompteController',
-            'commandes' =>$this->getListe()
+            'commandes' => $this->getListe()
         ]);
     }
 
@@ -138,14 +148,28 @@ class GestionCommandesController extends AbstractController
         ]);
     }
 
+    public function getDate()
+    {
+        $date = new DateTime();
+        $date->format("Y-m-d H:i:s");
+        return $date;
+    }
+
+    public function getDateButoir($dateCommande)
+    {
+        $date = $dateCommande->add(new DateInterval('P15D'));
+        $date->format("Y-m-d H:i:s");
+        return $date;
+    }
+
     public function getFiche($commandeId, $clientId)
     {
-        return "Commande_".$clientId.$commandeId;
+        return "Commande_".$clientId."-".$commandeId;
     }
 
     public function getFacture($commandeId, $clientId)
     {
-        return "Facture_".$clientId.$commandeId;
+        return "Facture_".$clientId."-".$commandeId;
     }
 
     public function getListe()
