@@ -29,21 +29,48 @@ class GestionCommandesController extends AbstractController
 
         
         $panier = $toolBox->getPanier($this->getSession());
-        //dd($panier);
         if ($panier==null) {
             return $this->redirectToRoute("panier_vide");
         }
-        
+
+        $commande = new Commande();
+        $commande->setClient($this->getUser()->getClient());
+        $eMI->persist($commande);
+        $eMI->flush();
+        $commande_id = $commande->getId();
+        $commande_client = $commande->getClient();
+        $commande->setComFiche($this->getFiche($commande_id, $commande_client));
+        $commande->setComFacture($this->getFacture($commande_id, $commande_client));
+        if ($eMI->persist($commande) || $eMI->flush()) {
+            return $this->redirectToRoute("commande_erreur");
+        }
+
+        foreach ($panier as $key => $article) {
+            $commande_detail = new CommandeDetail();
+            $commande_detail->setCommande($commande->getId());
+            $commande_detail->setProduit($article["id"]);
+            $commande_detail->setDetQuantite($article["quantite"]);
+            $commande_detail->setDetPrixVente($article["prix"]);
+            $commande_detail->setDetRemise(0);//Ajouter variable "remise" dans panier
+            if ($eMI->persist($commande_detail) || $eMI->flush()) {
+                return $this->redirectToRoute("commande_erreur");
+            }
+        }
 
         //(try/catch ou if) ? redirectToRoute(succes) : redirectToRoute(erreur{message})
-        $commande = new Commande();
-        $commande->setClient($this->getUser()->getClient()->getId());
-        //$eMI->persist($commande);
-        //$eMI->flush();
-
 
         return $this->render('gestion_commandes/creer.html.twig', [
             'controller_name' => 'GestionCompteController',
+        ]);
+    }
+
+    /**
+     * @Route("commande/erreur", name="commande_erreur")
+     */
+    public function commandeErreur(): Response
+    {
+        return $this->render('gestion_commandes/erreur.html.twig', [
+            'message' => 'Une erreur s\'est produite lors de la commande, veuillez ré-essayer.'
         ]);
     }
 
@@ -109,6 +136,16 @@ class GestionCommandesController extends AbstractController
             'panier' => $toolBox->getPanier($this->getSession()),
             'adresses' => $toolBox->getAdresses($this->getUser())
         ]);
+    }
+
+    public function getFiche($commandeId, $clientId)
+    {
+        return "Commande_".$clientId.$commandeId;
+    }
+
+    public function getFacture($commandeId, $clientId)
+    {
+        return "Facture_".$clientId.$commandeId;
     }
 
     public function getListe()
