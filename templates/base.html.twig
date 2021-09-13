@@ -62,10 +62,20 @@
                                 Mon panier
                             </a>
                             {% if app.user %}
-                            <div class="navbar-item">{{ app.user.email }}</div>
-                            <a href="{{ path('compte_afficher') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
-                                Mon Compte
-                            </a>
+
+                            <div class="navbar-item has-dropdown is-hoverable">
+                                <a class="navbar-link">
+                                    <div class="navbar-item">{{ app.user.email }}</div>
+                                </a>
+                                <div class="navbar-dropdown">
+                                    <a href="{{ path('compte_afficher') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                                        Mes informations
+                                    </a>
+                                    <a href="{{ path('commande_lister') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                                        Historique de commande
+                                    </a>
+                                </div>
+                            </div>
                             <a href="{{ path('app_logout') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
                                 log-out
                             </a>
