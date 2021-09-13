@@ -32,12 +32,8 @@ class GestionCompteController extends AbstractController
         $obj = $this->getUser()->getClient();
         $adresse = $tb->getAdresses($this->getUser());
         $mail = $this->getUser()->getEmail();
-        //dd($adresse);
-        //////////////////////////////////////////////
-        //                                          //
-        //  AJOUTER L'AFFICHAGE HISTORIQUE COMMANDE //
-        //                                          //
-        //////////////////////////////////////////////
+
+
         return $this->render('gestion_compte/afficher.html.twig', [
             'infoClient' => $obj,
             'adresse' => $adresse,
