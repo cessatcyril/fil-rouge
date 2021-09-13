@@ -13,6 +13,7 @@ use App\Form\CreerCompteType;
 use App\Entity\AdresseType as AT;
 use App\Repository\UserRepository;
 use App\Repository\AdresseTypeRepository;
+use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -105,14 +106,13 @@ class GestionCompteController extends AbstractController
         $form = $this->createForm(CreerCompteType::class);
         $form->handleRequest($request);
 
-        if ($request->isMethod("post")) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $data = $form->getData();
-            // dd($data);
 
             $u = new User();
             $u->setEmail($data["email"]);
-
+            $u->setRoles(["ROLE_PARTICULIER"]);
             $u->setPassword(
                 $passwordEncoder->encodePassword(
                     $u,
@@ -120,18 +120,60 @@ class GestionCompteController extends AbstractController
                 )
             );
 
-            $c = new Client();
-            $c->setCliNom($data["cliNom"]);
-            $u->setRoles(["ROLE_PARTICULIER"]);
 
+            $c = new Client();
             $c->setUser($u);
 
-            $a1 = new Adresse();
-            $a1->setAdrPays($data["adrPaysDomicile"]);
+            $c->setCliNom($data["cliNom"]);
+            $c->setCliPrenom($data["cliPrenom"]);
+            $c->setCliNaissance($data["cliNaissance"]);
+            $c->setCliTel($data["cliTel"]);
+            $c->setCliFax($data["cliFax"]);
+            $c->setCliSexe($data["cliSexe"]);
 
+            $dateNaissance = $data["cliNaissance"];
+            $dateNaissance->format('Y-m-d H:i:s');
+            $c->setCliNaissance($dateNaissance);
+
+            $date = new DateTime();
+            $date->format('Y-m-d H:i:s');
+            $c->setCliDate($date);
+
+
+            $a1 = new Adresse();
             $at1 = new AT();
             $at1->setClient($c);
             $at1->setAdresse($a1);
+
+            $a1->setAdrPays($data["adrPaysDomicile"]);
+            $a1->setAdrVille($data["adrVilleDomicile"]);
+            $a1->setAdrPostal($data["adrPostalDomicile"]);
+            $a1->setAdrAdresse($data["adrAdresseDomicile"]);
+            $at1->setTypAdresse(AT::DOMICILE);
+
+
+            $a2 = new Adresse();
+            $at2 = new AT();
+            $at2->setClient($c);
+            $at2->setAdresse($a2);
+
+            $a2->setAdrPays($data["adrPaysLivraison"]);
+            $a2->setAdrVille($data["adrVilleLivraison"]);
+            $a2->setAdrPostal($data["adrPostalLivraison"]);
+            $a2->setAdrAdresse($data["adrAdresseLivraison"]);
+            $at2->setTypAdresse(AT::LIVRAISON);
+
+
+            $a3 = new Adresse();
+            $at3 = new AT();
+            $at3->setClient($c);
+            $at3->setAdresse($a3);
+
+            $a3->setAdrPays($data["adrPaysFacturation"]);
+            $a3->setAdrVille($data["adrVilleFacturation"]);
+            $a3->setAdrPostal($data["adrPostalFacturation"]);
+            $a3->setAdrAdresse($data["adrAdresseFacturation"]);
+            $at3->setTypAdresse(AT::FACTURATION);
 
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -139,9 +181,13 @@ class GestionCompteController extends AbstractController
             $entityManager->persist($c);
             $entityManager->persist($a1);
             $entityManager->persist($at1);
+            $entityManager->persist($a2);
+            $entityManager->persist($at2);
+            $entityManager->persist($a3);
+            $entityManager->persist($at3);
             $entityManager->flush();
 
-            return $this->redirectToRoute('/categorie', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('categorie', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('gestion_compte/creer.html.twig', [
