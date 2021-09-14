@@ -2,37 +2,95 @@
 
 namespace App\Controller;
 
-use App\Entity\AdresseType;
-use App\Form\CarteCreditType;
+use DateTime;
+use App\Entity\Commande;
+use App\Service\ToolBox;
+use App\Form\CommandeType;
+use App\Entity\CommandeDetail;
+use App\Repository\CommandeRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AdresseTypeRepository;
 use App\Repository\CommandeDetailRepository;
-use App\Repository\CommandeRepository;
-use App\Repository\LivraisonDetailRepository;
-use App\Repository\LivraisonRepository;
 use App\Repository\ProduitRepository;
-use Doctrine\ORM\EntityManager;
+use DateInterval;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\Session;
-use App\Service\ToolBox;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class GestionCommandesController extends AbstractController
 {
 
     /**
-     * @Route("/commande/commander", name="commande_creer")
+     * @Route("/particulier/commande/commander", name="commande_creer")
      */
-    public function commandeCreer(): Response
+    public function commandeCreer(EntityManagerInterface $eMI, ProduitRepository $produitRepo, ToolBox $toolBox): Response
     {
-        //creer commande
-        //recap'
         //mise en base de donnees
-        //pdf
+        //pdf facture
+
+        $panier = $toolBox->getPanier($this->getSession());
+        if ($panier==null) {
+            return $this->redirectToRoute("panier_vide");
+        }
+
+        $date = $this->getDate();
+        $dateButoir = $this->getDateButoir($date);
+
+        $commande = new Commande();
+        $commande->setClient($this->getUser()->getClient());
+        $commande->setComStatut(Commande::EN_COURS);
+        $commande->setComCommande($date);
+        $commande->setComButoir($dateButoir);
+        
+        $eMI->persist($commande);
+        $eMI->flush();
+        $commande_id = $commande->getId();
+        $commande_client = $commande->getClient()->getId();
+        $commande->setComFiche($this->getFiche($commande_id, $commande_client));
+        $commande->setComFacture($this->getFacture($commande_id, $commande_client));
+        if ($eMI->persist($commande) || $eMI->flush()) {
+            return $this->redirectToRoute("commande_erreur");
+        }
+
+        foreach ($panier as $key => $article) {
+            $produit = $produitRepo->findOneBy(['id' => $article["id"]]);
+            $commande_detail = new CommandeDetail();
+            $commande_detail->setCommande($commande);
+            $commande_detail->setProduit($produit);
+            $commande_detail->setDetQuantite($article["quantite"]);
+            $commande_detail->setDetPrixVente($article["prix"]);
+            $commande_detail->setDetRemise(0);//Ajouter variable "remise" dans panier
+            if ($eMI->persist($commande_detail) || $eMI->flush()) {
+                return $this->redirectToRoute("commande_erreur");
+            }
+        }
+
+        //(try/catch ou if) ? redirectToRoute(succes) : redirectToRoute(erreur{message})
 
         return $this->render('gestion_commandes/creer.html.twig', [
             'controller_name' => 'GestionCompteController',
+        ]);
+    }
+
+    /**
+     * @Route("commande/erreur", name="commande_erreur")
+     */
+    public function commandeErreur(): Response
+    {
+        return $this->render('gestion_commandes/erreur.html.twig', [
+            'message' => 'Une erreur s\'est produite lors de la commande, veuillez ré-essayer.'
+        ]);
+    }
+
+    /**
+     * @Route("commande/passee", name="commande_passee")
+     */
+    public function FunctionName(): Response
+    {
+        return $this->render('gestion_commandes/passee.html.twig', [
+            ////////////////////////////////////////////////////////////////////////////////
         ]);
     }
 
@@ -63,7 +121,7 @@ class GestionCommandesController extends AbstractController
     {
         return $this->render('gestion_commandes/liste.html.twig', [
             'controller_name' => 'GestionCompteController',
-            'commandes' =>$this->getListe()
+            'commandes' => $this->getListe()
         ]);
     }
 
@@ -81,13 +139,37 @@ class GestionCommandesController extends AbstractController
     /**
      * @Route("/particulier/commande/recapitulatif", name="commande_recapitulatif")
      */
-    public function commandeRecapitulatif(AdresseTypeRepository $repo, ToolBox $tb): Response
+    public function commandeRecapitulatif(AdresseTypeRepository $repo, ToolBox $toolBox): Response
     {
         return $this->render('gestion_commandes/recapitulatif.html.twig', [
             'controller_name' => 'GestionCompteController',
-            'panier' => $tb->getPanier($this->getSession()),
-            'adresses' => $tb->getAdresses($this->getUser())
+            'panier' => $toolBox->getPanier($this->getSession()),
+            'adresses' => $toolBox->getAdresses($this->getUser())
         ]);
+    }
+
+    public function getDate()
+    {
+        $date = new DateTime();
+        $date->format("Y-m-d H:i:s");
+        return $date;
+    }
+
+    public function getDateButoir($dateCommande)
+    {
+        $date = $dateCommande->add(new DateInterval('P15D'));
+        $date->format("Y-m-d H:i:s");
+        return $date;
+    }
+
+    public function getFiche($commandeId, $clientId)
+    {
+        return "Commande_".$clientId."-".$commandeId;
+    }
+
+    public function getFacture($commandeId, $clientId)
+    {
+        return "Facture_".$clientId."-".$commandeId;
     }
 
     public function getListe()

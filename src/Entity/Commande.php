@@ -13,6 +13,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Commande
 {
+    const EN_COURS = 0;
+    const PARTIELLEMENT_LIVREE = 1;
+    const LIVREE = 3;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -21,17 +25,12 @@ class Commande
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $comNumero;
-
-    /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $comFiche;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $comFacture;
 
@@ -46,7 +45,7 @@ class Commande
     private $comCommande;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $comLivraison;
 
@@ -80,18 +79,6 @@ class Commande
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getComNumero(): ?int
-    {
-        return $this->comNumero;
-    }
-
-    public function setComNumero(int $comNumero): self
-    {
-        $this->comNumero = $comNumero;
-
-        return $this;
     }
 
     public function getComFiche(): ?string
