@@ -4,6 +4,8 @@
 
 {% block body %}
 {% for commande in commandes %}
+<a href='commande_lister{commande.id}'>
+    {{dump(commande)}}
     <div>
         <h1 class="title h1">Commande du {{ commande.date_commande }}</h1>
         <div>
@@ -22,6 +24,7 @@
             </ul>
         </div>
     </div>
+</a>
 
 
 {% endfor %}

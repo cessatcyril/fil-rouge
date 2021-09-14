@@ -7,10 +7,12 @@ use App\Entity\Commande;
 use App\Service\ToolBox;
 use App\Form\CommandeType;
 use App\Entity\CommandeDetail;
+use App\Entity\Livraison;
 use App\Repository\CommandeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AdresseTypeRepository;
 use App\Repository\CommandeDetailRepository;
+use App\Repository\LivraisonRepository;
 use App\Repository\ProduitRepository;
 use DateInterval;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,13 +21,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use function PHPUnit\Framework\isNull;
+
 class GestionCommandesController extends AbstractController
 {
-
     /**
      * @Route("/particulier/commande/commander", name="commande_creer")
      */
-    public function commandeCreer(EntityManagerInterface $eMI, ProduitRepository $produitRepo, ToolBox $toolBox): Response
+    public function commandeCreer(EntityManagerInterface $eMI, ProduitRepository $produitRepo, LivraisonRepository $livraisonRepo, ToolBox $toolBox): Response
     {
         //mise en base de donnees
         //pdf facture
@@ -65,6 +68,7 @@ class GestionCommandesController extends AbstractController
             if ($eMI->persist($commande_detail) || $eMI->flush()) {
                 return $this->redirectToRoute("commande_erreur");
             }
+            //$livraisonRepo->setCommande($commande_id);
         }
 
         //(try/catch ou if) ? redirectToRoute(succes) : redirectToRoute(erreur{message})
@@ -127,11 +131,11 @@ class GestionCommandesController extends AbstractController
 
 
     /**
-     * @Route("/commande/afficher", name="commande_afficher")
+     * @Route("/commande/detail", name="commande_detail")
      */
-    public function commandeAfficher(): Response
+    public function commandeDetail(): Response
     {
-        return $this->render('gestion_commandes/afficher.html.twig', [
+        return $this->render('gestion_commandes/detail.html.twig', [
             'controller_name' => 'GestionCompteController',
         ]);
     }
@@ -179,7 +183,7 @@ class GestionCommandesController extends AbstractController
         foreach ($commandes as $key => $commande) {
             $donnees[$key]['id'] = $commande->getId();
             $donnees[$key]['date_commande'] = $commande->getComCommande()->format('d/m/Y');
-            $donnees[$key]['date_livraison'] = $commande->getComLivraison()->format('d/m/Y');
+            $donnees[$key]['date_livraison'] = \isNull($commande->getComLivraison()) ? "Pas encore livré." : $commande->getComLivraison()->format('d/m/Y');
 
             
             $commande_details = $commande->getCommandeDetails();
@@ -200,12 +204,13 @@ class GestionCommandesController extends AbstractController
                 $livraison_detail = $livraison->getLivraisonDetails();
                 foreach ($livraison_detail as $key4 => $livraison_detail) {
                     if (isset($donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['id_produit']) || isset($donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['quantite_commandee'])) {
-                        $donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['quantite_livree'] = $livraison_detail->getDetQuantiteLivree();
+                        $donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['quantite_livree'] = isNull($livraison_detail->getDetQuantiteLivree() ? 0 : $livraison_detail->getDetQuantiteLivree());
                         $donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['quantite_a_livrer'] = $donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['quantite_commandee'] - $donnees[$key]['livraison'][$key4]['quantite_livree'] = $livraison_detail->getDetQuantiteLivree();
                     }
                 }
             }
         }
+        //dd($donnees);
         return $donnees;
     }
 
