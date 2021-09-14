@@ -25,7 +25,7 @@ class GestionCommandesController extends AbstractController
     /**
      * @Route("/particulier/commande/commander", name="commande_creer")
      */
-    public function commandeCreer(EntityManagerInterface $eMI, ProduitRepository $produitRepo, CommandeRepository $commandeRepo, CommandeDetailRepository $commandeDetailRepository, ToolBox $toolBox): Response
+    public function commandeCreer(EntityManagerInterface $eMI, ProduitRepository $produitRepo, ToolBox $toolBox): Response
     {
         //mise en base de donnees
         //pdf facture
