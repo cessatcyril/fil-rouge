@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use DateTime;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Entity\User;
 use App\Entity\Client;
 use App\Form\UserType;
@@ -13,7 +16,6 @@ use App\Form\CreerCompteType;
 use App\Entity\AdresseType as AT;
 use App\Repository\UserRepository;
 use App\Repository\AdresseTypeRepository;
-use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

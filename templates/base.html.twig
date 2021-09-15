@@ -68,11 +68,14 @@
                                     <div class="navbar-item">{{ app.user.email }}</div>
                                 </a>
                                 <div class="navbar-dropdown">
-                                    <a href="{{ path('compte_afficher') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                                    <a href="{{ path('compte_afficher') }}" class="navbar-item">
                                         Mes informations
                                     </a>
-                                    <a href="{{ path('commande_lister') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                                    <a href="{{ path('commande_lister') }}" class="navbar-item">
                                         Historique de commande
+                                    </a>
+                                    <a href="{{ path('commande_pdf') }}" class="navbar-item">
+                                        pdf test
                                     </a>
                                 </div>
                             </div>

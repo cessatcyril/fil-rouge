@@ -3,16 +3,20 @@
 namespace App\Controller;
 
 use DateTime;
+use DateInterval;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use App\Entity\User;
 use App\Entity\Commande;
 use App\Service\ToolBox;
 use App\Form\CommandeType;
+use App\Entity\AdresseType;
 use App\Entity\CommandeDetail;
+use App\Repository\ProduitRepository;
 use App\Repository\CommandeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AdresseTypeRepository;
 use App\Repository\CommandeDetailRepository;
-use App\Repository\ProduitRepository;
-use DateInterval;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,7 +35,7 @@ class GestionCommandesController extends AbstractController
         //pdf facture
 
         $panier = $toolBox->getPanier($this->getSession());
-        if ($panier==null) {
+        if ($panier == null) {
             return $this->redirectToRoute("panier_vide");
         }
 
@@ -43,7 +47,7 @@ class GestionCommandesController extends AbstractController
         $commande->setComStatut(Commande::EN_COURS);
         $commande->setComCommande($date);
         $commande->setComButoir($dateButoir);
-        
+
         $eMI->persist($commande);
         $eMI->flush();
         $commande_id = $commande->getId();
@@ -61,7 +65,7 @@ class GestionCommandesController extends AbstractController
             $commande_detail->setProduit($produit);
             $commande_detail->setDetQuantite($article["quantite"]);
             $commande_detail->setDetPrixVente($article["prix"]);
-            $commande_detail->setDetRemise(0);//Ajouter variable "remise" dans panier
+            $commande_detail->setDetRemise(0); //Ajouter variable "remise" dans panier
             if ($eMI->persist($commande_detail) || $eMI->flush()) {
                 return $this->redirectToRoute("commande_erreur");
             }
@@ -164,12 +168,12 @@ class GestionCommandesController extends AbstractController
 
     public function getFiche($commandeId, $clientId)
     {
-        return "Commande_".$clientId."-".$commandeId;
+        return "Commande_" . $clientId . "-" . $commandeId;
     }
 
     public function getFacture($commandeId, $clientId)
     {
-        return "Facture_".$clientId."-".$commandeId;
+        return "Facture_" . $clientId . "-" . $commandeId;
     }
 
     public function getListe()
@@ -181,7 +185,7 @@ class GestionCommandesController extends AbstractController
             $donnees[$key]['date_commande'] = $commande->getComCommande()->format('d/m/Y');
             $donnees[$key]['date_livraison'] = $commande->getComLivraison()->format('d/m/Y');
 
-            
+
             $commande_details = $commande->getCommandeDetails();
             foreach ($commande_details as $key3 => $commande_detail) {
                 $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['id_produit'] = $commande_detail->getProduit()->getId();
@@ -190,7 +194,7 @@ class GestionCommandesController extends AbstractController
                 $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['description'] = $commande_detail->getProduit()->getProDescription();
                 $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['remise'] = $commande_detail->getDetRemise();
                 $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['prix_unitaire'] = $commande_detail->getDetPrixVente();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'] = $commande_detail->getDetQuantite();/////////////////////
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'] = $commande_detail->getDetQuantite(); /////////////////////
                 $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['sous_total'] = $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise();
             }
 
@@ -227,5 +231,50 @@ class GestionCommandesController extends AbstractController
         $this->session = $session;
 
         return $this;
+    }
+
+
+
+    /**
+     * @Route("/commande/pdf", name="commande_pdf")
+     */
+    public function creerPdf(ToolBox $tb)
+    {
+
+        $n = $this->getUser()->getClient();
+        $a = $tb->getAdresses($this->getUser());
+
+
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('gestion_commandes/detailCommandePdf.html.twig', [
+            'title' => "Welcome to our PDF Test",
+            'nom' => $n,
+            'adresse' => $a
+
+        ]);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream("mypdf.pdf", [
+            "Attachment" => false
+        ]);
+        return $this->render('gestion_commandes/detailCommandePdf.html.twig', [
+            'controller_name' => 'GestionCompteController',
+        ]);
     }
 }
