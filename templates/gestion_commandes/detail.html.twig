@@ -1,20 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello GestionCommandesController!{% endblock %}
+{% block title %}Hello CatalogueController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/magash/Dev/Symfony/Greenvalley/src/Controller/GestionCommandesController.php'|file_link(0) }}">src/Controller/GestionCommandesController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/magash/Dev/Symfony/Greenvalley/templates/gestion_commandes/index.html.twig'|file_link(0) }}">templates/gestion_commandes/index.html.twig</a></code></li>
-    </ul>
+<div style="border: solid;"></div>
+{% for commande in commandes %}
+    <div>
+        <h1 class="title h1">Commande du {{ commande.date_commande }}</h1>
+        <div>
+            {% for produit in commande.produits %}
+            <div style="border: solid;">
+                <ul>
+                    <li>Produit : {{produit.produit}}</li>
+                    <li>{{produit.accroche}}</li>
+                    <li>{{produit.description|nl2br}}</li>
+                    <li>Prix unitaire : {{produit.prix_unitaire}}€</li>
+                    <li>Quantité commandée : {{produit.quantite_commandee}}</li>
+                    <li>Remise : {{produit.remise}}</li>
+                    <li>Sous-total : {{produit.sous_total}}€</li>
+                    <li>Quantité livrée : {{produit.quantite_livree}}</li>
+                    <li>Quantité à livrer : {{produit.quantite_a_livrer}}</li>
+                </ul>
+                <a href='{{ path('produit', {'produit':produit.id_produit}) }}'><button class="button">Voir le produit</button></a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <a href='{{ path('commande_detail', {'id':commande.id}) }}'><button class="button">Liste des commandes</button></a>
+    <a href='{{ path('remboursement_moyen', {'id':commande.id}) }}'><button class="button">Annuler la commande</button></a>
+{% endfor %}
 </div>
 {% endblock %}

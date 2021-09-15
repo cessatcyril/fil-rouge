@@ -35,6 +35,7 @@ class GestionCommandesController extends AbstractController
         //pdf facture
 
         $panier = $toolBox->getPanier($this->getSession());
+        dd($panier);
         if ($panier==null) {
             return $this->redirectToRoute("panier_vide");
         }
@@ -117,21 +118,26 @@ class GestionCommandesController extends AbstractController
     }
 
     /**
-     * @Route("/commande/annuler", name="commande_annuler")
+     * @Route("/particulier/commande/annuler/{id}", name="commande_annuler")
      */
     public function commandeAnnuler(): Response
     {
-        return $this->render('gestion_commandes/annuler.html.twig', [
-            'controller_name' => 'GestionCompteController',
-        ]);
-    }
+        /*
+            Client clique sur annuler commande
+                si comDate < 24h
+                    Client est redirige sur la page de remboursement
+                    Remboursement par carte bancaire ou virement
+                    Client clique sur remboursement
+                    Client est redirige vers commande_annuler
+                    Changements dans la bdd :
+                        ajout d'un booleen : 
+                            si true >> commande pas affichee sinon affichee
+                            si true >> commande a déja été remboursée
+                    redirection vers la page de succes ou la page d'erreur
+                sinon redirection vers page reglement#remboursement
+        */
 
-    /**
-     * @Route("/commande/modifier", name="commande_modifier")
-     */
-    public function commandeModifier(): Response
-    {
-        return $this->render('gestion_commandes/modifier.html.twig', [
+        return $this->render('gestion_commandes/annuler.html.twig', [
             'controller_name' => 'GestionCompteController',
         ]);
     }
@@ -174,10 +180,10 @@ class GestionCommandesController extends AbstractController
                         $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_a_livrer'] = $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'];
                     }
                 }
-                
             }
         }
         //dd($donnees);
+
         return $this->render('gestion_commandes/liste.html.twig', [
             'controller_name' => 'GestionCompteController',
             'commandes' => $donnees
@@ -186,12 +192,50 @@ class GestionCommandesController extends AbstractController
 
 
     /**
-     * @Route("/commande/detail{id}", name="commande_detail")
+     * @Route("/particulier/commande/detail/{id}", name="commande_detail")
      */
-    public function commandeDetail(): Response
+    public function commandeDetail(CommandeRepository $commandeRepo, $id): Response
     {
+        $commandes = $commandeRepo->findBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+        $donnees = [];
+        foreach ($commandes as $key => $commande) {
+            $donnees[$key]['id'] = $commande->getId();
+            $donnees[$key]['date_commande'] = $commande->getComCommande()->format('d/m/Y');
+            $donnees[$key]['date_livraison'] = (is_Null($commande->getComLivraison())) ? "Pas encore livré." : $commande->getComLivraison()->format('d/m/Y');
+
+            
+            $commande_details = $commande->getCommandeDetails();
+            foreach ($commande_details as $key3 => $commande_detail) {
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['id_produit'] = $commande_detail->getProduit()->getId();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['produit'] = $commande_detail->getProduit()->getProProduit();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['accroche'] = $commande_detail->getProduit()->getProAccroche();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['description'] = $commande_detail->getProduit()->getProDescription();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['remise'] = $commande_detail->getDetRemise();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['prix_unitaire'] = $commande_detail->getDetPrixVente();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'] = $commande_detail->getDetQuantite();/////////////////////
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['sous_total'] = $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise();
+            }
+
+            $livraisons = $commande->getLivraisons();
+            foreach ($livraisons as $key2 => $livraison) {
+
+                $livraisonDetails = $livraison->getLivraisonDetails();
+                foreach ($livraisonDetails as $key3 => $livraisonDetail) {
+                    if ($livraisonDetail->getLivraison() === $commande->getId()) {
+                        $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_livree'] = (is_Null($livraisonDetail->getDetQuantiteLivree() ? 0 : $livraisonDetail->getDetQuantiteLivree()));
+                        $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_a_livrer'] = $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_commandee'] - $donnees[$key]['livraison'][$key3]['quantite_livree'] = $livraisonDetail->getDetQuantiteLivree();
+                    } else {
+                        $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_livree'] = 0;
+                        $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_a_livrer'] = $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'];
+                    }
+                }
+            }
+        }
+        //dd($donnees);
+
         return $this->render('gestion_commandes/detail.html.twig', [
             'controller_name' => 'GestionCompteController',
+            'commandes' => $donnees
         ]);
     }
 

@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PaiementController extends AbstractController
 {
     /**
-     * @Route("/paiement/moyen_de_paiement", name="paiement_moyen")
+     * @Route("/particulier/paiement/moyen_de_paiement", name="paiement_moyen")
      */
     public function paiementMoyen(): Response
     {
@@ -21,7 +21,7 @@ class PaiementController extends AbstractController
     }
 
     /**
-     * @Route("/paiement/moyen_de_paiement/carte_de_credit", name="paiement_carte")
+     * @Route("/particulier/paiement/moyen_de_paiement/carte_de_credit", name="paiement_carte")
      */
     public function paiementCarte(Request $request): Response
     {
@@ -39,7 +39,7 @@ class PaiementController extends AbstractController
 
     /**
      * A SUPPRIMER SI PAS DE FORMULAIRE DANS virement.html.twig
-     * @Route("/paiement/moyen_de_paiement/virement", name="paiement_virement")
+     * @Route("/particulier/paiement/moyen_de_paiement/virement", name="paiement_virement")
      */
     public function paiementVirement(): Response
     {
@@ -50,7 +50,7 @@ class PaiementController extends AbstractController
 
     /**
      * A SUPPRIMER SI PAS DE FORMULAIRE DANS paypal.html.twig
-     * @Route("/paiement/moyen_de_paiement/paypal", name="paiement_paypal")
+     * @Route("/particulier/paiement/moyen_de_paiement/paypal", name="paiement_paypal")
      */
     public function paiementPaypal(): Response
     {
@@ -58,4 +58,55 @@ class PaiementController extends AbstractController
             'controller_name' => 'GestionCompteController',
         ]);
     }
+
+    /**
+     * @Route("/particulier/commande/annulation/remboursement/{id}", name="remboursement_moyen")
+     */
+    public function remboursementMoyen($id): Response
+    {
+        //dd($id);
+
+        return $this->render('paiement/remboursement_moyen.html.twig', [
+            'id' => $id
+        ]);
+    }
+
+    /**
+     * @Route("/particulier/commande/annulation/remboursement/carte/{id}", name="remboursement_carte")
+     */
+    public function remboursementCarte(Request $request, $id): Response
+    {
+        $form = $this->createForm(CarteCreditType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->redirectToRoute('commande_creer');
+        }
+
+        return $this->render('paiement/remboursement_carte.html.twig', [
+            'id' => $id,
+            'form' => $form->createView()
+        ]);
+    }
+
+
+    /**
+     * @Route("/particulier/commande/annulation/remboursement/virement/{id}", name="remboursement_virement")
+     */
+    public function remboursementVirement($id): Response
+    {
+        return $this->render('paiement/remboursement_virement.html.twig', [
+            'id' => $id
+        ]);
+    }
+
+    /**
+     * @Route("/particulier/commande/annulation/remboursement/paypal/{id}", name="remboursement_paypal")
+     */
+    public function remboursementPaypal($id): Response
+    {
+        return $this->render('paiement/remboursement_paypal.html.twig', [
+            'id' => $id
+        ]);
+    }
+
 }
