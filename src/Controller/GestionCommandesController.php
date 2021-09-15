@@ -142,8 +142,6 @@ class GestionCommandesController extends AbstractController
     public function commandeLister(CommandeRepository $commandeRepo): Response
     {
         $commandes = $commandeRepo->findBy(['client'=>$this->getUser()->getCLient()->getId()]);
-        //dd($commandes);
-        //$commandes = $this->getUser()->getClient()->getCommande();
         $donnees = [];
         foreach ($commandes as $key => $commande) {
             $donnees[$key]['id'] = $commande->getId();
@@ -162,20 +160,6 @@ class GestionCommandesController extends AbstractController
                 $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'] = $commande_detail->getDetQuantite();/////////////////////
                 $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['sous_total'] = $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise();
             }
-
-            // $livraisons = $commande->getLivraisons();
-            // foreach ($livraisons as $key2 => $livraison) {
-
-            //     $livraison_details = $livraison->getLivraisonDetails();
-            //     foreach ($livraison_details as $key4 => $livraison_detail) {
-            //         if (isset($donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['id_produit']) || isset($donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['quantite_commandee'])) {
-            //             $donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['quantite_livree'] = (is_Null($livraison_detail->getDetQuantiteLivree() ? 0 : $livraison_detail->getDetQuantiteLivree()));
-            //             $donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['quantite_a_livrer'] = $donnees[$key]['produits'][$livraison_detail->getProduit()->getId()]['quantite_commandee'] - $donnees[$key]['livraison'][$key4]['quantite_livree'] = $livraison_detail->getDetQuantiteLivree();
-            //         }
-            //         //qteLivree = livraisonDetail.detQuantiteLivree
-            //         //qteALivrer = commandeDetail.quantite_commandee
-            //     }
-            // }
 
             $livraisons = $commande->getLivraisons();
             foreach ($livraisons as $key2 => $livraison) {
@@ -202,7 +186,7 @@ class GestionCommandesController extends AbstractController
 
 
     /**
-     * @Route("/commande/detail", name="commande_detail")
+     * @Route("/commande/detail{id}", name="commande_detail")
      */
     public function commandeDetail(): Response
     {
