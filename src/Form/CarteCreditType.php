@@ -11,21 +11,20 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class CarteCreditType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('numero_carte', NumberType::class, [
+            ->add('numero_carte', TextType::class, [
                 'required' => true,
                 'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Length([
-                        'min' => 16,
-                        'max' =>16,
-                        'minMessage' => "Doit être un nombre à 16 chiffres",
-                        'maxMessage' => "Doit être un nombre à 16 chiffres"
+                    new Assert\Regex([
+                        'pattern' => '/[0-9]{16}/',
+                        'match' => true,
+                        'message' => 'Composé de 16 chiffres'
                     ])
                 ]
             ])
