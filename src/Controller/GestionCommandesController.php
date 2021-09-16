@@ -3,26 +3,25 @@
 namespace App\Controller;
 
 use DateTime;
-use DateInterval;
+use \DateInterval;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use App\Entity\User;
 use App\Entity\Commande;
 use App\Service\ToolBox;
-use App\Entity\CommandeDetail;
 use App\Entity\Livraison;
+use App\Entity\CommandeDetail;
 use App\Entity\LivraisonDetail;
+use App\Repository\ProduitRepository;
+use App\Repository\CommandeRepository;
+use function PHPUnit\Framework\isNull;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AdresseTypeRepository;
-use App\Repository\CommandeRepository;
-use App\Repository\ProduitRepository;
-use DateInterval;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-use function PHPUnit\Framework\isNull;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class GestionCommandesController extends AbstractController
 {
@@ -289,14 +288,14 @@ class GestionCommandesController extends AbstractController
 
     public function getDateButoir($dateCommande)
     {
-        $date = $dateCommande->add(new DateInterval(GestionCommandesController::INTERVALLE_DATE_BUTOIR));
+        $date = $dateCommande->add(new \DateInterval(GestionCommandesController::INTERVALLE_DATE_BUTOIR));
         $date->format("Y-m-d H:i:s");
         return $date;
     }
 
     public function getDateLivraisonPrevue($dateCommande)
     {
-        $date = $dateCommande->add(new DateInterval(GestionCommandesController::INTERVALLE_DATE_LIVRAISON));
+        $date = $dateCommande->add(new \DateInterval(GestionCommandesController::INTERVALLE_DATE_LIVRAISON));
         $date->format("Y-m-d H:i:s");
         return $date;
     }
