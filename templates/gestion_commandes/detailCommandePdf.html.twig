@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        table {
+
+            border: 1px solid black;
+            background-color: #F6FDF0;
+            width: 100%;
+        }
+
+        th {
+            background-color: #D5F4BB;
+            font-size: 0.875em;
+            font-weight: normal;
+        }
+
+        td {
+            font-size: 0.875em;
+            font-weight: bold;
+        }
+    </style>
+    <title>Facture pdf</title>
+</head>
+
+<body>
+    <header>
+        <h1>Ma facture :</h1>
+    </header>
+
+    <section>
+        <table>
+            <thead>
+                <tr>
+                    <th><abbr></abbr></th>
+                    <th><abbr title="Coordonne">Coordonnéées</abbr></th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>nom :</th>
+                    <td>{{ nom.cliNom }}</td>
+
+                </tr>
+                <tr>
+                    <th>prenom :</th>
+                    <td>{{ nom.cliPrenom }}</td>
+
+                </tr>
+                <tr>
+                    <th>telephone :</th>
+                    <td>{{ nom.cliTel }}</td>
+
+                </tr>
+                <tr>
+                    <th>adresse de facturation :</th>
+                    <td>{{ adresse.facturation.adresse.adrAdresse }}</td>
+
+                </tr>
+                <tr>
+                    <th>code postal :</th>
+                    <td>{{ adresse.facturation.adresse.adrPostal }}</td>
+
+                </tr>
+                <tr>
+                    <th>ville :</th>
+                    <td>{{ adresse.facturation.adresse.adrVille }}</td>
+
+                </tr>
+                <tr>
+                    <th>pays :</th>
+                    <td>{{ adresse.facturation.adresse.adrPays }}</td>
+
+                </tr>
+                <tr>
+                    <th>numéro de commande :</th>
+                    <td>
+                        <!-- twig variable pour num commande -->
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <br><br>
+    <section>
+        <table>
+            <thead>
+                <tr>
+                    <th><abbr title="Produit">Produit :</abbr></th>
+                    <th><abbr title="Quantite">quantitée :</abbr></th>
+                    <th><abbr title="PrixUnitaire">Prix unitaire :</abbr></th>
+                    <th><abbr title="Total">Total :</abbr></th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <!-- faire une boucle pour les produits -->
+                <tr>
+                    <td>produit</td>
+                    <td>quantité</td>
+                    <td>prix</td>
+                    <td>total</td>
+                </tr>
+                <!-- fermer la boucle -->
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <th>Total hors taxe :</th>
+                    <td>valeur</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <th>TVA</th>
+                    <td>valeur</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <th>Total TTC :</th>
+                    <td>valeur</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+
+
+
+
+
+</body>
+
+</html>
