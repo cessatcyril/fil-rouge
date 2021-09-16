@@ -31,9 +31,9 @@ class Livraison
     private $commande;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $livQuantite;
+    private $livDate;
 
     public function __construct()
     {
@@ -87,14 +87,14 @@ class Livraison
         return $this;
     }
 
-    public function getLivQuantite(): ?int
+    public function getLivDate(): ?\DateTimeInterface
     {
-        return $this->livQuantite;
+        return $this->livDate;
     }
 
-    public function setLivQuantite(int $livQuantite): self
+    public function setLivDate(\DateTimeInterface $livDate): self
     {
-        $this->livQuantite = $livQuantite;
+        $this->livDate = $livDate;
 
         return $this;
     }

@@ -3,29 +3,30 @@
 {% block title %}Hello CatalogueController!{% endblock %}
 
 {% block body %}
+<div style="border: solid;"></div>
 {% for commande in commandes %}
-<a href='commande_lister{commande.id}'>
-    {{dump(commande)}}
     <div>
         <h1 class="title h1">Commande du {{ commande.date_commande }}</h1>
         <div>
-            <ul>
-                {% for produit in commande.produits %}
-                <li>Produit : {{produit.produit}}</li>
-                <li>{{produit.accroche}}</li>
-                <li>{{produit.description|nl2br}}</li>
-                <li>Prix unitaire : {{produit.prix_unitaire}}€</li>
-                <li>Quantité commandée : {{produit.quantite_commandee}}</li>
-                <li>Remise : {{produit.remise}}</li>
-                <li>Sous-total : {{produit.sous_total}}€</li>
-                <li>Quantité livrée : {{produit.quantite_livree}}</li>
-                <li>Quantité à livrer : {{produit.quantite_a_livrer}}</li>
-                {% endfor %}
-            </ul>
+            {% for produit in commande.produits %}
+            <div style="border: solid;">
+                <ul>
+                    <li>Produit : {{produit.produit}}</li>
+                    <li>{{produit.accroche}}</li>
+                    <li>{{produit.description|nl2br}}</li>
+                    <li>Prix unitaire : {{produit.prix_unitaire}}€</li>
+                    <li>Quantité commandée : {{produit.quantite_commandee}}</li>
+                    <li>Remise : {{produit.remise}}</li>
+                    <li>Sous-total : {{produit.sous_total}}€</li>
+                    <li>Quantité livrée : {{produit.quantite_livree}}</li>
+                    <li>Quantité à livrer : {{produit.quantite_a_livrer}}</li>
+                </ul>
+                <a href='{{ path('produit', {'produit':produit.id_produit}) }}'><button class="button">Voir le produit</button></a>
+            </div>
+            {% endfor %}
         </div>
     </div>
-</a>
-
-
+    <a href='{{ path('commande_detail', {'id':commande.id}) }}''><button class="button">Détail de la commande</button></a>
 {% endfor %}
+</div>
 {% endblock %}
