@@ -5,7 +5,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <style>
+        table {
+
+            border: 1px solid black;
+            background-color: #F6FDF0;
+            width: 100%;
+        }
+
+        th {
+            background-color: #D5F4BB;
+            font-size: 0.875em;
+            font-weight: normal;
+        }
+
+        td {
+            font-size: 0.875em;
+            font-weight: bold;
+        }
+    </style>
+    <title>Facture pdf</title>
 </head>
 
 <body>
@@ -60,7 +79,9 @@
                 </tr>
                 <tr>
                     <th>numéro de commande :</th>
-                    <td></td>
+                    <td>
+                        <!-- twig variable pour num commande -->
+                    </td>
 
                 </tr>
             </tbody>
@@ -72,8 +93,8 @@
             <thead>
                 <tr>
                     <th><abbr title="Produit">Produit :</abbr></th>
-                    <th><abbr title="Quantite">quantité :</abbr></th>
-                    <th><abbr title="PrixUni">Prix unitaire :</abbr></th>
+                    <th><abbr title="Quantite">quantitée :</abbr></th>
+                    <th><abbr title="PrixUnitaire">Prix unitaire :</abbr></th>
                     <th><abbr title="Total">Total :</abbr></th>
 
                 </tr>
