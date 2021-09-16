@@ -24,6 +24,7 @@ class GestionCommandesController extends AbstractController
 {
     const INTERVALLE_DATE_BUTOIR = 'P15D';
     const INTERVALLE_DATE_LIVRAISON = 'P2D';
+    const NB_JOURS_REMBOURSEMENT = 1;
 
 
     /**
@@ -35,7 +36,6 @@ class GestionCommandesController extends AbstractController
         //pdf facture
 
         $panier = $toolBox->getPanier($this->getSession());
-        dd($panier);
         if ($panier==null) {
             return $this->redirectToRoute("panier_vide");
         }
@@ -118,10 +118,34 @@ class GestionCommandesController extends AbstractController
     }
 
     /**
-     * @Route("/particulier/commande/annuler/{id}", name="commande_annuler")
+     * @Route("/particulier/commande/annulation/{id}", name="commande_annuler")
      */
-    public function commandeAnnuler(): Response
+    public function commandeAnnuler(CommandeRepository $commandeRepo, $id): Response
     {
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'id' => $id
+            ]);
+        }
+
+        $maintenant = new DateTime();
+        $maintenant->format("Y-m-d H:i:s");
+
+        $dateCommande = DateTime::createFromFormat("Y-m-d H:i:s", $commande->getComCommande()->format("Y-m-d H:i:s"));    
+        $intervalle = $dateCommande->diff($maintenant);
+
+        if ($intervalle->format('%R') === "+" || $intervalle->format('%d') < GestionCommandesController::NB_JOURS_REMBOURSEMENT) {
+            //Dans Commande, creer attribut annulation
+            //$commande->getAnnulation();
+        } else {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'id' => $id
+            ]);
+        }
+
+
         /*
             Client clique sur annuler commande
                 si comDate < 24h
@@ -136,6 +160,7 @@ class GestionCommandesController extends AbstractController
                     redirection vers la page de succes ou la page d'erreur
                 sinon redirection vers page reglement#remboursement
         */
+
 
         return $this->render('gestion_commandes/annuler.html.twig', [
             'controller_name' => 'GestionCompteController',

@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Form\CarteCreditType;
+use App\Repository\CommandeRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -74,39 +76,113 @@ class PaiementController extends AbstractController
     /**
      * @Route("/particulier/commande/annulation/remboursement/carte/{id}", name="remboursement_carte")
      */
-    public function remboursementCarte(Request $request, $id): Response
+    public function remboursementCarte(Request $request, CommandeRepository $commandeRepo, $id): Response
     {
-        $form = $this->createForm(CarteCreditType::class);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('commande_creer');
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'id' => $id
+            ]);
         }
 
-        return $this->render('paiement/remboursement_carte.html.twig', [
-            'id' => $id,
-            'form' => $form->createView()
-        ]);
+        $maintenant = new DateTime();
+        $maintenant->format("Y-m-d H:i:s");
+
+        $dateCommande = DateTime::createFromFormat("Y-m-d H:i:s", $commande->getComCommande()->format("Y-m-d H:i:s"));    
+        $intervalle = $dateCommande->diff($maintenant);
+
+        if ($intervalle->format('%R') === "+" || $intervalle->format('%d') < GestionCommandesController::NB_JOURS_REMBOURSEMENT) {
+            $form = $this->createForm(CarteCreditType::class);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                return $this->redirectToRoute('commande_annuler', ['id' => $id]);
+            } else {
+                return $this->render('paiement/remboursement_carte.html.twig', [
+                    'id' => $id,
+                    'form' => $form->createView()
+                ]);
+            }
+        } else {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'id' => $id
+            ]);
+        }
     }
 
 
     /**
      * @Route("/particulier/commande/annulation/remboursement/virement/{id}", name="remboursement_virement")
      */
-    public function remboursementVirement($id): Response
+    public function remboursementVirement(Request $request, CommandeRepository $commandeRepo, $id): Response
     {
-        return $this->render('paiement/remboursement_virement.html.twig', [
-            'id' => $id
-        ]);
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'id' => $id
+            ]);
+        }
+
+        $maintenant = new DateTime();
+        $maintenant->format("Y-m-d H:i:s");
+
+        $dateCommande = DateTime::createFromFormat("Y-m-d H:i:s", $commande->getComCommande()->format("Y-m-d H:i:s"));    
+        $intervalle = $dateCommande->diff($maintenant);
+
+        if ($intervalle->format('%R') === "+" || $intervalle->format('%d') < GestionCommandesController::NB_JOURS_REMBOURSEMENT) {
+            $form = $this->createForm(CarteCreditType::class);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                return $this->redirectToRoute('commande_annuler', ['id' => $id]);
+            } else {
+                return $this->render('paiement/remboursement_carte.html.twig', [
+                    'id' => $id,
+                    'form' => $form->createView()
+                ]);
+            }
+        } else {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'id' => $id
+            ]);
+        }
     }
 
     /**
      * @Route("/particulier/commande/annulation/remboursement/paypal/{id}", name="remboursement_paypal")
      */
-    public function remboursementPaypal($id): Response
+    public function remboursementPaypal(Request $request, CommandeRepository $commandeRepo, $id): Response
     {
-        return $this->render('paiement/remboursement_paypal.html.twig', [
-            'id' => $id
-        ]);
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'id' => $id
+            ]);
+        }
+
+        $maintenant = new DateTime();
+        $maintenant->format("Y-m-d H:i:s");
+
+        $dateCommande = DateTime::createFromFormat("Y-m-d H:i:s", $commande->getComCommande()->format("Y-m-d H:i:s"));    
+        $intervalle = $dateCommande->diff($maintenant);
+
+        if ($intervalle->format('%R') === "+" || $intervalle->format('%d') < GestionCommandesController::NB_JOURS_REMBOURSEMENT) {
+            $form = $this->createForm(CarteCreditType::class);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                return $this->redirectToRoute('commande_annuler', ['id' => $id]);
+            } else {
+                return $this->render('paiement/remboursement_carte.html.twig', [
+                    'id' => $id,
+                    'form' => $form->createView()
+                ]);
+            }
+        } else {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'id' => $id
+            ]);
+        }
     }
 
 }
