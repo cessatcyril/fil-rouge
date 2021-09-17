@@ -3,20 +3,34 @@
 {% block title %}Hello CatalogueController!{% endblock %}
 
 {% block body %}
-{% for produit in listeProduits %}
-<div>
 
-    <a href="/produit/{{produit.Id}}">
-        <img src="/images/produit/{{ produit.imagePrincipale }}" alt="image du produit" />
-        {{produit.proAccroche}}
-    </a>
+{% for produit in listeProduits %}
+<div class="card">
+    <div class="card-image">
+        <figure class="image is-128x128">
+            <a target="_blank" href="/images/produit/{{ produit.imagePrincipale }}">
+                <img src="/images/produit/{{ produit.imagePrincipale }}" alt="image du produit" />
+            </a>
+        </figure>
+    </div>
+    <div class="card-content">
+        <div class="media">
+            <div class="media-content">
+                <p class="title is-4">{{produit.proProduit}}</p>
+            </div>
+        </div>
+        <div class="content">
+            {{produit.proAccroche}}
+        </div>
+    </div>
+    <footer class="card-footer">
+        <a class="button color-light" href="/produit/{{produit.Id}}" class="card-footer-item">détail du produit</a>
+    </footer>
 </div>
 {% endfor %}
 {% if page>0 %}
-<a
-    href="{{ path('liste_produits', { sousCategorie: listeProduits[0].sousCategorie.id , page: previous} ) }}">previous</a>
+<a href="{{ path('liste_produits', { sousCategorie: listeProduits[0].sousCategorie.id , page: previous} ) }}">previous</a>
 {% endif %}
-{% if page<nombrePages %} <a
-    href="{{ path('liste_produits', { sousCategorie: listeProduits[0].sousCategorie.id , page: next} ) }}">next</a>
+{% if page<nombrePages %} <a href="{{ path('liste_produits', { sousCategorie: listeProduits[0].sousCategorie.id , page: next} ) }}">next</a>
     {% endif %}
     {% endblock %}

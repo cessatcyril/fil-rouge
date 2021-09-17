@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello JeuDeTestController!{% endblock %}
+
+{% block body %}
+
+
+<div class="field is-horizontal">
+</div>
+<div class="field-body">
+    <!--form nom -->
+    <div class="field">
+        <label class="label" for="nom">primary</label>
+        <div class="control is-expanded">
+            <input class="input color-primary" type="text" name="test1" value="formulaire primary">
+        </div>
+        <p class="control">
+        <div class="button color-primary">
+            button primary </div>
+        </p>
+    </div>
+    <!-- form prenom-->
+    <div class="field">
+        <label class="label" for="prenom">secondary</label>
+        <div class="control is-expanded">
+            <input class="input color-secondary" type="text" name="test2" value="formulaire secondary">
+        </div>
+        <p class="control">
+        <div class="button color-secondary">
+            button secondary </div>
+        </p>
+    </div>
+</div>
+<div class="field is-horizontal">
+</div>
+<div class="field-body">
+    <!--form nom -->
+    <div class="field">
+        <label class="label" for="nom">light</label>
+        <div class="control is-expanded">
+            <input class="input color-light" type="text" name="test3" value="formulaire light">
+        </div>
+        <p class="control">
+        <div class="button color-light">
+            button light </div>
+        </p>
+    </div>
+    <!-- form prenom-->
+    <div class="field">
+        <label class="label" for="prenom">dark</label>
+        <div class="control is-expanded">
+            <input class="input color-dark" type="text" name="test4" value="formulaire dark">
+        </div>
+        <p class="control">
+        <div class="button color-dark">
+            button dark </div>
+        </p>
+    </div>
+</div>
+<br>
+<br>
+<div class="columns">
+    <div class="column is-3 color-primary">colonne primary <br>colonne primary <br>colonne primary <br>colonne primary <br></div>
+    <div class="column is-3 color-secondary">colonne secondary <br>colonne secondary <br>colonne secondary <br>colonne secondary <br></div>
+    <div class="column is-3 color-light">colonne light <br>colonne light <br>colonne light <br>colonne light <br></div>
+    <div class="column is-3 color-dark">colonne dark <br>colonne dark <br>colonne dark <br>colonne dark <br></div>
+</div>
+
+{% endblock %}
