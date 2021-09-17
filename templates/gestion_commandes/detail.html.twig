@@ -27,7 +27,7 @@
         </div>
     </div>
     <a href='{{ path('commande_lister') }}'><button class="button">Liste des commandes</button></a>
-    <a href='{{ path('remboursement_moyen', {'id':commande.id}) }}'><button class="button">Annuler la commande</button></a>
+    <a href='{{ path('commande_annuler', {'id':commande.id}) }}'><button class="button">Annuler la commande</button></a>
 {% endfor %}
 </div>
 {% endblock %}

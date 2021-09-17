@@ -28,7 +28,9 @@ class GestionCommandesController extends AbstractController
     const INTERVALLE_DATE_BUTOIR = 'P15D';
     const INTERVALLE_DATE_LIVRAISON = 'P2D';
     const NB_JOURS_REMBOURSEMENT = 1;
-
+    const MESSAGE_ANNULATION_IMPOSSIBLE = 'Cette commande n\'est pas annulable. Les annulations de commandes sont annulables pendant une durée de '. GestionCommandesController::NB_JOURS_REMBOURSEMENT*24 .' heures';
+    const MESSAGE_ANNULATION_DEJA_EFFECTUEE = 'Cette commande n\'est pas annulable, cette commande a déja été annulée.';
+    const MESSAGE_ANNULATION_COMMANDE_INCONNUE = 'Cette commande n\'existe pas et n\'est donc pas annulable';
 
     /**
      * @Route("/particulier/commande/commander", name="commande_creer")
@@ -123,13 +125,13 @@ class GestionCommandesController extends AbstractController
     /**
      * @Route("/particulier/commande/annulation/{id}", name="commande_annuler")
      */
-    public function commandeAnnuler(CommandeRepository $commandeRepo, $id): Response
+    public function commandeAnnuler(EntityManagerInterface $eMI, CommandeRepository $commandeRepo, $id): Response
     {
         $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
 
         if ($commande==null) {
             return $this->render('paiement/remboursement_echec.html.twig', [
-                'id' => $id
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
             ]);
         }
 
@@ -140,34 +142,21 @@ class GestionCommandesController extends AbstractController
         $intervalle = $dateCommande->diff($maintenant);
 
         if ($intervalle->format('%R') === "+" || $intervalle->format('%d') < GestionCommandesController::NB_JOURS_REMBOURSEMENT) {
-            //Dans Commande, creer attribut annulation
-            //$commande->getAnnulation();
+            if ($commande->getComAnnulation() == false) {
+                $commande->setComAnnulation(true);
+                $eMI->persist($commande);
+                $eMI->flush();
+                $this->redirectToRoute('remboursement_moyen', ['id' => $id]);
+            } else {
+                return $this->render('erreur/erreur.html.twig', [
+                    'message' => GestionCommandesController::MESSAGE_ANNULATION_DEJA_EFFECTUEE
+                ]);
+            }
         } else {
-            return $this->render('paiement/remboursement_echec.html.twig', [
-                'id' => $id
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_IMPOSSIBLE
             ]);
         }
-
-
-        /*
-            Client clique sur annuler commande
-                si comDate < 24h
-                    Client est redirige sur la page de remboursement
-                    Remboursement par carte bancaire ou virement
-                    Client clique sur remboursement
-                    Client est redirige vers commande_annuler
-                    Changements dans la bdd :
-                        ajout d'un booleen : 
-                            si true >> commande pas affichee sinon affichee
-                            si true >> commande a déja été remboursée
-                    redirection vers la page de succes ou la page d'erreur
-                sinon redirection vers page reglement#remboursement
-        */
-
-
-        return $this->render('gestion_commandes/annuler.html.twig', [
-            'controller_name' => 'GestionCompteController',
-        ]);
     }
 
     /**
