@@ -1,0 +1,20 @@
+
+remboursement :
+
+dans vue commande_detail, client clique sur annuler
+client redirigé vers commande_annulation
+si comDate -24h
+    si comAnnulation == false
+        comAnnulation = true
+        redirection vers paiement_remboursement
+        si dans paiement_remboursement comAnnulation == false
+            redirection moyen_paiement
+                client clique sur moyen de remboursement et est redirige vers la methode (carte...) selectionnee
+                    client rempli formulaire et redirection vers remboursement_succes
+        sinon 
+            redirection annulation_succes
+    sinon 
+        redirection vers annulation_echec
+sinon 
+    redirection vers annulation_echec
+
