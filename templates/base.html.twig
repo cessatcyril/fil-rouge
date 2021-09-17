@@ -9,8 +9,12 @@
     {% block stylesheets %}
     {#{{ encore_entry_link_tags('app') }}#}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css">
+    <link href="~bulma-carousel/dist/css/bulma-carousel.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/test.css') }}" />
     <script src="https://kit.fontawesome.com/b8a4a1dff5.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
     {% endblock %}
 
     {% block javascripts %}
@@ -19,7 +23,7 @@
 </head>
 
 <body class="has-background-dark">
-    <section class="hero is-info">
+    <section class="hero color-primary">
         <!-- Hero head: will stick at the top -->
         <div class="hero-head">
 

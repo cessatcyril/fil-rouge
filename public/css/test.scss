@@ -1,0 +1,21 @@
+
+// As hex codes */
+
+$color-primary: #CAF0AC;	// Main Primary color */
+$color-light: #E3F8D1;
+$color-secondary: #B0E584;
+$color-dark: #87C453;
+
+
+.color-primary {
+    background-color: $color-primary;
+}
+.color-secondary {
+    background-color: $color-secondary;
+}
+.color-light {
+    background-color: $color-light;
+}
+.color-dark {
+    background-color: $color-dark;
+}

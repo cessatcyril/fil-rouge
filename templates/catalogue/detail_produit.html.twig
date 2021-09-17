@@ -3,12 +3,33 @@
 {% block title %}Hello CatalogueController!{% endblock %}
 
 {% block body %}
-    <ul>
-        {% for row in produit.images %}
-            <li><img src="/images/produit/{{ row }}" alt="N'affiche pas d'image"></li>
-        {% endfor %}
-        <li>{{ produit.proProduit }}</li>
-        <li>{{ produit.proDescription }}</li>
-    </ul>
-    <a href="/panier/ajouter/{{produit.id }}" class="button">Ajouter au panier</a>
+
+<section class="section">
+    <div class="container">
+        <!-- Start Carousel -->
+        <div id="carousel-demo" class="carousel">
+            {% for row in produit.images %}
+            {% set n = ( n | default(0) ) + 1 %}
+            <div class="item-{{ n }}">
+                <figure class="image is-124x124">
+                    <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image">
+                </figure>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- End Carousel -->
+        {{ produit.proProduit }}
+        {{ produit.proDescription }}
+    </div>
+</section>
+
+
+
+<a href="/panier/ajouter/{{produit.id }}" class="button">Ajouter au panier</a>
+<script>
+    bulmaCarousel.attach('#carousel-demo', {
+        slidesToScroll: 1,
+        slidesToShow: 2
+    });
+</script>
 {% endblock %}
