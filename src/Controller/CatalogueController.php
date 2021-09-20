@@ -46,7 +46,7 @@ class CatalogueController extends AbstractController
      */
     public function listeProduits(SousCategorie $sousCategorie, $page = 0, ProduitRepository $repo): Response
     {
-
+        $n = 0;
         $nombreProduits = $repo->countProduits($sousCategorie);
         $nombrePages = intval($nombreProduits / 5);
 
@@ -61,7 +61,8 @@ class CatalogueController extends AbstractController
             "nombrePages" => $nombrePages,
             "page" => $page,
             "previous" => $previous,
-            "next" => $next
+            "next" => $next,
+            "n" => $n,
         ]);
     }
 

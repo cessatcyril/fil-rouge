@@ -1,33 +1,53 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello CatalogueController!{% endblock %}
-
+{# boucle pour récupérer le nombre de produit total a afficher #}
 {% block body %}
-
 {% for produit in listeProduits %}
-<div class="card">
-    <div class="card-image">
-        <figure class="image is-128x128">
-            <a target="_blank" href="/images/produit/{{ produit.imagePrincipale }}">
-                <img src="/images/produit/{{ produit.imagePrincipale }}" alt="image du produit" />
-            </a>
-        </figure>
-    </div>
-    <div class="card-content">
-        <div class="media">
-            <div class="media-content">
-                <p class="title is-4">{{produit.proProduit}}</p>
+{% set n = loop.length %}
+{% endfor %}
+
+
+{# mise en page des colonnes avec bulma #}
+<div class="columns is-mobile is-centered">
+    <div class="column is-four-fifths">
+
+        <header>
+            <div class="content">
+                <h1> {{ n }} produits disponible.</h1>
+            </div>
+        </header>
+
+        {# boucle avec element card de bulma pour afficher le résumer de chaque produit #}
+        {% for produit in listeProduits %}
+        <div class="block">
+            <div class="card">
+                <div class="card-image">
+                    <a target="_blank" href="/images/produit/{{ produit.imagePrincipale }}">
+                        <img src="/images/produit/{{ produit.imagePrincipale }}" alt="image du produit" class="thumbnail" />
+                    </a>
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <p class="title is-4">{{produit.proProduit}}</p>
+                        </div>
+                    </div>
+                    <div class="content">
+                        {{produit.proAccroche}}
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    <a class="button color-light" href="/produit/{{produit.Id}}" class="card-footer-item">détail du produit</a>
+                </footer>
             </div>
         </div>
-        <div class="content">
-            {{produit.proAccroche}}
-        </div>
+        {% endfor %}
+
     </div>
-    <footer class="card-footer">
-        <a class="button color-light" href="/produit/{{produit.Id}}" class="card-footer-item">détail du produit</a>
-    </footer>
 </div>
-{% endfor %}
+
+{# block de pagination des différents produit #}
 {% if page>0 %}
 <a href="{{ path('liste_produits', { sousCategorie: listeProduits[0].sousCategorie.id , page: previous} ) }}">previous</a>
 {% endif %}

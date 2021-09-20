@@ -4,32 +4,61 @@
 
 {% block body %}
 
-<section class="section">
-    <div class="container">
-        <!-- Start Carousel -->
-        <div id="carousel-demo" class="carousel">
-            {% for row in produit.images %}
-            {% set n = ( n | default(0) ) + 1 %}
-            <div class="item-{{ n }}">
-                <figure class="image is-124x124">
-                    <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image">
-                </figure>
+{# mise en page des colonnes avec bulma #}
+<div class="columns is-mobile is-centered is-multiline">
+    <div class="column is-four-fifths">
+
+        <header>
+            <div class="content">
+                <h1>Détail du produit :</h1>
             </div>
-            {% endfor %}
-        </div>
-        <!-- End Carousel -->
-        {{ produit.proProduit }}
-        {{ produit.proDescription }}
+        </header>
+        <section class="section">
+            <div class="columns is-multiline">
+
+                <div class="column is-8">
+                    <!-- Start Carousel -->
+                    {# <div class="column is-4"> #}
+                        <div id="carousel-demo" class="carousel">
+                            {% for row in produit.images %}
+                            {% set n = ( n | default(0) ) + 1 %}
+                            <div class="item-{{ n }}">
+                                <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image" class="thumbnail">
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <!-- End Carousel -->
+                        <div class="content">
+                            <h3>Nom du produit : </h3>
+                            <p>{{ produit.proProduit }}</p>
+                        </div>
+                        <div class="content">
+                            <h3>Détail : </h3>
+                            <p>{{ produit.proDescription }}</p>
+                        </div>
+                        {#
+                    </div> #}
+                </div>
+
+                <div class="column is-4">
+                    {{ produit.proPrixV }} euros<br>
+                    <a href="/panier/ajouter/{{produit.id }}" class="button color-dark">Ajouter au panier</a>
+                </div>
+
+
+
+            </div>
+        </section>
+
     </div>
-</section>
+</div>
 
 
 
-<a href="/panier/ajouter/{{produit.id }}" class="button">Ajouter au panier</a>
 <script>
     bulmaCarousel.attach('#carousel-demo', {
         slidesToScroll: 1,
-        slidesToShow: 2
+        slidesToShow: 4
     });
 </script>
 {% endblock %}
