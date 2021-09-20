@@ -4,8 +4,8 @@
 
 {% block body %}
 <section>
-    <div class="columns">
-        <div class="column is-10 is-offset-1">
+    <div class="columns is-mobile is-centered">
+        <div class="column is-four-fifths">
 
             <div class="block">
                 <div class="content">
@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <p class="control">
-                    <a class="button is-link" href="{{ path('compte_modifier_user', {'id': infoClient.user.id}) }}">
+                    <a class="button color-secondary" href="{{ path('compte_modifier_user', {'id': infoClient.user.id}) }}">
                         Changer email ou mot de passe
                     </a>
                 </p>
@@ -89,7 +89,7 @@
                     </div>
                 </div>
                 <p class="control">
-                    <a class="button is-link" href="{{ path('compte_modifier', {'id': infoClient.id}) }}">
+                    <a class="button color-secondary" href="{{ path('compte_modifier', {'id': infoClient.id}) }}">
                         Modifier informations personnelles
                     </a>
                 </p>
@@ -104,7 +104,7 @@
                 </div>
 
                 <p class="control">
-                    <a class="button is-link" href="{{ path('adresse_edit', {'id': value.adresse.id}) }}">
+                    <a class="button color-secondary" href="{{ path('adresse_edit', {'id': value.adresse.id}) }}">
                         Modifier adresse
                     </a>
                 </p>
@@ -151,7 +151,7 @@
                 </div>
 
                 <p class="control">
-                    <a class="button is-link" href="{{ path('adresse_edit', {'id': value.adresse.id}) }}">
+                    <a class="button color-secondary" href="{{ path('adresse_edit', {'id': value.adresse.id}) }}">
                         Modifier adresse
                     </a>
 
@@ -197,7 +197,7 @@
                 </div>
 
                 <p class="control">
-                    <a class="button is-link" href="{{ path('adresse_edit', {'id': value.adresse.id}) }}">
+                    <a class="button color-secondary" href="{{ path('adresse_edit', {'id': value.adresse.id}) }}">
                         Modifier adresse
                     </a>
 
@@ -246,12 +246,12 @@
                         <div class="block">
                             <div class="field is-grouped">
                                 <p class="control">
-                                    <a class="button is-link" href="{{ path('compte_supprimer', {'id': userId.id}) }}">
+                                    <a class="button color-secondary" href="{{ path('compte_supprimer', {'id': userId.id}) }}">
                                         Supprimer votre compte
                                     </a>
                                 </p>
                                 <p class="control">
-                                    <a class="button is-link" href="{{ path('categorie') }}">
+                                    <a class="button color-secondary" href="{{ path('categorie') }}">
                                         Retour
                                     </a>
                                 </p>

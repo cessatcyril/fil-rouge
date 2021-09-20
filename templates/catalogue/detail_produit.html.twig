@@ -41,10 +41,13 @@
                 </div>
 
                 <div class="column is-4">
-                    {{ produit.proPrixV }} euros<br>
-                    <a href="/panier/ajouter/{{produit.id }}" class="button color-dark">Ajouter au panier</a>
+                    <div class="content">
+                        <p class="color-prix">
+                            {{ produit.proPrixV }} €
+                        </p>
+                        <a href="/panier/ajouter/{{produit.id }}" class="button color-dark">Ajouter au panier</a>
+                    </div>
                 </div>
-
 
 
             </div>

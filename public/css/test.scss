@@ -5,7 +5,7 @@ $color-primary: #CAF0AC;	// Main Primary color */
 $color-light: #E3F8D1;
 $color-secondary: #B0E584;
 $color-dark: #87C453;
-
+$color-red: red;
 
 .color-primary {
     background-color: $color-primary;
@@ -18,6 +18,9 @@ $color-dark: #87C453;
 }
 .color-dark {
     background-color: $color-dark;
+}
+.color-red {
+    color: $color-red;
 }
 
 
@@ -32,4 +35,29 @@ $color-dark: #87C453;
   /* Add a hover effect (blue shadow) */
   .thumbnail:hover {
     box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
-  }
+        position:relative;
+        top:-25px;
+        left:-35px;
+        width:100%;
+        height:auto;
+        display:block;
+        z-index:999;
+    }
+
+.color-prix {
+    font-size: 3em;
+    color: $color-red;
+}
+
+.img-panier {
+
+	width: 350px;
+	height: 350px;
+}
+
+.image img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 300px;
+}
