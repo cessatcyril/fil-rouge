@@ -78,6 +78,17 @@ class CatalogueController extends AbstractController
     }
 
     /**
+     * @Route("/produit/carousel/{produit}", name="produit_carousel")
+     */
+    public function produitCarousel(Produit $produit): Response
+    {
+        return $this->render('catalogue/produit_carousel.html.twig', [
+            'controller_name' => 'CatalogueController',
+            'produit' => $produit
+        ]);
+    }
+
+    /**
      * Affiche une image dans un dossier privé
      * @Route("/private_pic/{fichier}", name="private_pic")
      */

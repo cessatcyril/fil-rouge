@@ -66,3 +66,9 @@ $color-red: red;
     position: absolute;
     bottom: 0px;
 }
+
+.img-float img {
+    display: block;
+    float: left;
+    margin-right: 5px;
+}

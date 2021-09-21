@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    {# Run `composer require symfony/webpack-encore-bundle`
+    and uncomment the following Encore helpers to start using Symfony UX #}
+    {% block stylesheets %}
+    {#{{ encore_entry_link_tags('app') }}#}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css">
+    <link href="~bulma-carousel/dist/css/bulma-carousel.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/test.css') }}" />
+    <script src="https://kit.fontawesome.com/b8a4a1dff5.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+    {% endblock %}
+
+    {% block javascripts %}
+    {#{{ encore_entry_script_tags('app') }}#}
+    {% endblock %}
+</head>
+
+</html>
+
+{% block body %}
+
+<!-- Start Carousel -->
+<div class="columns is-centered">
+    <div class="column is-half">
+        <div id="carousel-demo" class="carousel">
+
+            {% for row in produit.images %}
+            {% set n = ( n | default(0) ) + 1 %}
+            <div class="item-{{ n }}">
+                <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- End Carousel -->
+
+
+
+<script>
+    bulmaCarousel.attach('#carousel-demo', {
+        slidesToScroll: 1,
+        slidesToShow: 1,
+        loop: true,
+    });
+</script>
+
+
+
+{% endblock %}
