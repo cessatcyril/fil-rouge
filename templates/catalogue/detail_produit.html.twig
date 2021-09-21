@@ -7,6 +7,14 @@
 {# mise en page des colonnes avec bulma #}
 <div class="columns is-mobile is-centered is-multiline">
     <div class="column is-four-fifths">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="/">catégorie</a></li>
+                <li><a href="/sous_categories/{{ produit.sousCategorie.categorie.id }}">sous-catégorie</a></li>
+                <li><a href="/liste_produits/{{ produit.sousCategorie.id }}">liste des produits</a></li>
+                <li class="is-active"><a href="#" aria-current="page">détail du produit</a></li>
+            </ul>
+        </nav>
 
         <header>
             <div class="content">
