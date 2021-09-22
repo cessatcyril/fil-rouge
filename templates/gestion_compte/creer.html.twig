@@ -1,97 +1,346 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello GestionCompteController!{% endblock %}
+{% block title %}Creer un compte{% endblock %}
 
 {% block body %}
+<div class="columns is-mobile is-centered">
+    <div class="column is-four-fifths">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="/">Accueil</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Créer un compte</a></li>
+            </ul>
+        </nav>
 
-
-{{ form_start(form) }}
-
-{{ form_label(form.email) }}
-{{ form_widget(form.email) }}
-{{ form_errors(form.email) }}
-<br>
-{{ form_label(form.plainPassword) }}
-{{ form_widget(form.plainPassword) }}
-{{ form_errors(form.plainPassword) }}
-<br>
-{{ form_label(form.cliNom) }}
-{{ form_widget(form.cliNom) }}
-{{ form_errors(form.cliNom) }}
-<br>
-{{ form_label(form.cliPrenom) }}
-{{ form_widget(form.cliPrenom) }}
-{{ form_errors(form.cliPrenom) }}
-<br>
-{{ form_label(form.cliNaissance) }}
-{{ form_widget(form.cliNaissance) }}
-{{ form_errors(form.cliNaissance) }}
-<br>
-{{ form_label(form.cliTel) }}
-{{ form_widget(form.cliTel) }}
-{{ form_errors(form.cliTel) }}
-<br>
-{{ form_label(form.cliFax) }}
-{{ form_widget(form.cliFax) }}
-{{ form_errors(form.cliFax) }}
-<br>
-{{ form_label(form.cliSexe) }}
-{{ form_widget(form.cliSexe) }}
-{{ form_errors(form.cliSexe) }}
-<br>
-{{ form_label(form.adrPaysDomicile) }}
-{{ form_widget(form.adrPaysDomicile) }}
-{{ form_errors(form.adrPaysDomicile) }}
-<br>
-{{ form_label(form.adrVilleDomicile) }}
-{{ form_widget(form.adrVilleDomicile) }}
-{{ form_errors(form.adrVilleDomicile) }}
-<br>
-{{ form_label(form.adrPostalDomicile) }}
-{{ form_widget(form.adrPostalDomicile) }}
-{{ form_errors(form.adrPostalDomicile) }}
-<br>
-{{ form_label(form.adrAdresseDomicile) }}
-{{ form_widget(form.adrAdresseDomicile) }}
-{{ form_errors(form.adrAdresseDomicile) }}
-<br>
-{{ form_label(form.adrPaysLivraison) }}
-{{ form_widget(form.adrPaysLivraison) }}
-{{ form_errors(form.adrPaysLivraison) }}
-<br>
-{{ form_label(form.adrVilleLivraison) }}
-{{ form_widget(form.adrVilleLivraison) }}
-{{ form_errors(form.adrVilleLivraison) }}
-<br>
-{{ form_label(form.adrPostalLivraison) }}
-{{ form_widget(form.adrPostalLivraison) }}
-{{ form_errors(form.adrPostalLivraison) }}
-<br>
-{{ form_label(form.adrAdresseLivraison) }}
-{{ form_widget(form.adrAdresseLivraison) }}
-{{ form_errors(form.adrAdresseLivraison) }}
-<br>
-{{ form_label(form.adrPaysFacturation) }}
-{{ form_widget(form.adrPaysFacturation) }}
-{{ form_errors(form.adrPaysFacturation) }}
-<br>
-{{ form_label(form.adrVilleFacturation) }}
-{{ form_widget(form.adrVilleFacturation) }}
-{{ form_errors(form.adrVilleFacturation) }}
-<br>
-{{ form_label(form.adrPostalFacturation) }}
-{{ form_widget(form.adrPostalFacturation) }}
-{{ form_errors(form.adrPostalFacturation) }}
-<br>
-{{ form_label(form.adrAdresseFacturation) }}
-{{ form_widget(form.adrAdresseFacturation) }}
-{{ form_errors(form.adrAdresseFacturation) }}
-<br>
-<button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+        <div class="block">
+            <div class="content">
+                <h3>Créer un compte</h3>
+            </div>
+            {{ form_start(form) }}
 
 
 
+
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.email, 'Email',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.email, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.email) }}</div>
+
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.plainPassword, 'Password',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.plainPassword, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.plainPassword) }}</div>
+                </div>
+            </div>
+
+
+
+
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.cliNom, 'Nom',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.cliNom, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.cliNom) }}</div>
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.cliPrenom, 'Prenom',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.cliPrenom, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.cliPrenom) }}</div>
+                </div>
+            </div>
+
+
+
+
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.cliNaissance, 'Date de naissance',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.cliNaissance, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.cliNaissance) }}</div>
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.cliSexe, 'Sexe',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.cliSexe, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.cliSexe) }}</div>
+                </div>
+            </div>
+
+
+
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.cliTel, 'Téléphone',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.cliTel, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.cliTel) }}</div>
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.cliFax, 'Fax',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.cliFax, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.cliFax) }}</div>
+                </div>
+            </div>
+
+
+
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.adrAdresseDomicile, 'Adresse du domicile',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control">
+                                {{ form_widget(form.adrAdresseDomicile, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.adrAdresseDomicile) }}</div>
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.adrVilleDomicile, 'Ville',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control">
+                                {{ form_widget(form.adrVilleDomicile, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.adrVilleDomicile) }}</div>
+                </div>
+            </div>
+
+
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.adrPostalDomicile, 'Code postal',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.adrPostalDomicile, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.adrPostalDomicile) }}</div>
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.adrPaysDomicile, 'Pays',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.adrPaysDomicile, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.adrPaysDomicile) }}</div>
+                </div>
+            </div>
+
+
+
+
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.adrAdresseLivraison, 'Adresse de livraison',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.adrAdresseLivraison, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.adrAdresseLivraison) }}</div>
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.adrVilleLivraison, 'Ville',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.adrVilleLivraison, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.adrVilleLivraison) }}</div>
+                </div>
+            </div>
+
+
+
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.adrPostalLivraison, 'Code postal',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.adrPostalLivraison, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.adrPostalLivraison) }}</div>
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.adrPaysLivraison, 'Pays',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.adrPaysLivraison, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error">{{ form_errors(form.adrPaysLivraison) }}</div>
+                </div>
+            </div>
+
+
+
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.adrAdresseFacturation, 'Adresse de facturation',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.adrAdresseFacturation, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    {# <div class="error">{{ form_errors(form.adrAdresseFacturation) }}</div> #}
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.adrVilleFacturation, 'Ville',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.adrVilleFacturation, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    {# <div class="error">{{ form_errors(form.adrVilleFacturation) }}</div> #}
+                </div>
+            </div>
+
+
+
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.adrPostalFacturation, 'Code postal',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.adrPostalFacturation, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    {# <div class="error">{{ form_errors(form.adrPostalFacturation) }}</div> #}
+                    <!--form  -->
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            {{ form_label(form.adrPaysFacturation, 'Pays',{'label_attr': {'class': 'label'}}) }}
+                        </div>
+                        <div class="field-body">
+                            <div class="control is-expanded">
+                                {{ form_widget(form.adrPaysFacturation, {'attr': {'class': 'control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    {# <div class="error">{{ form_errors(form.adrPaysFacturation) }}</div> #}
+                </div>
+            </div>
+
+
+            <p class="control">
+                <button class="button color-secondary">{{ button_label|default('Save') }}</button>
+            </p>
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+</div>
 
 
 {% endblock %}

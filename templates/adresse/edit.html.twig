@@ -3,7 +3,19 @@
 {% block title %}Edit Adresse{% endblock %}
 
 {% block body %}
-<h1>Modifier adresse</h1>
 
-{{ include('adresse/_form.html.twig', {'button_label': 'Modifier'}) }}
+<div class="columns is-mobile is-centered">
+    <div class="column is-four-fifths">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="/">Accueil</a></li>
+                <li><a href="/particulier/compte/afficher/">Mon compte</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Modifier votre adresse</a></li>
+            </ul>
+        </nav>
+
+        {{ include('adresse/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+    </div>
+</div>
 {% endblock %}

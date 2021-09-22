@@ -1,12 +1,42 @@
-{{ form_start(form) }}
+<div class="block">
+    <div class="content">
+        <h3>Modifier vos identifiants</h3>
+    </div>
+    {{ form_start(form) }}
+    <!--form  -->
+    <div class="field is-horizontal">
+        <div class="field-label">
+            {{ form_label(form.email, 'Email',{'label_attr': {'class': 'label'}}) }}
+        </div>
+        <div class="field-body">
+            <div class="control is-expanded">
+                {{ form_widget(form.email, {'attr': {'class': 'control'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="error">{{ form_errors(form.email) }}</div>
+    <br>
+    <!--form  -->
+    <div class="field is-horizontal">
+        <div class="field-label">
+            {{ form_label(form.plainPassword, 'Mot de passe',{'label_attr': {'class': 'label'}}) }}
+        </div>
+        <div class="field-body">
+            <div class="control is-expanded">
+                {{ form_widget(form.plainPassword, {'attr': {'class': 'control'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="error">{{ form_errors(form.plainPassword) }}</div>
+    <br>
 
-{{ form_label(form.email) }}
-{{ form_widget(form.email) }}
-{{ form_errors(form.email) }}
-<br>
-{{ form_label(form.plainPassword) }}
-{{ form_widget(form.plainPassword) }}
-{{ form_errors(form.plainPassword) }}
-<br>
-<button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+    <p class="control">
+        <button class="button color-secondary">{{ button_label|default('Save') }}</button>
+    </p>
+
+
+
+
+
+    {{ form_end(form) }}
+</div>

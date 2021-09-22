@@ -3,8 +3,20 @@
 {% block title %}Edit Client{% endblock %}
 
 {% block body %}
-<h1>Modifier ses données personnelles</h1>
 
-{{ include('client/_form.html.twig', {'button_label': 'Update'}) }}
+<div class="columns is-mobile is-centered">
+    <div class="column is-four-fifths">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="/">Accueil</a></li>
+                <li><a href="/particulier/compte/afficher/">Mon compte</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Modifier vos informations personnelles</a></li>
+            </ul>
+        </nav>
 
+        {{ include('client/_form.html.twig', {'button_label': 'Update'}) }}
+
+
+    </div>
+</div>
 {% endblock %}

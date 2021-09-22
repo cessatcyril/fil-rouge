@@ -3,8 +3,20 @@
 {% block title %}Edit User{% endblock %}
 
 {% block body %}
-<h1>Modifier ses informations :</h1>
 
-{{ include('user/_form.html.twig', {'button_label': 'Modifier'}) }}
+<div class="columns is-mobile is-centered">
+    <div class="column is-four-fifths">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="/">Accueil</a></li>
+                <li><a href="/particulier/compte/afficher/">Mon compte</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Modifier vos identifiants</a></li>
+            </ul>
+        </nav>
+
+        {{ include('user/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+    </div>
+</div>
 
 {% endblock %}
