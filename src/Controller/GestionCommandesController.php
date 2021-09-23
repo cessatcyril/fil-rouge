@@ -259,6 +259,9 @@ class GestionCommandesController extends AbstractController
      */
     public function commandeRecapitulatif(AdresseTypeRepository $repo, ToolBox $toolBox): Response
     {
+        if (is_null($toolBox->getPanier($this->getSession()))) {
+            return $this->redirectToRoute('panier_vide');
+        }
         return $this->render('gestion_commandes/recapitulatif.html.twig', [
             'controller_name' => 'GestionCompteController',
             'panier' => $toolBox->getPanier($this->getSession()),
