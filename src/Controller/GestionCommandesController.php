@@ -143,7 +143,7 @@ class GestionCommandesController extends AbstractController
             ]);
         }
 
-        if ($commande->getComAnnulation() == false) {
+        if ($commande->getComAnnulation()) {
             return $this->render('erreur/erreur.html.twig', [
                 'message' => GestionCommandesController::MESSAGE_ANNULATION_DEJA_EFFECTUEE
             ]);
