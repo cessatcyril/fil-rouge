@@ -4,88 +4,64 @@
     </div>
     {{ form_start(form) }}
     <!--form -->
-    <div class="field is-horizontal">
-        <div class="field-label">
-            {{ form_label(form.cliNom, 'nom',{'label_attr': {'class': 'label'}}) }}
-        </div>
-        <div class="field-body">
-            <div class="control is-expanded">
-                {{ form_widget(form.cliNom, {'attr': {'class': 'input'}}) }}
-            </div>
+    <div class="field">
+        {{ form_label(form.cliNom, 'nom',{'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.cliNom, {'attr': {'class': 'input'}}) }}
         </div>
     </div>
     <div class="error">{{ form_errors(form.cliNom) }}</div>
-    <br>
+
 
     <!--form -->
-    <div class="field is-horizontal">
-        <div class="field-label">
-            {{ form_label(form.cliPrenom, 'Prenom',{'label_attr': {'class': 'label'}}) }}
-        </div>
-        <div class="field-body">
-            <div class="control is-expanded">
-                {{ form_widget(form.cliPrenom, {'attr': {'class': 'input'}}) }}
-            </div>
+    <div class="field">
+        {{ form_label(form.cliPrenom, 'Prénom',{'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.cliPrenom, {'attr': {'class': 'input'}}) }}
         </div>
     </div>
     <div class="error">{{ form_errors(form.cliPrenom) }}</div>
-    <br>
+
 
     <!--form -->
-    <div class="field is-horizontal">
-        <div class="field-label">
-            {{ form_label(form.cliNaissance, 'Date de naissance',{'label_attr': {'class': 'label'}}) }}
-        </div>
-        <div class="field-body">
-            <div class="control is-expanded">
-                {{ form_widget(form.cliNaissance, {'attr': {'class': 'input'}}) }}
-            </div>
+    <div class="field">
+        {{ form_label(form.cliNaissance, 'Date de naissance',{'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.cliNaissance, {'attr': {'class': 'input'}}) }}
         </div>
     </div>
     <div class="error">{{ form_errors(form.cliNaissance) }}</div>
-    <br>
+
 
     <!--form -->
-    <div class="field is-horizontal">
-        <div class="field-label">
-            {{ form_label(form.cliSexe, 'Sexe',{'label_attr': {'class': 'label'}}) }}
-        </div>
-        <div class="field-body">
-            <div class="control is-expanded">
-                {{ form_widget(form.cliSexe, {'attr': {'class': 'input'}}) }}
-            </div>
+    <div class="field">
+        {{ form_label(form.cliSexe, 'Sexe',{'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.cliSexe, {'attr': {'class': 'input'}}) }}
         </div>
     </div>
     <div class="error">{{ form_errors(form.cliSexe) }}</div>
-    <br>
+
 
     <!--form -->
-    <div class="field is-horizontal">
-        <div class="field-label">
-            {{ form_label(form.cliTel, 'Téléphone',{'label_attr': {'class': 'label'}}) }}
-        </div>
-        <div class="field-body">
-            <div class="control is-expanded">
-                {{ form_widget(form.cliTel, {'attr': {'class': 'input'}}) }}
-            </div>
+    <div class="field">
+        {{ form_label(form.cliTel, 'Téléphone',{'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.cliTel, {'attr': {'class': 'input'}}) }}
         </div>
     </div>
     <div class="error">{{ form_errors(form.cliTel) }}</div>
-    <br>
+
 
     <!--form -->
-    <div class="field is-horizontal">
-        <div class="field-label">
-            {{ form_label(form.cliFax, 'Fax',{'label_attr': {'class': 'label'}}) }}
-        </div>
-        <div class="field-body">
-            <div class="control is-expanded">
-                {{ form_widget(form.cliFax, {'attr': {'class': 'input'}}) }}
-            </div>
+    <div class="field">
+        {{ form_label(form.cliFax, 'Fax',{'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.cliFax, {'attr': {'class': 'input'}}) }}
         </div>
     </div>
     <div class="error">{{ form_errors(form.cliFax) }}</div>
-    <br>
+
 
 
     <p class="control">

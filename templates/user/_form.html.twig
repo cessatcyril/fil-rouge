@@ -4,31 +4,21 @@
     </div>
     {{ form_start(form) }}
     <!--form  -->
-    <div class="field is-horizontal">
-        <div class="field-label">
-            {{ form_label(form.email, 'Email',{'label_attr': {'class': 'label'}}) }}
-        </div>
-        <div class="field-body">
-            <div class="control is-expanded">
-                {{ form_widget(form.email, {'attr': {'class': 'input'}}) }}
-            </div>
+    <div class="field">
+        {{ form_label(form.email, 'Email',{'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.email, {'attr': {'class': 'input'}}) }}
         </div>
     </div>
     <div class="error">{{ form_errors(form.email) }}</div>
-    <br>
     <!--form  -->
-    <div class="field is-horizontal">
-        <div class="field-label">
-            {{ form_label(form.plainPassword, 'Mot de passe',{'label_attr': {'class': 'label'}}) }}
-        </div>
-        <div class="field-body">
-            <div class="control is-expanded">
-                {{ form_widget(form.plainPassword, {'attr': {'class': 'input'}}) }}
-            </div>
+    <div class="field">
+        {{ form_label(form.plainPassword, 'Mot de passe',{'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.plainPassword, {'attr': {'class': 'input'}}) }}
         </div>
     </div>
     <div class="error">{{ form_errors(form.plainPassword) }}</div>
-    <br>
 
     <p class="control">
         <button class="button color-secondary">{{ button_label|default('Save') }}</button>
