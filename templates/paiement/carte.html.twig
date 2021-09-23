@@ -3,11 +3,6 @@
 {% block title %}Hello CatalogueController!{% endblock %}
 
 {% block body %}
-    {# form(form) #}
-
-
-
-
     <div class="has-background-light py-5">
         <div class="container is-fluid">
             {{form_start(form)}}
@@ -26,6 +21,7 @@
                     </div>
                     <div class="field-body">
                         {{ form_widget(form.cryptogramme, {'attr': {'class': 'control'}}) }}
+                        {{ form_errors(form.cryptogramme) }}
                     </div>
                 </div>
                 <div class="field is-horizontal">
@@ -34,6 +30,7 @@
                     </div>
                     <div class="field-body">
                         {{ form_widget(form.detenteur, {'attr': {'class': 'control'}}) }}
+                        {{ form_errors(form.detenteur) }}
                     </div>
                 </div>
                 <div class="select">

@@ -1,17 +1,19 @@
 
 remboursement :
 
+1
 au paiement par carte et paypal, set comPaiement = true
 
+2
 dans vue commande_detail, client clique sur annuler
 client redirigé vers commande_annulation
 //si comDate -24h
     //si comAnnulation == false
         //comAnnulation = true
         //redirection vers paiement_remboursement
-        si dans paiement_remboursement comAnnulation == false
-            redirection moyen_paiement
-                client clique sur moyen de remboursement et est redirige vers la methode (carte...) selectionnee
+        //si dans paiement_remboursement comAnnulation == false
+            //redirection moyen_paiement
+                >>3 client clique sur moyen de remboursement et est redirige vers la methode (carte...) selectionnee
                     client rempli formulaire et redirection vers remboursement_succes
         sinon 
             redirection annulation_succes
@@ -20,3 +22,23 @@ client redirigé vers commande_annulation
 //sinon 
     //redirection vers annulation_impossible
 
+
+
+Dans la liste des commande, ajouter dans le twig :
+si pas commande annulée et si commande pas remboursee
+    lien vers paiement_remboursement_moyen
+
+    
+
+
+
+3
+dans remboursement moyen paiement 
+//si comAnnulation == true
+    //si comPaiement == true
+        //affichage des liens
+    //sinon redirection vers erreur/erreur.html.twig message => GestionCommandesController::MESSAGE_ANNULATION_PAS_PAYE
+//sinon redirection vers erreur/erreur.html.twig message => GestionCommandesController::MESSAGE_ANNULATION_PAS_EFFECTUEE
+
+4
+//couper en petites fonctions le controle pour gestion commande et paiementcontroller

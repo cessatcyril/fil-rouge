@@ -8,20 +8,20 @@
         {{form_start(form)}}
             <div class="field is-horizontal">
                 <div class="field-label">
-                    {{ form_label(form.Identifiant, 'Identifiant', {'label_attr': {'class': 'label'}}) }}
+                    {{ form_label(form.IBAN, 'IBAN', {'label_attr': {'class': 'label'}}) }}
                 </div>
                 <div class="field-body">
-                    {{ form_widget(form.Identifiant, {'attr': {'class': 'control'}}) }}
-                    {{ form_errors(form.Identifiant) }}
+                    {{ form_widget(form.IBAN, {'attr': {'class': 'control'}}) }}
+                    {{ form_errors(form.IBAN) }}
                 </div>
             </div>
             <div class="field is-horizontal">
                 <div class="field-label">
-                    {{ form_label(form.Mot_de_passe, 'Mot_de_passe', {'label_attr': {'class': 'label'}}) }}
+                    {{ form_label(form.BIC, 'BIC', {'label_attr': {'class': 'label'}}) }}
                 </div>
                 <div class="field-body">
-                    {{ form_widget(form.Mot_de_passe, {'attr': {'class': 'control'}}) }}
-                    {{ form_errors(form.Mot_de_passe) }}
+                    {{ form_widget(form.BIC, {'attr': {'class': 'control'}}) }}
+                    {{ form_errors(form.BIC) }}
                 </div>
             </div>
 

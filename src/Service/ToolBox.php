@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use DateTime;
 use App\Entity\User;
 use App\Entity\AdresseType;
 use App\Repository\AdresseTypeRepository;
@@ -54,5 +55,20 @@ class ToolBox
         $session->set("panier", $panier);
 
         return $panier;
+    }
+
+    public function intervalCorrect($date, $nombreDeJourMax)
+    {
+        $maintenant = new DateTime();
+        $maintenant->format("Y-m-d H:i:s");
+
+        $dateCommande = DateTime::createFromFormat("Y-m-d H:i:s", $date->format("Y-m-d H:i:s"));    
+        $intervalle = $dateCommande->diff($maintenant);
+
+        if ($intervalle->format('%R') === "+" && ($intervalle->format('%d')*24+$intervalle->format('%h')) < $nombreDeJourMax) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

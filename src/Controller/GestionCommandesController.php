@@ -27,10 +27,12 @@ class GestionCommandesController extends AbstractController
 {
     const INTERVALLE_DATE_BUTOIR = 'P15D';
     const INTERVALLE_DATE_LIVRAISON = 'P2D';
-    const NB_JOURS_REMBOURSEMENT = 1;
-    const MESSAGE_ANNULATION_IMPOSSIBLE = 'Cette commande n\'est pas annulable. Les annulations de commandes sont annulables pendant une durée de '. GestionCommandesController::NB_JOURS_REMBOURSEMENT*24 .' heures';
+    const NB_HEURES_REMBOURSEMENT = 24;
+    const MESSAGE_ANNULATION_DATE_IMPOSSIBLE = 'Cette commande n\'est pas annulable. Les annulations de commandes sont annulables pendant une durée de '. GestionCommandesController::NB_HEURES_REMBOURSEMENT*24 .' heures';
     const MESSAGE_ANNULATION_DEJA_EFFECTUEE = 'Cette commande n\'est pas annulable, cette commande a déja été annulée.';
     const MESSAGE_ANNULATION_COMMANDE_INCONNUE = 'Cette commande n\'existe pas et n\'est donc pas annulable';
+    const MESSAGE_ANNULATION_PAS_EFFECTUEE = 'La commande n\'a encore pas été annulée. Pour effectuer un remboursement, la commande doit être à priori annulée.';
+    const MESSAGE_ANNULATION_PAS_PAYE = 'La commande ne peut pas être remboursée, elle n\'a pas été payée.';
 
     /**
      * @Route("/particulier/commande/commander", name="commande_creer")
@@ -125,7 +127,7 @@ class GestionCommandesController extends AbstractController
     /**
      * @Route("/particulier/commande/annulation/{id}", name="commande_annuler")
      */
-    public function commandeAnnuler(EntityManagerInterface $eMI, CommandeRepository $commandeRepo, $id): Response
+    public function commandeAnnuler(EntityManagerInterface $eMI, CommandeRepository $commandeRepo, ToolBox $toolBox, $id): Response
     {
         $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
 
@@ -135,28 +137,24 @@ class GestionCommandesController extends AbstractController
             ]);
         }
 
-        $maintenant = new DateTime();
-        $maintenant->format("Y-m-d H:i:s");
-
-        $dateCommande = DateTime::createFromFormat("Y-m-d H:i:s", $commande->getComCommande()->format("Y-m-d H:i:s"));    
-        $intervalle = $dateCommande->diff($maintenant);
-
-        if ($intervalle->format('%R') === "+" || $intervalle->format('%d') < GestionCommandesController::NB_JOURS_REMBOURSEMENT) {
-            if ($commande->getComAnnulation() == false) {
-                $commande->setComAnnulation(true);
-                $eMI->persist($commande);
-                $eMI->flush();
-                $this->redirectToRoute('remboursement_moyen', ['id' => $id]);
-            } else {
-                return $this->render('erreur/erreur.html.twig', [
-                    'message' => GestionCommandesController::MESSAGE_ANNULATION_DEJA_EFFECTUEE
-                ]);
-            }
-        } else {
+        if (!$toolBox->intervalCorrect($commande->getComCommande(), GestionCommandesController::NB_HEURES_REMBOURSEMENT)) {
             return $this->render('erreur/erreur.html.twig', [
-                'message' => GestionCommandesController::MESSAGE_ANNULATION_IMPOSSIBLE
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_DATE_IMPOSSIBLE
             ]);
         }
+
+        if ($commande->getComAnnulation() == false) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_DEJA_EFFECTUEE
+            ]);
+        }
+
+        $commande->setComAnnulation(true);
+        $eMI->persist($commande);
+        $eMI->flush();
+        return $this->render('gestion_commandes/annuler.html.twig', [
+            'id' => $id
+        ]);
     }
 
     /**
