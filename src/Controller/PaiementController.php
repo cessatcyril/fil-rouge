@@ -49,7 +49,7 @@ class PaiementController extends AbstractController
     /**
      * @Route("/particulier/paiement/moyen_de_paiement/carte_de_credit/{id}", name="paiement_carte")
      */
-    public function paiementCarte(CommandeRepository $commandeRepo, Request $request, $id): Response
+    public function paiementCarte(CommandeRepository $commandeRepo, EntityManagerInterface $eMI, Request $request, $id): Response
     {
         $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
 
@@ -74,6 +74,15 @@ class PaiementController extends AbstractController
         $form = $this->createForm(CarteCreditType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($commande->getComPaiement()) {
+                return $this->redirectToRoute('erreur/erreur.html.twig', [
+                    'message' => GestionCommandesController::MESSAGE_PAIEMENT_DEJA_FAIT
+                ]);
+            }
+            $commande->setComPaiement(1);
+            $eMI->persist($commande);
+            $eMI->flush();
+
             return $this->redirectToRoute('commande_succes', [
                 'id' => $id
             ]);
@@ -118,7 +127,7 @@ class PaiementController extends AbstractController
     /**
      * @Route("/particulier/paiement/moyen_de_paiement/paypal/{id}", name="paiement_paypal")
      */
-    public function paiementPaypal(CommandeRepository $commandeRepo, Request $request, $id): Response
+    public function paiementPaypal(CommandeRepository $commandeRepo, EntityManagerInterface $eMI, Request $request, $id): Response
     {
         $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
 
@@ -143,6 +152,15 @@ class PaiementController extends AbstractController
         $form = $this->createForm(PaypalType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($commande->getComPaiement()) {
+                return $this->redirectToRoute('erreur/erreur.html.twig', [
+                    'message' => GestionCommandesController::MESSAGE_PAIEMENT_DEJA_FAIT
+                ]);
+            }
+            $commande->setComPaiement(1);
+            $eMI->persist($commande);
+            $eMI->flush();
+
             return $this->redirectToRoute('commande_succes', [
                 'id' => $id
             ]);

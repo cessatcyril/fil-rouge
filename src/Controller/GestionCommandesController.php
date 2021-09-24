@@ -113,6 +113,14 @@ class GestionCommandesController extends AbstractController
     }
 
     /**
+     * @Route("erreur", name="erreur")
+     */
+    public function erreur(): Response
+    {
+        return $this->render('erreur/erreur.html.twig', []);
+    }
+
+    /**
      * @Route("commande/erreur", name="commande_erreur")
      */
     public function commandeErreur(): Response
@@ -244,11 +252,13 @@ class GestionCommandesController extends AbstractController
         $commandes = $commandeRepo->findBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
         $donnees = [];
         foreach ($commandes as $key => $commande) {
-            $donnees[$key]['id'] = $commande->getId();
-            $donnees[$key]['date_commande'] = $commande->getComCommande()->format('d/m/Y');
-            $donnees[$key]['date_livraison'] = (is_Null($commande->getComLivraison())) ? "Pas encore livré." : $commande->getComLivraison()->format('d/m/Y');
-            $donnees[$key]['annulation'] = $commande->getComAnnulation();
-            $donnees[$key]['paiement'] = $commande->getComPaiement();
+            $donnees[$key] = [
+                'id' => $commande->getId(),
+                'date_commande'=> $commande->getComCommande()->format('d/m/Y'),
+                'date_livraison' => (is_Null($commande->getComLivraison())) ? "Pas encore livré." : $commande->getComLivraison()->format('d/m/Y'),
+                'annulation' => $commande->getComAnnulation(),
+                'paiement' => $commande->getComPaiement()
+            ];
 
             
             $commande_details = $commande->getCommandeDetails();
@@ -261,6 +271,9 @@ class GestionCommandesController extends AbstractController
                 $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['prix_unitaire'] = $commande_detail->getDetPrixVente();
                 $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'] = $commande_detail->getDetQuantite();/////////////////////
                 $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['sous_total'] = $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise();
+            
+                
+
             }
 
             $livraisons = $commande->getLivraisons();
