@@ -19,22 +19,23 @@
             <div class="content">
                 <h4>Renseigner vos identifiants :</h4>
             </div>
-            <div class="field is-horizontal">
-                <div class="field">
-                    <label class="label" for="inputEmail">Email</label>
-                    <div class="control">
-                        <input class="input" type="Email" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required autofocus>
+            <div class="columns">
+                <div class="column is-one-quarter">
+                    <div class="field">
+                        <label class="label" for="inputEmail">Email</label>
+                        <div class="control">
+                            <input class="input" type="Email" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required autofocus>
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label" for="inputPassword">Password</label>
-                    <div class="control">
-                        <input class="input form-control" type="password" name="password" id="inputPassword" autocomplete="current-password" required>
+                    <div class="field">
+                        <label class="label" for="inputPassword">Password</label>
+                        <div class="control">
+                            <input class="input form-control" type="password" name="password" id="inputPassword" autocomplete="current-password" required>
+                        </div>
                     </div>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                 </div>
             </div>
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
             {# formulaire par defaut commenter si-dessous #}
 
             {# <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
