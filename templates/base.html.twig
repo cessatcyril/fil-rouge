@@ -98,6 +98,24 @@
                                 Creer un compte
                             </a>
                             {% endif %}
+
+                            <div class="navbar-item">
+                                <form method="POST" action="{{ path('categorie_recherche') }}">
+                                    <div class="field is-horizontal">
+                                        <div class="field">
+                                            <div class="control">
+                                                <input class="input" type="text" placeholder="recherche" name="recherche">
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <div class="control">
+                                                <button class="button" type="submit">rechercher</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
                         </div>
                     </div>
                 </div>

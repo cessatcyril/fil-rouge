@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}résultat de la recherche{% endblock %}
+
+{% block body %}
+
+
+<div class="columns is-mobile is-centered is-multiline">
+    <div class="column is-four-fifths">
+        {# si l'utilisitaeur entre une valeur de recherche, on affiche la liste des produits dont la recherche a un match dans la dbb #}
+        {% if recherche %}
+
+        <header>
+            <div class="content">
+                <h1>résultat de la recherche :</h1>
+            </div>
+        </header>
+        {% for produit in recherche %}
+        <section class="section">
+            <div class="columns is-multiline">
+
+                <div class="column is-8">
+
+                    <div class="columns">
+                        <div class="column">
+                            <div class="img-float">
+                                <a href="/produit/carousel/{{produit.Id}}" target="_blank">
+                                    {% for row in produit.images %}
+                                    <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image" class="thumbnail">
+                                    {% endfor %}
+                                </a>
+                            </div>
+                        </div>
+
+
+                        <div class="column">
+                            <div class="box">
+                                <div class="content">
+                                    <h3>Nom du produit : </h3>
+                                    <p>{{ produit.proProduit }}</p>
+                                </div>
+                                <div class="content">
+                                    <h3>Détail : </h3>
+                                    <p>{{ produit.proDescription|nl2br }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-4">
+                    <div class="content">
+                        <p class="color-prix">
+                            {{ produit.proPrixV }} €
+                        </p>
+                        <a href="/panier/ajouter/{{produit.id }}" class="button color-dark">Ajouter au panier</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endfor %}
+        {# si la rechercche est vide ou la method n'ai pas post, on ne trouve aucun résultat #}
+        {% else %}
+        <header>
+            <div class="content">
+                <h1>Aucun résultat trouvé.</h1>
+            </div>
+        </header>
+
+        {% endif %}
+    </div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}

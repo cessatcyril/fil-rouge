@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Categorie;
 use App\Entity\Image;
 use App\Entity\Produit;
+use App\Entity\Categorie;
 use App\Entity\SousCategorie;
-use App\Repository\CategorieRepository;
 use App\Repository\ProduitRepository;
+use App\Repository\CategorieRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -95,5 +96,30 @@ class CatalogueController extends AbstractController
     public function private_pic($fichier): Response
     {
         return new BinaryFileResponse("../image/produit/" . $fichier);
+    }
+
+    /**
+     * @Route("/recherche/", name="categorie_recherche")
+     */
+    public function recherche(Request $request, ProduitRepository $repoP): Response
+    {
+        if ($request->getMethod() == "POST") {
+            $recherche = $request->request->get("recherche");
+            if ($recherche != '') {
+                $recherche = '%' . $recherche . '%';
+                $produit = $repoP->rechercheProduit($recherche);
+            } else {
+                $produit = false;
+            }
+        } else {
+            $produit = False;
+        }
+
+
+        //dd($produit);
+        return $this->render('catalogue/recherche.html.twig', [
+            'menu_actuel' => 'accueil',
+            'recherche' => $produit,
+        ]);
     }
 }
