@@ -17,56 +17,135 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PaiementController extends AbstractController
 {
     /**
-     * @Route("/particulier/paiement/moyen_de_paiement", name="paiement_moyen")
+     * @Route("/particulier/paiement/moyen_de_paiement/{id}", name="paiement_moyen")
      */
-    public function paiementMoyen(): Response
+    public function paiementMoyen(CommandeRepository $commandeRepo, $id): Response
     {
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
+            ]);
+        }
+
+        if ($commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_COMMANDE_ANNULEE
+            ]);    
+        }
+
+        if ($commande->getComPaiement()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_DEJA_FAIT
+            ]);
+        }
+
         return $this->render('paiement/moyen.html.twig', [
-            'controller_name' => 'GestionCompteController',
+            'id' => $id
         ]);
     }
 
     /**
-     * @Route("/particulier/paiement/moyen_de_paiement/carte_de_credit", name="paiement_carte")
+     * @Route("/particulier/paiement/moyen_de_paiement/carte_de_credit/{id}", name="paiement_carte")
      */
-    public function paiementCarte(Request $request): Response
+    public function paiementCarte(CommandeRepository $commandeRepo, Request $request, $id): Response
     {
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
+            ]);
+        }
+
+        if ($commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_COMMANDE_ANNULEE
+            ]);    
+        }
+
+        if ($commande->getComPaiement()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_DEJA_FAIT
+            ]);
+        }
+
         $form = $this->createForm(CarteCreditType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('commande_creer');
+            return $this->redirectToRoute('commande_succes', [
+                'id' => $id
+            ]);
         }
-
+        
         return $this->render('paiement/carte.html.twig', [
-            'controller_name' => 'GestionCompteController',
+            'id' => $id,
             'form' => $form->createView()
         ]);
     }
 
     /**
-     * @Route("/particulier/paiement/moyen_de_paiement/virement", name="paiement_virement")
+     * @Route("/particulier/paiement/moyen_de_paiement/virement/{id}", name="paiement_virement")
      */
-    public function paiementVirement(Request $request): Response
+    public function paiementVirement(CommandeRepository $commandeRepo, $id): Response
     {
-        $form = $this->createForm(VirementType::class);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('commande_creer');
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
+            ]);
         }
+
+        if ($commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_COMMANDE_ANNULEE
+            ]);    
+        }
+
+        if ($commande->getComPaiement()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_DEJA_FAIT
+            ]);
+        }
+
         return $this->render('paiement/virement.html.twig', [
-            'controller_name' => 'GestionCompteController',
+            'id' => $id,
         ]);
     }
 
     /**
-     * @Route("/particulier/paiement/moyen_de_paiement/paypal", name="paiement_paypal")
+     * @Route("/particulier/paiement/moyen_de_paiement/paypal/{id}", name="paiement_paypal")
      */
-    public function paiementPaypal(Request $request): Response
+    public function paiementPaypal(CommandeRepository $commandeRepo, Request $request, $id): Response
     {
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
+            ]);
+        }
+
+        if ($commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_COMMANDE_ANNULEE
+            ]);    
+        }
+
+        if ($commande->getComPaiement()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_DEJA_FAIT
+            ]);
+        }
+
         $form = $this->createForm(PaypalType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('commande_creer');
+            return $this->redirectToRoute('commande_succes', [
+                'id' => $id
+            ]);
         }
         return $this->render('paiement/paypal.html.twig', [
             'controller_name' => 'GestionCompteController',

@@ -33,6 +33,8 @@ class GestionCommandesController extends AbstractController
     const MESSAGE_ANNULATION_COMMANDE_INCONNUE = 'Cette commande n\'existe pas et n\'est donc pas annulable';
     const MESSAGE_ANNULATION_PAS_EFFECTUEE = 'La commande n\'a encore pas été annulée. Pour effectuer un remboursement, la commande doit être à priori annulée.';
     const MESSAGE_ANNULATION_PAS_PAYE = 'La commande ne peut pas être remboursée, elle n\'a pas été payée.';
+    const MESSAGE_PAIEMENT_COMMANDE_ANNULEE = 'Cette commande a été annulée. Une commande annulée ne peut pas être payée, passez une autre commande.';
+    const MESSAGE_PAIEMENT_DEJA_FAIT = 'Cette commande a déja été payée.';
 
     /**
      * @Route("/particulier/commande/commander", name="commande_creer")
@@ -97,7 +99,13 @@ class GestionCommandesController extends AbstractController
             $eMI->flush();
         }
 
-        //(try/catch ou if) ? redirectToRoute(succes) : redirectToRoute(erreur{message})
+        $panier = null;
+        $toolBox->panierRaz($this->getSession());
+        //dd($panier);
+
+        return $this->redirectToRoute('paiement_moyen', [
+            'id' => $commande_id
+        ]);
 
         return $this->render('gestion_commandes/creer.html.twig', [
             'controller_name' => 'GestionCompteController',
@@ -115,12 +123,32 @@ class GestionCommandesController extends AbstractController
     }
 
     /**
-     * @Route("commande/passee", name="commande_passee")
+     * @Route("commande/passee/{id}", name="commande_succes")
      */
-    public function FunctionName(): Response
+    public function commandeSucces(CommandeRepository $commandeRepo, $id): Response
     {
-        return $this->render('gestion_commandes/passee.html.twig', [
-            ////////////////////////////////////////////////////////////////////////////////
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
+            ]);
+        }
+
+        if ($commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_COMMANDE_ANNULEE
+            ]);    
+        }
+
+        if ($commande->getComPaiement()) {
+            return $this->render('gestion_commandes/succes.html.twig', [
+                'id' => $id
+            ]);
+        }
+
+        return $this->render('gestion_commandes/commande_enregistree.html.twig', [
+            'id' => $id
         ]);
     }
 
@@ -168,6 +196,8 @@ class GestionCommandesController extends AbstractController
             $donnees[$key]['id'] = $commande->getId();
             $donnees[$key]['date_commande'] = $commande->getComCommande()->format('d/m/Y');
             $donnees[$key]['date_livraison'] = (is_Null($commande->getComLivraison())) ? "Pas encore livré." : $commande->getComLivraison()->format('d/m/Y');
+            $donnees[$key]['annulation'] = $commande->getComAnnulation();
+            $donnees[$key]['paiement'] = $commande->getComPaiement();
 
             
             $commande_details = $commande->getCommandeDetails();
@@ -217,6 +247,8 @@ class GestionCommandesController extends AbstractController
             $donnees[$key]['id'] = $commande->getId();
             $donnees[$key]['date_commande'] = $commande->getComCommande()->format('d/m/Y');
             $donnees[$key]['date_livraison'] = (is_Null($commande->getComLivraison())) ? "Pas encore livré." : $commande->getComLivraison()->format('d/m/Y');
+            $donnees[$key]['annulation'] = $commande->getComAnnulation();
+            $donnees[$key]['paiement'] = $commande->getComPaiement();
 
             
             $commande_details = $commande->getCommandeDetails();

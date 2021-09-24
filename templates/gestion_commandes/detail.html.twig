@@ -9,6 +9,7 @@
         <h1 class="title h1">Commande du {{ commande.date_commande }}</h1>
         <div>
             {% for produit in commande.produits %}
+            {% if commande.annulation == false %}
             <div style="border: solid;">
                 <ul>
                     <li>Produit : {{produit.produit}}</li>
@@ -20,14 +21,21 @@
                     <li>Sous-total : {{produit.sous_total}}€</li>
                     <li>Quantité livrée : {{produit.quantite_livree}}</li>
                     <li>Quantité à livrer : {{produit.quantite_a_livrer}}</li>
+                    {% if commande.paiement == true %}
+                    <li>Paiement : effectué</li>
+                    {% else %}
+                    <li>Paiement : en attente de paiement</li>
+                    {% endif %}  
                 </ul>
                 <a href='{{ path('produit', {'produit':produit.id_produit}) }}'><button class="button">Voir le produit</button></a>
             </div>
+            {% endif %}
             {% endfor %}
         </div>
     </div>
     <a href='{{ path('commande_lister') }}'><button class="button">Liste des commandes</button></a>
     <a href='{{ path('commande_annuler', {'id':commande.id}) }}'><button class="button">Annuler la commande</button></a>
+    <a href="{{ path('paiement_moyen', {'id':commande.id}) }}"><button class="button">Payer la commande</button></a>
 {% endfor %}
 </div>
 {% endblock %}

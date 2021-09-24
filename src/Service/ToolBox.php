@@ -8,6 +8,7 @@ use App\Entity\AdresseType;
 use App\Repository\AdresseTypeRepository;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 
 
@@ -55,6 +56,12 @@ class ToolBox
         $session->set("panier", $panier);
 
         return $panier;
+    }
+
+    public function panierRaz(SessionInterface $session)
+    {
+        $session->remove("panier");
+        $session->set("panier", []);
     }
 
     public function intervalCorrect($date, $nombreDeJourMax)
