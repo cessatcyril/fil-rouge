@@ -131,7 +131,7 @@ class GestionCommandesController extends AbstractController
     }
 
     /**
-     * @Route("commande/passee/{id}", name="commande_succes")
+     * @Route("particulier/commande/passee/{id}", name="commande_succes")
      */
     public function commandeSucces(CommandeRepository $commandeRepo, $id): Response
     {
@@ -201,24 +201,32 @@ class GestionCommandesController extends AbstractController
         $commandes = $commandeRepo->findBy(['client'=>$this->getUser()->getCLient()->getId()]);
         $donnees = [];
         foreach ($commandes as $key => $commande) {
-            $donnees[$key]['id'] = $commande->getId();
-            $donnees[$key]['date_commande'] = $commande->getComCommande()->format('d/m/Y');
-            $donnees[$key]['date_livraison'] = (is_Null($commande->getComLivraison())) ? "Pas encore livré." : $commande->getComLivraison()->format('d/m/Y');
-            $donnees[$key]['annulation'] = $commande->getComAnnulation();
-            $donnees[$key]['paiement'] = $commande->getComPaiement();
+            $donnees[$key] = [
+                'id' => $commande->getId(),
+                'date_commande' => $commande->getComCommande()->format('d/m/Y'),
+                'date_livraison' => (is_null($commande->getComLivraison())) ? "Pas encore livré." : $commande->getComLivraison()->format('d/m/Y'),
+                'annulation' => $commande->getComAnnulation(),
+                'paiement' => $commande->getComPaiement()
+            ];
 
             
             $commande_details = $commande->getCommandeDetails();
             foreach ($commande_details as $key3 => $commande_detail) {
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['id_produit'] = $commande_detail->getProduit()->getId();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['produit'] = $commande_detail->getProduit()->getProProduit();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['accroche'] = $commande_detail->getProduit()->getProAccroche();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['description'] = $commande_detail->getProduit()->getProDescription();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['remise'] = $commande_detail->getDetRemise();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['prix_unitaire'] = $commande_detail->getDetPrixVente();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'] = $commande_detail->getDetQuantite();/////////////////////
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['sous_total'] = $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()] = [
+                    'id_produit' => $commande_detail->getProduit()->getId(),
+                    'produit' => $commande_detail->getProduit()->getProProduit(),
+                    'accroche' => $commande_detail->getProduit()->getProAccroche(),
+                    'description' => $commande_detail->getProduit()->getProDescription(),
+                    'remise' => $commande_detail->getDetRemise(),
+                    'prix_unitaire' => $commande_detail->getDetPrixVente(),
+                    'quantite_commandee' => $commande_detail->getDetQuantite(),
+                    'sous_total' => $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise(),
+                    'quantite_livree' => 0,
+                    'quantite_a_livrer' => $commande_detail->getDetQuantite(),
+                ];
+                
             }
+            //dd($donnees);
 
             $livraisons = $commande->getLivraisons();
             foreach ($livraisons as $key2 => $livraison) {
@@ -227,15 +235,15 @@ class GestionCommandesController extends AbstractController
                 foreach ($livraisonDetails as $key3 => $livraisonDetail) {
                     if ($livraisonDetail->getLivraison() === $commande->getId()) {
                         $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_livree'] = (is_Null($livraisonDetail->getDetQuantiteLivree() ? 0 : $livraisonDetail->getDetQuantiteLivree()));
-                        $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_a_livrer'] = $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_commandee'] - $donnees[$key]['livraison'][$key3]['quantite_livree'] = $livraisonDetail->getDetQuantiteLivree();
+                        $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_a_livrer'] = $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'];
                     } else {
                         $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_livree'] = 0;
                         $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_a_livrer'] = $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'];
+                        
                     }
                 }
             }
         }
-        //dd($donnees);
 
         return $this->render('gestion_commandes/liste.html.twig', [
             'controller_name' => 'GestionCompteController',
@@ -263,17 +271,18 @@ class GestionCommandesController extends AbstractController
             
             $commande_details = $commande->getCommandeDetails();
             foreach ($commande_details as $key3 => $commande_detail) {
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['id_produit'] = $commande_detail->getProduit()->getId();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['produit'] = $commande_detail->getProduit()->getProProduit();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['accroche'] = $commande_detail->getProduit()->getProAccroche();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['description'] = $commande_detail->getProduit()->getProDescription();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['remise'] = $commande_detail->getDetRemise();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['prix_unitaire'] = $commande_detail->getDetPrixVente();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'] = $commande_detail->getDetQuantite();/////////////////////
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['sous_total'] = $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise();
-            
-                
-
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()] = [
+                    'id_produit' => $commande_detail->getProduit()->getId(),
+                    'produit' => $commande_detail->getProduit()->getProProduit(),
+                    'accroche' => $commande_detail->getProduit()->getProAccroche(),
+                    'description' => $commande_detail->getProduit()->getProDescription(),
+                    'remise' => $commande_detail->getDetRemise(),
+                    'prix_unitaire' => $commande_detail->getDetPrixVente(),
+                    'quantite_commandee' => $commande_detail->getDetQuantite(),
+                    'sous_total' => $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise(),
+                    'quantite_livree' => 0,
+                    'quantite_a_livrer' => $commande_detail->getDetQuantite(),
+                ];
             }
 
             $livraisons = $commande->getLivraisons();
