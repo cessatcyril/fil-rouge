@@ -75,8 +75,8 @@
                     <!--form  -->
                     <div class="field">
                         {{ form_label(form.cliSexe, 'Sexe',{'label_attr': {'class': 'label'}}) }}
-                        <div class="control">
-                            {{ form_widget(form.cliSexe, {'attr': {'class': 'input'}}) }}
+                        <div class="select">
+                            {{ form_widget(form.cliSexe, {'attr': {'class': 'option'}}) }}
                         </div>
                     </div>
                     <div class="error">{{ form_errors(form.cliSexe) }}</div>
