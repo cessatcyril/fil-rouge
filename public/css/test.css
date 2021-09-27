@@ -18,24 +18,16 @@
 
 .thumbnail {
   border: 1px solid #ddd;
-  /* Gray border */
   border-radius: 4px;
-  /* Rounded border */
   padding: 5px;
-  /* Some padding */
-  width: 150px;
-  /* Set a small width */ }
+  width: 150px; }
 
-/* Add a hover effect (blue shadow) + and bigger img */
-.thumbnail:hover {
+.thumbnailListe {
   border: 1px solid #ddd;
-  /* Gray border */
   border-radius: 4px;
-  /* Rounded border */
   padding: 5px;
-  /* Some padding */
-  width: 150px;
-  /* Set a small width */
+  max-height: 150px;
+  width: auto;
   max-width: 150px; }
 
 .color-prix {

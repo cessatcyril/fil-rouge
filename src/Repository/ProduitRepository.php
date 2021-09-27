@@ -15,6 +15,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class ProduitRepository extends ServiceEntityRepository
 {
+    const NOMBREPAGE = 10;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Produit::class);
@@ -42,7 +44,20 @@ class ProduitRepository extends ServiceEntityRepository
             ->getResult());
     }
 
-    public function rechercheProduit($recherche)
+    // public function rechercheProduit($recherche)
+    // {
+    //     return $this->createQueryBuilder('p')
+    //         ->andWhere('p.proProduit LIKE :val')
+    //         ->orWhere('p.proDescription LIKE :val')
+    //         ->orWhere('p.proAccroche LIKE :val')
+    //         ->setParameter('val', $recherche)
+    //         ->orderBy('p.proProduit', 'ASC')
+    //         //->setMaxResults(10)
+    //         ->getQuery()
+    //         ->getResult();
+    // }
+
+    public function rechercheByPage($recherche, $page_number = 0)
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.proProduit LIKE :val')
@@ -50,12 +65,23 @@ class ProduitRepository extends ServiceEntityRepository
             ->orWhere('p.proAccroche LIKE :val')
             ->setParameter('val', $recherche)
             ->orderBy('p.proProduit', 'ASC')
-            //->setMaxResults(10)
+            ->setFirstResult($page_number * ProduitRepository::NOMBREPAGE)
+            ->setMaxResults(ProduitRepository::NOMBREPAGE)
             ->getQuery()
             ->getResult();
     }
 
-
+    public function countProduitsRecherche($recherche)
+    {
+        return count($this->createQueryBuilder('p')
+            ->andWhere('p.proProduit LIKE :val')
+            ->orWhere('p.proDescription LIKE :val')
+            ->orWhere('p.proAccroche LIKE :val')
+            ->setParameter('val', $recherche)
+            ->orderBy('p.proProduit', 'ASC')
+            ->getQuery()
+            ->getResult());
+    }
 
     // /**
     //  * @return Produit[] Returns an array of Produit objects

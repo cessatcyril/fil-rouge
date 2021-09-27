@@ -16,7 +16,7 @@
             </div>
         </header>
         {% for produit in recherche %}
-        <section class="section">
+        <section class="section box">
             <div class="columns is-multiline">
 
                 <div class="column is-8">
@@ -26,7 +26,7 @@
                             <div class="img">
                                 <a href="/produit/carousel/{{produit.Id}}" target="_blank">
                                     {% for row in produit.images %}
-                                    <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image" class="thumbnail">
+                                    <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image" class="thumbnailListe">
                                     {% endfor %}
                                 </a>
                             </div>
@@ -36,12 +36,10 @@
                         <div class="column">
                             <div class="box">
                                 <div class="content">
-                                    <h3>Nom du produit : </h3>
-                                    <p>{{ produit.proProduit }}</p>
+                                    <h3>{{ produit.proProduit }} </h3>
                                 </div>
                                 <div class="content">
-                                    <h3>Détail : </h3>
-                                    <p>{{ produit.proDescription|nl2br }}</p>
+                                    <p>{{ produit.proAccroche|nl2br }}</p>
                                 </div>
                             </div>
                         </div>
@@ -53,7 +51,10 @@
                         <p class="color-prix">
                             {{ produit.proPrixV }} €
                         </p>
-                        <a href="/panier/ajouter/{{produit.id }}" class="button color-dark">Ajouter au panier</a>
+                        <div class="buttons is-grouped">
+                            <a href="/produit/{{produit.id }}" class="button color-dark">Détail</a>
+                            <a href="/panier/ajouter/{{produit.id }}" class="button color-dark">Ajouter au panier</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -68,14 +69,24 @@
         </header>
 
         {% endif %}
+
+        {# block de pagination des différents produit #}
+
+        <div class="buttons is-grouped  is-centered">
+
+            {% if page>0 %}
+            <p class="control">
+                <a class="button color-secondary" href="{{ path('categorie_recherche', { rech , page: previous} ) }}">previous</a>
+            </p>
+            {% endif %}
+            {% if page<nombrePages %} <p class="control">
+                <a class="button color-secondary" href="{{ path('categorie_recherche', { rech , page: next} ) }}">next</a>
+                </p>
+
+                {% endif %}
+        </div>
     </div>
 </div>
-
-
-
-
-
-
 
 
 {% endblock %}

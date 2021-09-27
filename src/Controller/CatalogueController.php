@@ -99,27 +99,56 @@ class CatalogueController extends AbstractController
     }
 
     /**
-     * @Route("/recherche/", name="categorie_recherche")
+     * @Route("/recherche/{rech}/{page}", name="categorie_recherche")
      */
-    public function recherche(Request $request, ProduitRepository $repoP): Response
+    public function recherche(Request $request, ProduitRepository $repoP, $rech = "", $page = 0): Response
     {
-        if ($request->getMethod() == "POST") {
+
+        if ($rech != "") {
+            $recherche = '%' . $rech . '%';
+            $nombreProduits = $repoP->countProduitsRecherche($recherche);
+            $nombrePages = intval($nombreProduits / 10);
+
+            $listeProduits = $repoP->rechercheByPage($recherche, $page);
+            $previous = ($page > 0) ? $page - 1 : 0;
+            $next = ($page >= $nombrePages) ? $nombrePages : $page + 1;
+        } else if ($request->getMethod() == "POST") {
             $recherche = $request->request->get("recherche");
             if ($recherche != '') {
+                $rech = $recherche;
                 $recherche = '%' . $recherche . '%';
-                $produit = $repoP->rechercheProduit($recherche);
+                $nombreProduits = $repoP->countProduitsRecherche($recherche);
+                $nombrePages = intval($nombreProduits / 10);
+
+                $listeProduits = $repoP->rechercheByPage($recherche, $page);
+                $previous = ($page > 0) ? $page - 1 : 0;
+                $next = ($page >= $nombrePages) ? $nombrePages : $page + 1;
             } else {
-                $produit = false;
+                $listeProduits = false;
+                $nombreProduits = 0;
+                $nombrePages = 0;
+                $previous = 0;
+                $next = 0;
             }
         } else {
-            $produit = False;
+            $listeProduits = False;
+            $nombreProduits = 0;
+            $nombrePages = 0;
+            $previous = 0;
+            $next = 0;
         }
 
 
-        //dd($produit);
+        //dd($recherche);
         return $this->render('catalogue/recherche.html.twig', [
             'menu_actuel' => 'accueil',
-            'recherche' => $produit,
+            //'recherche' => $produit,
+            'recherche' => $listeProduits,
+            "nombrePages" => $nombrePages,
+            "page" => $page,
+            "previous" => $previous,
+            "next" => $next,
+            'rech' => $rech,
         ]);
     }
 }
