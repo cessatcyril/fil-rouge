@@ -3,9 +3,13 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Service\ToolBox;
+use App\Form\VirementType;
 use App\Form\CarteCreditType;
 use App\Repository\CommandeRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use App\Controller\GestionCommandesController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,60 +17,197 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PaiementController extends AbstractController
 {
     /**
-     * @Route("/particulier/paiement/moyen_de_paiement", name="paiement_moyen")
+     * @Route("/particulier/paiement/moyen_de_paiement/{id}", name="paiement_moyen")
      */
-    public function paiementMoyen(): Response
+    public function paiementMoyen(CommandeRepository $commandeRepo, $id): Response
     {
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
+            ]);
+        }
+
+        if ($commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_COMMANDE_ANNULEE
+            ]);    
+        }
+
+        if ($commande->getComPaiement()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_DEJA_FAIT
+            ]);
+        }
+
         return $this->render('paiement/moyen.html.twig', [
-            'controller_name' => 'GestionCompteController',
+            'id' => $id
         ]);
     }
 
     /**
-     * @Route("/particulier/paiement/moyen_de_paiement/carte_de_credit", name="paiement_carte")
+     * @Route("/particulier/paiement/moyen_de_paiement/carte_de_credit/{id}", name="paiement_carte")
      */
-    public function paiementCarte(Request $request): Response
+    public function paiementCarte(CommandeRepository $commandeRepo, EntityManagerInterface $eMI, Request $request, $id): Response
     {
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
+            ]);
+        }
+
+        if ($commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_COMMANDE_ANNULEE
+            ]);    
+        }
+
+        if ($commande->getComPaiement()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_DEJA_FAIT
+            ]);
+        }
+
         $form = $this->createForm(CarteCreditType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('commande_creer');
-        }
+            if ($commande->getComPaiement()) {
+                return $this->redirectToRoute('erreur/erreur.html.twig', [
+                    'message' => GestionCommandesController::MESSAGE_PAIEMENT_DEJA_FAIT
+                ]);
+            }
+            $commande->setComPaiement(1);
+            $eMI->persist($commande);
+            $eMI->flush();
 
+            return $this->redirectToRoute('commande_succes', [
+                'id' => $id
+            ]);
+        }
+        
         return $this->render('paiement/carte.html.twig', [
-            'controller_name' => 'GestionCompteController',
+            'id' => $id,
             'form' => $form->createView()
         ]);
     }
 
     /**
-     * A SUPPRIMER SI PAS DE FORMULAIRE DANS virement.html.twig
-     * @Route("/particulier/paiement/moyen_de_paiement/virement", name="paiement_virement")
+     * @Route("/particulier/paiement/moyen_de_paiement/virement/{id}", name="paiement_virement")
      */
-    public function paiementVirement(): Response
+    public function paiementVirement(CommandeRepository $commandeRepo, $id): Response
     {
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
+            ]);
+        }
+
+        if ($commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_COMMANDE_ANNULEE
+            ]);    
+        }
+
+        if ($commande->getComPaiement()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_DEJA_FAIT
+            ]);
+        }
+
         return $this->render('paiement/virement.html.twig', [
-            'controller_name' => 'GestionCompteController',
+            'id' => $id,
         ]);
     }
 
     /**
-     * A SUPPRIMER SI PAS DE FORMULAIRE DANS paypal.html.twig
-     * @Route("/particulier/paiement/moyen_de_paiement/paypal", name="paiement_paypal")
+     * @Route("/particulier/paiement/moyen_de_paiement/paypal/{id}", name="paiement_paypal")
      */
-    public function paiementPaypal(): Response
+    public function paiementPaypal(CommandeRepository $commandeRepo, EntityManagerInterface $eMI, Request $request, $id): Response
     {
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
+            ]);
+        }
+
+        if ($commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_COMMANDE_ANNULEE
+            ]);    
+        }
+
+        if ($commande->getComPaiement()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_DEJA_FAIT
+            ]);
+        }
+
+        $form = $this->createForm(PaypalType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($commande->getComPaiement()) {
+                return $this->redirectToRoute('erreur/erreur.html.twig', [
+                    'message' => GestionCommandesController::MESSAGE_PAIEMENT_DEJA_FAIT
+                ]);
+            }
+            $commande->setComPaiement(1);
+            $eMI->persist($commande);
+            $eMI->flush();
+
+            return $this->redirectToRoute('commande_succes', [
+                'id' => $id
+            ]);
+        }
         return $this->render('paiement/paypal.html.twig', [
             'controller_name' => 'GestionCompteController',
         ]);
     }
 
     /**
+     * @Route("/particulier/commande/annulation/remboursement/succes", name="remboursement_succes")
+     */
+    public function remboursementSucces(): Response
+    {
+        return $this->render('paiement/remboursement_succes.html.twig', []);
+    }
+
+    /**
      * @Route("/particulier/commande/annulation/remboursement/{id}", name="remboursement_moyen")
      */
-    public function remboursementMoyen($id): Response
+    public function remboursementMoyen(EntityManagerInterface $eMI, CommandeRepository $commandeRepo, ToolBox $toolBox, $id): Response
     {
-        //dd($id);
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
+            ]);
+        }
+
+        if (!$toolBox->intervalCorrect($commande->getComCommande(), GestionCommandesController::NB_HEURES_REMBOURSEMENT)) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_DATE_IMPOSSIBLE
+            ]);
+        }
+
+        if (!$commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_PAS_EFFECTUEE
+            ]);    
+        }
+
+        if (!$commande->getComPaiement()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_PAS_PAYE
+            ]);
+        }
 
         return $this->render('paiement/remboursement_moyen.html.twig', [
             'id' => $id
@@ -76,36 +217,42 @@ class PaiementController extends AbstractController
     /**
      * @Route("/particulier/commande/annulation/remboursement/carte/{id}", name="remboursement_carte")
      */
-    public function remboursementCarte(Request $request, CommandeRepository $commandeRepo, $id): Response
+    public function remboursementCarte(Request $request, CommandeRepository $commandeRepo,ToolBox $toolBox, $id): Response
     {
         $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
 
         if ($commande==null) {
             return $this->render('paiement/remboursement_echec.html.twig', [
-                'id' => $id
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
             ]);
         }
 
-        $maintenant = new DateTime();
-        $maintenant->format("Y-m-d H:i:s");
+        if (!$toolBox->intervalCorrect($commande->getComCommande(), GestionCommandesController::NB_HEURES_REMBOURSEMENT)) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_DATE_IMPOSSIBLE
+            ]);
+        }
 
-        $dateCommande = DateTime::createFromFormat("Y-m-d H:i:s", $commande->getComCommande()->format("Y-m-d H:i:s"));    
-        $intervalle = $dateCommande->diff($maintenant);
+        if (!$commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_PAS_EFFECTUEE
+            ]);    
+        }
 
-        if ($intervalle->format('%R') === "+" || $intervalle->format('%d') < GestionCommandesController::NB_JOURS_REMBOURSEMENT) {
-            $form = $this->createForm(CarteCreditType::class);
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                return $this->redirectToRoute('commande_annuler', ['id' => $id]);
-            } else {
-                return $this->render('paiement/remboursement_carte.html.twig', [
-                    'id' => $id,
-                    'form' => $form->createView()
-                ]);
-            }
+        if (!$commande->getComPaiement()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_PAS_PAYE
+            ]);
+        }
+
+        $form = $this->createForm(CarteCreditType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->render('paiement/remboursement_succes.html.twig', []);
         } else {
-            return $this->render('paiement/remboursement_echec.html.twig', [
-                'id' => $id
+            return $this->render('paiement/remboursement_carte.html.twig', [
+                'id' => $id,
+                'form' => $form->createView()
             ]);
         }
     }
@@ -114,36 +261,41 @@ class PaiementController extends AbstractController
     /**
      * @Route("/particulier/commande/annulation/remboursement/virement/{id}", name="remboursement_virement")
      */
-    public function remboursementVirement(Request $request, CommandeRepository $commandeRepo, $id): Response
+    public function remboursementVirement(Request $request, CommandeRepository $commandeRepo,ToolBox $toolBox, $id): Response
     {
         $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
 
         if ($commande==null) {
             return $this->render('paiement/remboursement_echec.html.twig', [
-                'id' => $id
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
             ]);
         }
 
-        $maintenant = new DateTime();
-        $maintenant->format("Y-m-d H:i:s");
+        if (!$toolBox->intervalCorrect($commande->getComCommande(), GestionCommandesController::NB_HEURES_REMBOURSEMENT)) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_DATE_IMPOSSIBLE
+            ]);
+        }
 
-        $dateCommande = DateTime::createFromFormat("Y-m-d H:i:s", $commande->getComCommande()->format("Y-m-d H:i:s"));    
-        $intervalle = $dateCommande->diff($maintenant);
+        if (!$commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_PAS_EFFECTUEE
+            ]);    
+        }
 
-        if ($intervalle->format('%R') === "+" || $intervalle->format('%d') < GestionCommandesController::NB_JOURS_REMBOURSEMENT) {
-            $form = $this->createForm(CarteCreditType::class);
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                return $this->redirectToRoute('commande_annuler', ['id' => $id]);
-            } else {
-                return $this->render('paiement/remboursement_carte.html.twig', [
-                    'id' => $id,
-                    'form' => $form->createView()
-                ]);
-            }
+        if (!$commande->getComPaiement()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_PAS_PAYE
+            ]);
+        }
+
+        $form = $this->createForm(VirementType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->render('paiement/remboursement_succes.html.twig', []);
         } else {
-            return $this->render('paiement/remboursement_echec.html.twig', [
-                'id' => $id
+            return $this->render('paiement/remboursement_virement.html.twig', [
+                'form' => $form->createView()
             ]);
         }
     }
@@ -151,36 +303,41 @@ class PaiementController extends AbstractController
     /**
      * @Route("/particulier/commande/annulation/remboursement/paypal/{id}", name="remboursement_paypal")
      */
-    public function remboursementPaypal(Request $request, CommandeRepository $commandeRepo, $id): Response
+    public function remboursementPaypal(Request $request, CommandeRepository $commandeRepo,ToolBox $toolBox, $id): Response
     {
         $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
 
         if ($commande==null) {
             return $this->render('paiement/remboursement_echec.html.twig', [
-                'id' => $id
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
             ]);
         }
 
-        $maintenant = new DateTime();
-        $maintenant->format("Y-m-d H:i:s");
+        if (!$toolBox->intervalCorrect($commande->getComCommande(), GestionCommandesController::NB_HEURES_REMBOURSEMENT)) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_DATE_IMPOSSIBLE
+            ]);
+        }
 
-        $dateCommande = DateTime::createFromFormat("Y-m-d H:i:s", $commande->getComCommande()->format("Y-m-d H:i:s"));    
-        $intervalle = $dateCommande->diff($maintenant);
+        if (!$commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_PAS_EFFECTUEE
+            ]);    
+        }
 
-        if ($intervalle->format('%R') === "+" || $intervalle->format('%d') < GestionCommandesController::NB_JOURS_REMBOURSEMENT) {
-            $form = $this->createForm(CarteCreditType::class);
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                return $this->redirectToRoute('commande_annuler', ['id' => $id]);
-            } else {
-                return $this->render('paiement/remboursement_carte.html.twig', [
-                    'id' => $id,
-                    'form' => $form->createView()
-                ]);
-            }
+        if (!$commande->getComPaiement()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_PAS_PAYE
+            ]);
+        }
+
+        $form = $this->createForm(VirementType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->render('paiement/remboursement_succes.html.twig', []);
         } else {
-            return $this->render('paiement/remboursement_echec.html.twig', [
-                'id' => $id
+            return $this->render('paiement/remboursement_paypal.html.twig', [
+                'form' => $form->createView()
             ]);
         }
     }

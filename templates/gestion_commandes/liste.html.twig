@@ -9,20 +9,27 @@
         <h1 class="title h1">Commande du {{ commande.date_commande }}</h1>
         <div>
             {% for produit in commande.produits %}
-            <div style="border: solid;">
-                <ul>
-                    <li>Produit : {{produit.produit}}</li>
-                    <li>{{produit.accroche}}</li>
-                    <li>{{produit.description|nl2br}}</li>
-                    <li>Prix unitaire : {{produit.prix_unitaire}}€</li>
-                    <li>Quantité commandée : {{produit.quantite_commandee}}</li>
-                    <li>Remise : {{produit.remise}}</li>
-                    <li>Sous-total : {{produit.sous_total}}€</li>
-                    <li>Quantité livrée : {{produit.quantite_livree}}</li>
-                    <li>Quantité à livrer : {{produit.quantite_a_livrer}}</li>
-                </ul>
-                <a href='{{ path('produit', {'produit':produit.id_produit}) }}'><button class="button">Voir le produit</button></a>
-            </div>
+            {% if commande.annulation == false %}
+                <div style="border: solid;">
+                    <ul>
+                        <li>Produit : {{produit.produit}}</li>
+                        <li>{{produit.accroche}}</li>
+                        <li>{{produit.description|nl2br}}</li>
+                        <li>Prix unitaire : {{produit.prix_unitaire}}€</li>
+                        <li>Quantité commandée : {{produit.quantite_commandee}}</li>
+                        <li>Remise : {{produit.remise}}</li>
+                        <li>Sous-total : {{produit.sous_total}}€</li>
+                        <li>Quantité livrée : {{produit.quantite_livree}}</li>
+                        <li>Quantité à livrer : {{produit.quantite_a_livrer}}</li>
+                        {% if commande.paiement == true %}
+                        <li>Paiement : effectué</li>
+                        {% else %}
+                        <li>Paiement : en attente de paiement</li>
+                        {% endif %}  
+                    </ul>
+                    <a href='{{ path('produit', {'produit':produit.id_produit}) }}'><button class="button">Voir le produit</button></a>
+                </div>
+            {% endif %}
             {% endfor %}
         </div>
     </div>

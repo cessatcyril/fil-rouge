@@ -27,8 +27,14 @@ class GestionCommandesController extends AbstractController
 {
     const INTERVALLE_DATE_BUTOIR = 'P15D';
     const INTERVALLE_DATE_LIVRAISON = 'P2D';
-    const NB_JOURS_REMBOURSEMENT = 1;
-
+    const NB_HEURES_REMBOURSEMENT = 24;
+    const MESSAGE_ANNULATION_DATE_IMPOSSIBLE = 'Cette commande n\'est pas annulable. Les annulations de commandes sont annulables pendant une durée de '. GestionCommandesController::NB_HEURES_REMBOURSEMENT*24 .' heures';
+    const MESSAGE_ANNULATION_DEJA_EFFECTUEE = 'Cette commande n\'est pas annulable, cette commande a déja été annulée.';
+    const MESSAGE_ANNULATION_COMMANDE_INCONNUE = 'Cette commande n\'existe pas et n\'est donc pas annulable';
+    const MESSAGE_ANNULATION_PAS_EFFECTUEE = 'La commande n\'a encore pas été annulée. Pour effectuer un remboursement, la commande doit être à priori annulée.';
+    const MESSAGE_ANNULATION_PAS_PAYE = 'La commande ne peut pas être remboursée, elle n\'a pas été payée.';
+    const MESSAGE_PAIEMENT_COMMANDE_ANNULEE = 'Cette commande a été annulée. Une commande annulée ne peut pas être payée, passez une autre commande.';
+    const MESSAGE_PAIEMENT_DEJA_FAIT = 'Cette commande a déja été payée.';
 
     /**
      * @Route("/particulier/commande/commander", name="commande_creer")
@@ -93,11 +99,25 @@ class GestionCommandesController extends AbstractController
             $eMI->flush();
         }
 
-        //(try/catch ou if) ? redirectToRoute(succes) : redirectToRoute(erreur{message})
+        $panier = null;
+        $toolBox->panierRaz($this->getSession());
+        //dd($panier);
+
+        return $this->redirectToRoute('paiement_moyen', [
+            'id' => $commande_id
+        ]);
 
         return $this->render('gestion_commandes/creer.html.twig', [
             'controller_name' => 'GestionCompteController',
         ]);
+    }
+
+    /**
+     * @Route("erreur", name="erreur")
+     */
+    public function erreur(): Response
+    {
+        return $this->render('erreur/erreur.html.twig', []);
     }
 
     /**
@@ -111,62 +131,65 @@ class GestionCommandesController extends AbstractController
     }
 
     /**
-     * @Route("commande/passee", name="commande_passee")
+     * @Route("particulier/commande/passee/{id}", name="commande_succes")
      */
-    public function FunctionName(): Response
+    public function commandeSucces(CommandeRepository $commandeRepo, $id): Response
     {
-        return $this->render('gestion_commandes/passee.html.twig', [
-            ////////////////////////////////////////////////////////////////////////////////
+        $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
+
+        if ($commande==null) {
+            return $this->render('paiement/remboursement_echec.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
+            ]);
+        }
+
+        if ($commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_PAIEMENT_COMMANDE_ANNULEE
+            ]);    
+        }
+
+        if ($commande->getComPaiement()) {
+            return $this->render('gestion_commandes/succes.html.twig', [
+                'id' => $id
+            ]);
+        }
+
+        return $this->render('gestion_commandes/commande_enregistree.html.twig', [
+            'id' => $id
         ]);
     }
 
     /**
      * @Route("/particulier/commande/annulation/{id}", name="commande_annuler")
      */
-    public function commandeAnnuler(CommandeRepository $commandeRepo, $id): Response
+    public function commandeAnnuler(EntityManagerInterface $eMI, CommandeRepository $commandeRepo, ToolBox $toolBox, $id): Response
     {
         $commande = $commandeRepo->findOneBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
 
         if ($commande==null) {
             return $this->render('paiement/remboursement_echec.html.twig', [
-                'id' => $id
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_COMMANDE_INCONNUE
             ]);
         }
 
-        $maintenant = new DateTime();
-        $maintenant->format("Y-m-d H:i:s");
-
-        $dateCommande = DateTime::createFromFormat("Y-m-d H:i:s", $commande->getComCommande()->format("Y-m-d H:i:s"));    
-        $intervalle = $dateCommande->diff($maintenant);
-
-        if ($intervalle->format('%R') === "+" || $intervalle->format('%d') < GestionCommandesController::NB_JOURS_REMBOURSEMENT) {
-            //Dans Commande, creer attribut annulation
-            //$commande->getAnnulation();
-        } else {
-            return $this->render('paiement/remboursement_echec.html.twig', [
-                'id' => $id
+        if (!$toolBox->intervalCorrect($commande->getComCommande(), GestionCommandesController::NB_HEURES_REMBOURSEMENT)) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_DATE_IMPOSSIBLE
             ]);
         }
 
+        if ($commande->getComAnnulation()) {
+            return $this->render('erreur/erreur.html.twig', [
+                'message' => GestionCommandesController::MESSAGE_ANNULATION_DEJA_EFFECTUEE
+            ]);
+        }
 
-        /*
-            Client clique sur annuler commande
-                si comDate < 24h
-                    Client est redirige sur la page de remboursement
-                    Remboursement par carte bancaire ou virement
-                    Client clique sur remboursement
-                    Client est redirige vers commande_annuler
-                    Changements dans la bdd :
-                        ajout d'un booleen : 
-                            si true >> commande pas affichee sinon affichee
-                            si true >> commande a déja été remboursée
-                    redirection vers la page de succes ou la page d'erreur
-                sinon redirection vers page reglement#remboursement
-        */
-
-
+        $commande->setComAnnulation(true);
+        $eMI->persist($commande);
+        $eMI->flush();
         return $this->render('gestion_commandes/annuler.html.twig', [
-            'controller_name' => 'GestionCompteController',
+            'id' => $id
         ]);
     }
 
@@ -178,22 +201,32 @@ class GestionCommandesController extends AbstractController
         $commandes = $commandeRepo->findBy(['client'=>$this->getUser()->getCLient()->getId()]);
         $donnees = [];
         foreach ($commandes as $key => $commande) {
-            $donnees[$key]['id'] = $commande->getId();
-            $donnees[$key]['date_commande'] = $commande->getComCommande()->format('d/m/Y');
-            $donnees[$key]['date_livraison'] = (is_Null($commande->getComLivraison())) ? "Pas encore livré." : $commande->getComLivraison()->format('d/m/Y');
+            $donnees[$key] = [
+                'id' => $commande->getId(),
+                'date_commande' => $commande->getComCommande()->format('d/m/Y'),
+                'date_livraison' => (is_null($commande->getComLivraison())) ? "Pas encore livré." : $commande->getComLivraison()->format('d/m/Y'),
+                'annulation' => $commande->getComAnnulation(),
+                'paiement' => $commande->getComPaiement()
+            ];
 
             
             $commande_details = $commande->getCommandeDetails();
             foreach ($commande_details as $key3 => $commande_detail) {
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['id_produit'] = $commande_detail->getProduit()->getId();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['produit'] = $commande_detail->getProduit()->getProProduit();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['accroche'] = $commande_detail->getProduit()->getProAccroche();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['description'] = $commande_detail->getProduit()->getProDescription();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['remise'] = $commande_detail->getDetRemise();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['prix_unitaire'] = $commande_detail->getDetPrixVente();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'] = $commande_detail->getDetQuantite();/////////////////////
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['sous_total'] = $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()] = [
+                    'id_produit' => $commande_detail->getProduit()->getId(),
+                    'produit' => $commande_detail->getProduit()->getProProduit(),
+                    'accroche' => $commande_detail->getProduit()->getProAccroche(),
+                    'description' => $commande_detail->getProduit()->getProDescription(),
+                    'remise' => $commande_detail->getDetRemise(),
+                    'prix_unitaire' => $commande_detail->getDetPrixVente(),
+                    'quantite_commandee' => $commande_detail->getDetQuantite(),
+                    'sous_total' => $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise(),
+                    'quantite_livree' => 0,
+                    'quantite_a_livrer' => $commande_detail->getDetQuantite(),
+                ];
+                
             }
+            //dd($donnees);
 
             $livraisons = $commande->getLivraisons();
             foreach ($livraisons as $key2 => $livraison) {
@@ -202,15 +235,15 @@ class GestionCommandesController extends AbstractController
                 foreach ($livraisonDetails as $key3 => $livraisonDetail) {
                     if ($livraisonDetail->getLivraison() === $commande->getId()) {
                         $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_livree'] = (is_Null($livraisonDetail->getDetQuantiteLivree() ? 0 : $livraisonDetail->getDetQuantiteLivree()));
-                        $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_a_livrer'] = $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_commandee'] - $donnees[$key]['livraison'][$key3]['quantite_livree'] = $livraisonDetail->getDetQuantiteLivree();
+                        $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_a_livrer'] = $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'];
                     } else {
                         $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_livree'] = 0;
                         $donnees[$key]['produits'][$livraisonDetail->getProduit()->getId()]['quantite_a_livrer'] = $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'];
+                        
                     }
                 }
             }
         }
-        //dd($donnees);
 
         return $this->render('gestion_commandes/liste.html.twig', [
             'controller_name' => 'GestionCompteController',
@@ -227,21 +260,29 @@ class GestionCommandesController extends AbstractController
         $commandes = $commandeRepo->findBy(['client'=>$this->getUser()->getCLient()->getId(), 'id'=>$id]);
         $donnees = [];
         foreach ($commandes as $key => $commande) {
-            $donnees[$key]['id'] = $commande->getId();
-            $donnees[$key]['date_commande'] = $commande->getComCommande()->format('d/m/Y');
-            $donnees[$key]['date_livraison'] = (is_Null($commande->getComLivraison())) ? "Pas encore livré." : $commande->getComLivraison()->format('d/m/Y');
+            $donnees[$key] = [
+                'id' => $commande->getId(),
+                'date_commande'=> $commande->getComCommande()->format('d/m/Y'),
+                'date_livraison' => (is_Null($commande->getComLivraison())) ? "Pas encore livré." : $commande->getComLivraison()->format('d/m/Y'),
+                'annulation' => $commande->getComAnnulation(),
+                'paiement' => $commande->getComPaiement()
+            ];
 
             
             $commande_details = $commande->getCommandeDetails();
             foreach ($commande_details as $key3 => $commande_detail) {
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['id_produit'] = $commande_detail->getProduit()->getId();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['produit'] = $commande_detail->getProduit()->getProProduit();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['accroche'] = $commande_detail->getProduit()->getProAccroche();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['description'] = $commande_detail->getProduit()->getProDescription();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['remise'] = $commande_detail->getDetRemise();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['prix_unitaire'] = $commande_detail->getDetPrixVente();
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['quantite_commandee'] = $commande_detail->getDetQuantite();/////////////////////
-                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()]['sous_total'] = $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise();
+                $donnees[$key]['produits'][$commande_detail->getProduit()->getId()] = [
+                    'id_produit' => $commande_detail->getProduit()->getId(),
+                    'produit' => $commande_detail->getProduit()->getProProduit(),
+                    'accroche' => $commande_detail->getProduit()->getProAccroche(),
+                    'description' => $commande_detail->getProduit()->getProDescription(),
+                    'remise' => $commande_detail->getDetRemise(),
+                    'prix_unitaire' => $commande_detail->getDetPrixVente(),
+                    'quantite_commandee' => $commande_detail->getDetQuantite(),
+                    'sous_total' => $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise(),
+                    'quantite_livree' => 0,
+                    'quantite_a_livrer' => $commande_detail->getDetQuantite(),
+                ];
             }
 
             $livraisons = $commande->getLivraisons();
@@ -272,6 +313,9 @@ class GestionCommandesController extends AbstractController
      */
     public function commandeRecapitulatif(AdresseTypeRepository $repo, ToolBox $toolBox): Response
     {
+        if (is_null($toolBox->getPanier($this->getSession()))) {
+            return $this->redirectToRoute('panier_vide');
+        }
         return $this->render('gestion_commandes/recapitulatif.html.twig', [
             'controller_name' => 'GestionCompteController',
             'panier' => $toolBox->getPanier($this->getSession()),

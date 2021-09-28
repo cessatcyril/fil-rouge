@@ -3,57 +3,54 @@
 {% block title %}Hello CatalogueController!{% endblock %}
 
 {% block body %}
-    {# form(form) #}
+<div class="has-background-light py-5">
+    <div class="container is-fluid">
+        {{form_start(form)}}
+            <div class="field is-horizontal">
+                <div class="field-label">
+                    {{ form_label(form.numero_carte, 'Numéro de carte banquaire', {'label_attr': {'class': 'label'}}) }}
+                </div>
+                <div class="field-body">
+                    {{ form_widget(form.numero_carte, {'attr': {'class': 'control'}}) }}
+                    {{ form_errors(form.numero_carte) }}
+                </div>
+            </div>
+            <div class="field is-horizontal">
+                <div class="field-label">
+                    {{ form_label(form.cryptogramme, 'Cryptogramme', {'label_attr': {'class': 'label'}}) }}
+                </div>
+                <div class="field-body">
+                    {{ form_widget(form.cryptogramme, {'attr': {'class': 'control'}}) }}
+                    {{ form_errors(form.numero_carte) }}
+                </div>
+            </div>
+            <div class="field is-horizontal">
+                <div class="field-label">
+                    {{ form_label(form.detenteur, 'Détenteur de la carte', {'label_attr': {'class': 'label'}}) }}
+                </div>
+                <div class="field-body">
+                    {{ form_widget(form.detenteur, {'attr': {'class': 'control'}}) }}
+                    {{ form_errors(form.numero_carte) }}
+                </div>
+            </div>
+            <div class="select">
+                {{ form_widget(form.mois, {'attr': {'class': 'control'}}) }}
+            </div>
+            <div class="select">
+                {{ form_widget(form.annee, {'attr': {'class': 'control'}}) }}
+            </div>
 
-
-
-
-    <div class="has-background-light py-5">
-        <div class="container is-fluid">
-            {{form_start(form)}}
-                <div class="field is-horizontal">
-                    <div class="field-label">
-                        {{ form_label(form.numero_carte, 'Numéro de carte banquaire', {'label_attr': {'class': 'label'}}) }}
-                    </div>
-                    <div class="field-body">
-                        {{ form_widget(form.numero_carte, {'attr': {'class': 'control'}}) }}
-                        {{ form_errors(form.numero_carte) }}
-                    </div>
-                </div>
-                <div class="field is-horizontal">
-                    <div class="field-label">
-                        {{ form_label(form.cryptogramme, 'Cryptogramme', {'label_attr': {'class': 'label'}}) }}
-                    </div>
-                    <div class="field-body">
-                        {{ form_widget(form.cryptogramme, {'attr': {'class': 'control'}}) }}
-                    </div>
-                </div>
-                <div class="field is-horizontal">
-                    <div class="field-label">
-                        {{ form_label(form.detenteur, 'Détenteur de la carte', {'label_attr': {'class': 'label'}}) }}
-                    </div>
-                    <div class="field-body">
-                        {{ form_widget(form.detenteur, {'attr': {'class': 'control'}}) }}
-                    </div>
-                </div>
-                <div class="select">
-                    {{ form_widget(form.mois, {'attr': {'class': 'control'}}) }}
-                </div>
-                <div class="select">
-                    {{ form_widget(form.annee, {'attr': {'class': 'control'}}) }}
-                </div>
-
-                <div class="field is-grouped">
-                    <p class="control">
-                        {{ form_widget(form.save, {'attr': {'class': 'button is-primary'}}) }}
-                    </p>
-                    <p class="control">
-                        {# <a class="button is-light">
-                            Annuler
-                        </a> #}
-                    </p>
-                </div>
-                {{form_end(form)}}
-        </div>
+            <div class="field is-grouped">
+                <p class="control">
+                    {{ form_widget(form.save, {'attr': {'class': 'button is-primary'}}) }}
+                </p>
+                <p class="control">
+                    {# <a class="button is-light">
+                        Annuler
+                    </a> #}
+                </p>
+            </div>
+            {{form_end(form)}}
     </div>
+</div>
 {% endblock %}

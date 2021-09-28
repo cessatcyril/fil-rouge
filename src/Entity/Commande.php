@@ -70,6 +70,16 @@ class Commande
      */
     private $livraisons;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $comPaiement = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $comAnnulation = false;
+
     public function __construct()
     {
         $this->commandeDetails = new ArrayCollection();
@@ -251,6 +261,30 @@ class Commande
                 $livraison->setCommande(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getComPaiement(): ?bool
+    {
+        return $this->comPaiement;
+    }
+
+    public function setComPaiement(bool $comPaiement): self
+    {
+        $this->comPaiement = $comPaiement;
+
+        return $this;
+    }
+
+    public function getComAnnulation(): ?bool
+    {
+        return $this->comAnnulation;
+    }
+
+    public function setComAnnulation(bool $comAnnulation): self
+    {
+        $this->comAnnulation = $comAnnulation;
 
         return $this;
     }

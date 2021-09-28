@@ -4,4 +4,8 @@
 
 {% block body %}
 Votre commande a bien été annulée.
+Si vous avez déja effectué le paiement vous pouvez vous faire rembourser via le lien ci-dessous.
+Vous pouvez retrouver la commande annulée dans "mon compte/mes commandes".
+A partir de là si la procédure de remboursement n'a pas été validée vous pourrez cliquer sur le bouton me remboursement.
+<a href="{{ path('remboursement_moyen', {'id':id}) }}"><button class="button is-success">Se faire rembourser</button></a>
 {% endblock %}

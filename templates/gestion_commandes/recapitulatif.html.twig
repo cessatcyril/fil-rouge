@@ -187,7 +187,18 @@
                     </a>
                 </div>
             </div>
-        </section>
+        </div>
+        <br>
+        {% endif %}
+        {% endfor %}
+        <div>
+            <a href="{{ path('commande_creer') }}">
+                <button class="button is-link">Valider les informations</button>
+            </a>
+            <a href="#{# path('compte_modifier') #}">
+                <button class="button is-link">Modifier les informations</button>
+            </a>
+        </div>
     </div>
 </div>
 
