@@ -5,9 +5,11 @@
 {% block body %}
 {% for produit in listeProduits %}
 <div>
+    {# {{ dump(produit) }} #}
+    <a href="/produit/{{produit.id}}">
+        
+        <img src="{{ produit.image }}" alt="image du produit" />
 
-    <a href="/produit/{{produit.Id}}">
-        <img src="/images/produit/{{ produit.imagePrincipale }}" alt="image du produit" />
         {{produit.proAccroche}}
     </a>
 </div>
