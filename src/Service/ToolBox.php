@@ -260,6 +260,10 @@ class ToolBox
 
     public function imageResizer($fileName, $dest, $width = 100, $square = true)
     {
+        // Exemple de chemin vers public avec symfony :
+        // Injecter : ParameterBagInterface $parameterBagInterface
+        // $chemin = $parameterBagInterface->get('kernel.project_dir').'/public/images/produit/';
+
         $img = new \Imagick($fileName);
         $w = $img->getImageWidth();
         $h = $img->getImageHeight();

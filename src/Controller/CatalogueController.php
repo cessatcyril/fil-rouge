@@ -57,24 +57,15 @@ class CatalogueController extends AbstractController
         $listeProduits = $repo->findByPage($sousCategorie, $page);
         $liste = [];
         foreach ($listeProduits as $key => $produit) {
-            $nom = explode('.', $produit->getImagePrincipale());
-
-            $chemin = $parameterBagInterface->get('kernel.project_dir').'/public/images/produit/';
-            
-            $toolBox->imageResizer($chemin.$nom[0].".".$nom[1], $chemin.$nom[0]."thumb.".$nom[1], 200);
-
             $liste[] = [
                 'id' => $produit->getId(),
                 'proProduit' => $produit->getProProduit(),
                 'proDescription' => $produit->getProDescription(),
                 'proAccroche' => $produit->getProAccroche(),
                 'sousCategorie' => $produit->getSousCategorie(),
-                'image' => "/images/produit/".$nom[0]."thumb.".$nom[1]
-            ];
-            //dd($liste);
-            
+                'image' => "/images/produit/".$produit->getImagePrincipale()
+            ]; 
         }
-        //dd($listeProduits);
         
 
         $previous = ($page > 0) ? $page - 1 : 0;
