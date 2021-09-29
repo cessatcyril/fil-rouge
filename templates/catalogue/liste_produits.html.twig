@@ -7,7 +7,6 @@
 {% set n = loop.length %}
 {% endfor %}
 
-
 {# mise en page des colonnes avec bulma #}
 <div class="columns is-mobile is-centered">
     <div class="column is-four-fifths">
@@ -20,35 +19,39 @@
         </nav>
 
         <header>
-            <div class="content">
+            <div class="content has-text-centered mb-5">
                 <h1> {{ n }} produits disponible.</h1>
             </div>
         </header>
 
-        {# boucle avec element card de bulma pour afficher le résumer de chaque produit #}
         {% for produit in listeProduits %}
-        <div class="block">
-            <div class="card">
-                <div class="card-image">
-                    <a target="_blank" href="{{ produit.image }}">
+        <a href="/produit/{{produit.id}}" class="box p-1">
+            <article class="columns is-tablet">
+                <div class="column is-one-quarter">
+                    <figure class="media-left thumbnailListeBox is-flex is-justify-content-center centre-block">
                         <img src="{{ produit.image }}" alt="image du produit" class="thumbnailListe" />
-                    </a>
+                    </figure>
                 </div>
-                <div class="card-content">
-                    <div class="media">
-                        <div class="media-content">
-                            <p class="title is-4">{{produit.proProduit}}</p>
+                <div class="column enfant-centre">
+                    <div class="content is-vcentered">
+                        <p class="title is-4 is-family-monospace">{{produit.proProduit}}</p>
+                        <div>
+                            {{produit.proAccroche}}
                         </div>
                     </div>
-                    <div class="content">
-                        {{produit.proAccroche}}
+                </div>
+                <div class="column is-3 enfant-centre">
+                    <div class="media-content">
+                        <div class="media-right has-text-danger is-size-4 has-text-centered has-text-weight-bold p-3">
+                            {{produit.prix}}€
+                        </div>
                     </div>
                 </div>
-                <footer class="card-footer">
-                    <a class="button color-light" href="/produit/{{produit.id}}" class="card-footer-item">détail du produit</a>
-                </footer>
-            </div>
-        </div>
+                
+               
+                    
+            </article>
+        </a>
         {% endfor %}
 
     </div>
