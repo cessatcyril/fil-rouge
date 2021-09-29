@@ -9,11 +9,9 @@
     {#{{ encore_entry_link_tags('app') }}#}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css">
-    <link href="~bulma-carousel/dist/css/bulma-carousel.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/test.css') }}" />
-    <script src="https://kit.fontawesome.com/b8a4a1dff5.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/carousel.css') }}" />
+
+
     {% endblock %}
 
     {% block javascripts %}
@@ -25,31 +23,31 @@
 
 {% block body %}
 
-<!-- Start Carousel -->
-<div class="columns is-centered">
-    <div class="column is-half">
-        <div id="carousel-demo" class="carousel">
 
+
+
+
+<section class="carousel" aria-label="Gallery">
+    <ol class="carousel__viewport">
+        {% for row in produit.images %}
+        {% set n = ( n | default(0) ) + 1 %}
+        <li id="carousel__slide{{ n }}" tabindex="0" class="carousel__slide">
+            <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image" class="carouselImg">
+        </li>
+        {% endfor %}
+    </ol>
+    <aside class="carousel__navigation">
+        <ol class="carousel__navigation-list">
             {% for row in produit.images %}
-            {% set n = ( n | default(0) ) + 1 %}
-            <div class="item-{{ n }}">
-                <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image">
-            </div>
+            {% set n = ( n | default(0) + 1 ) %}
+            <li class="carousel__navigation-item">
+                <a href="#carousel__slide{{ n }}" class="carousel__navigation-button">Go to slide 1</a>
+            </li>
             {% endfor %}
-        </div>
-    </div>
-</div>
-<!-- End Carousel -->
+        </ol>
+    </aside>
+</section>
 
-
-
-<script>
-    bulmaCarousel.attach('#carousel-demo', {
-        slidesToScroll: 1,
-        slidesToShow: 1,
-        loop: true,
-    });
-</script>
 
 
 
