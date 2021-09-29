@@ -29,13 +29,26 @@
 
                     <div class="columns">
                         <div class="column">
-                            <div class="img">
-                                <a href="/produit/carousel/{{produit.Id}}" target="_blank">
+                            <section class="carousel" aria-label="Gallery">
+                                <ol class="carousel__viewport">
                                     {% for row in produit.images %}
-                                    <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image" class="thumbnail">
+                                    {% set n = ( n | default(0) ) + 1 %}
+                                    <li id="carousel__slide{{ n }}" tabindex="0" class="carousel__slide">
+                                        <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image" class="carouselImg">
+                                    </li>
                                     {% endfor %}
-                                </a>
-                            </div>
+                                </ol>
+                                <aside class="carousel__navigation">
+                                    <ol class="carousel__navigation-list">
+                                        {% for row in produit.images %}
+                                        {% set n = ( n | default(0) + 1 ) %}
+                                        <li class="carousel__navigation-item">
+                                            <a href="#carousel__slide{{ n }}" class="carousel__navigation-button">Go to slide 1</a>
+                                        </li>
+                                        {% endfor %}
+                                    </ol>
+                                </aside>
+                            </section>
                         </div>
 
 
