@@ -63,7 +63,8 @@ class CatalogueController extends AbstractController
                 'proDescription' => $produit->getProDescription(),
                 'proAccroche' => $produit->getProAccroche(),
                 'sousCategorie' => $produit->getSousCategorie(),
-                'image' => "/images/produit/".$produit->getImagePrincipale()
+                'image' => "/images/produit/".$produit->getImagePrincipale(),
+                'prix' => $produit->getProPrixV()
             ]; 
         }
         

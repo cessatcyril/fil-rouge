@@ -7,7 +7,6 @@
 {% set n = loop.length %}
 {% endfor %}
 
-
 {# mise en page des colonnes avec bulma #}
 <div class="columns is-mobile is-centered">
     <div class="column is-four-fifths">
@@ -25,30 +24,27 @@
             </div>
         </header>
 
-        {# boucle avec element card de bulma pour afficher le résumer de chaque produit #}
         {% for produit in listeProduits %}
-        <div class="block">
-            <div class="card">
-                <div class="card-image">
-                    <a target="_blank" href="{{ produit.image }}">
-                        <img src="{{ produit.image }}" alt="image du produit" class="thumbnailListe" />
-                    </a>
-                </div>
-                <div class="card-content">
-                    <div class="media">
-                        <div class="media-content">
-                            <p class="title is-4">{{produit.proProduit}}</p>
+        <a href="/produit/{{produit.id}}" class="box p-1">
+            <article class="media parent-centre ">
+                {# <a target="_blank" href="{{ produit.image }}"> #}
+                <figure class="media-left thumbnailListeBox is-flex is-justify-content-center">
+                    <img src="{{ produit.image }}" alt="image du produit" class="thumbnailListe" />
+                </figure>
+                {# </a> #}
+                <div class="media-content  enfant-centre">
+                    <div class="content is-vcentered">
+                        <p class="title is-4 is-family-monospace">{{produit.proProduit}}</p>
+                        <div>
+                            {{produit.proAccroche}}
                         </div>
                     </div>
-                    <div class="content">
-                        {{produit.proAccroche}}
-                    </div>
                 </div>
-                <footer class="card-footer">
-                    <a class="button color-light" href="/produit/{{produit.id}}" class="card-footer-item">détail du produit</a>
-                </footer>
-            </div>
-        </div>
+                    <div class="media-right has-text-info is-size-3 has-text-weight-bold enfant-centre p-3">
+                        {{produit.prix}}€
+                    </div>
+            </article>
+        </a>
         {% endfor %}
 
     </div>

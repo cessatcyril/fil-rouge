@@ -23,12 +23,24 @@
   width: 150px; }
 
 .thumbnailListe {
-  border: 1px solid #ddd;
-  border-radius: 4px;
   padding: 5px;
   max-height: 150px;
   width: auto;
-  max-width: 150px; }
+  max-width: 150px; 
+}
+
+.thumbnailListeBox {
+  height: 150px;
+  width: 150px;
+}
+
+.parent-centre {
+  display: flex;
+}
+
+.enfant-centre {
+  margin: auto;
+}
 
 .color-prix {
   font-size: 3em;
@@ -51,5 +63,7 @@
 .img-float img {
   display: block;
   margin-right: 5px; }
+
+
 
 /*# sourceMappingURL=test.css.map */
