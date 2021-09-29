@@ -19,18 +19,20 @@
         </nav>
 
         <header>
-            <div class="content">
+            <div class="content has-text-centered mb-5">
                 <h1> {{ n }} produits disponible.</h1>
             </div>
         </header>
 
         {% for produit in listeProduits %}
         <a href="/produit/{{produit.id}}" class="box p-1">
-            <article class="media parent-centre ">
-                <figure class="media-left thumbnailListeBox is-flex is-justify-content-center">
-                    <img src="{{ produit.image }}" alt="image du produit" class="thumbnailListe" />
-                </figure>
-                <div class="media-content enfant-centre">
+            <article class="columns is-tablet">
+                <div class="column is-one-quarter">
+                    <figure class="media-left thumbnailListeBox is-flex is-justify-content-center centre-block">
+                        <img src="{{ produit.image }}" alt="image du produit" class="thumbnailListe" />
+                    </figure>
+                </div>
+                <div class="column enfant-centre">
                     <div class="content is-vcentered">
                         <p class="title is-4 is-family-monospace">{{produit.proProduit}}</p>
                         <div>
@@ -38,9 +40,16 @@
                         </div>
                     </div>
                 </div>
-                    <div class="media-right has-text-info is-size-3 has-text-weight-bold enfant-centre p-3">
-                        {{produit.prix}}€
+                <div class="column is-3 enfant-centre">
+                    <div class="media-content">
+                        <div class="media-right has-text-danger is-size-4 has-text-centered has-text-weight-bold p-3">
+                            {{produit.prix}}€
+                        </div>
                     </div>
+                </div>
+                
+               
+                    
             </article>
         </a>
         {% endfor %}
