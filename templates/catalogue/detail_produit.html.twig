@@ -23,9 +23,6 @@
         </header>
 
         <section class="section box">
-            <div class="columns is-multiline">
-
-                <div class="column is-8">
 
                     <div class="columns">
                         <div class="column">
@@ -34,7 +31,9 @@
                                     {% for row in produit.images %}
                                     {% set n = ( n | default(0) ) + 1 %}
                                     <li id="carousel__slide{{ n }}" tabindex="0" class="carousel__slide">
-                                        <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image" class="carouselImg">
+                                        <a target="_blank" href="/images/produit/{{ row }}">
+                                            <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image" class="carouselImg">
+                                        </a>
                                     </li>
                                     {% endfor %}
                                 </ol>
@@ -53,7 +52,7 @@
 
 
                         <div class="column is-desktop">
-                            <div class="box">
+                            <div class="">
                                 <div class="content">
                                     <h3>Nom du produit : </h3>
                                     <p>{{ produit.proProduit }}</p>
@@ -65,21 +64,17 @@
                             </div>
                         </div>
                     </div>
-
-
-                </div>
-
-                <div class="column is-4">
-                    <div class="content">
-                        <p class="color-prix">
-                            {{ produit.proPrixV }} €
-                        </p>
-                        <a href="/panier/ajouter/{{produit.id }}" class="button color-dark">Ajouter au panier</a>
+                    <div>
+                        <div class="content is-flex has-text-centered title is-3 has-text-danger is-justify-content-center">
+                                {{ produit.proPrixV }} €
+                        </div>
+                        <div class="is-flex content is-justify-content-center">
+                            <a href="/panier/ajouter/{{produit.id }}" class="button color-dark">Ajouter au panier</a>
+                        </div>
                     </div>
-                </div>
-
 
             </div>
+            
         </section>
 
     </div>
