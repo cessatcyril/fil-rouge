@@ -64,6 +64,13 @@
   display: block;
   margin-right: 5px; }
 
+.toute-hauteur {
+  height: 100%;
+}
 
+.centre-block {
+  margin-left: auto;
+  margin-right: auto;
+}
 
 /*# sourceMappingURL=test.css.map */

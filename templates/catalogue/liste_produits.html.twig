@@ -27,12 +27,10 @@
         {% for produit in listeProduits %}
         <a href="/produit/{{produit.id}}" class="box p-1">
             <article class="media parent-centre ">
-                {# <a target="_blank" href="{{ produit.image }}"> #}
                 <figure class="media-left thumbnailListeBox is-flex is-justify-content-center">
                     <img src="{{ produit.image }}" alt="image du produit" class="thumbnailListe" />
                 </figure>
-                {# </a> #}
-                <div class="media-content  enfant-centre">
+                <div class="media-content enfant-centre">
                     <div class="content is-vcentered">
                         <p class="title is-4 is-family-monospace">{{produit.proProduit}}</p>
                         <div>
