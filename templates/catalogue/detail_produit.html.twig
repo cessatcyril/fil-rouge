@@ -23,58 +23,48 @@
         </header>
 
         <section class="section box">
-
-                    <div class="columns">
-                        <div class="column">
-                            <section class="carousel" aria-label="Gallery">
-                                <ol class="carousel__viewport">
-                                    {% for row in produit.images %}
-                                    {% set n = ( n | default(0) ) + 1 %}
-                                    <li id="carousel__slide{{ n }}" tabindex="0" class="carousel__slide">
-                                        <a target="_blank" href="/images/produit/{{ row }}">
-                                            <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image" class="carouselImg">
-                                        </a>
-                                    </li>
-                                    {% endfor %}
-                                </ol>
-                                <aside class="carousel__navigation">
-                                    <ol class="carousel__navigation-list">
-                                        {% for row in produit.images %}
-                                        {% set n = ( n | default(0) + 1 ) %}
-                                        <li class="carousel__navigation-item">
-                                            <a href="#carousel__slide{{ n }}" class="carousel__navigation-button">Go to slide 1</a>
-                                        </li>
-                                        {% endfor %}
-                                    </ol>
-                                </aside>
-                            </section>
-                        </div>
+            <section class="carousel mb-6" aria-label="Gallery">
+                <ol class="carousel__viewport">
+                    {% for row in produit.images %}
+                    {% set n = ( n | default(0) ) + 1 %}
+                    <li id="carousel__slide{{ n }}" tabindex="0" class="carousel__slide">
+                        <a target="_blank" href="/images/produit/{{ row }}">
+                            <img src="/images/produit/{{ row }}" alt="N'affiche pas d'image" class="carouselImg">
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ol>
+                <aside class="carousel__navigation">
+                    <ol class="carousel__navigation-list">
+                        {% for row in produit.images %}
+                        {% set n = ( n | default(0) + 1 ) %}
+                        <li class="carousel__navigation-item">
+                            <a href="#carousel__slide{{ n }}" class="carousel__navigation-button">Go to slide 1</a>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </aside>
+            </section>
 
 
-                        <div class="column is-desktop">
-                            <div class="">
-                                <div class="content">
-                                    <h3>Nom du produit : </h3>
-                                    <p>{{ produit.proProduit }}</p>
-                                </div>
-                                <div class="content">
-                                    <h3>Détail : </h3>
-                                    <p>{{ produit.proDescription|nl2br }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="content is-flex has-text-centered title is-3 has-text-danger is-justify-content-center">
-                                {{ produit.proPrixV }} €
-                        </div>
-                        <div class="is-flex content is-justify-content-center">
-                            <a href="/panier/ajouter/{{produit.id }}" class="button color-dark">Ajouter au panier</a>
-                        </div>
-                    </div>
-
+            <div class="columns is-desktop">
+                <div class="column content">
+                    <h3>Nom du produit : </h3>
+                    <p>{{ produit.proProduit }}</p>
+                </div>
+                <div class="column content">
+                    <h3>Détail : </h3>
+                    <p>{{ produit.proDescription|nl2br }}</p>
+                </div>
+                <div class="column">
+                    <div class="content is-flex has-text-centered title is-3 has-text-danger is-justify-content-center">
+                        {{ produit.proPrixV }} €
+                </div>
+                <div class="is-flex content is-justify-content-center">
+                    <a href="/panier/ajouter/{{produit.id }}" class="button color-dark">Ajouter au panier</a>
+                </div>
+                </div>
             </div>
-            
         </section>
 
     </div>

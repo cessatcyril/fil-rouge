@@ -1,5 +1,5 @@
 .color-primary {
-  background-color: #CAF0AC; }
+  background-color: #00B400; }
 
 .color-secondary {
   background-color: #B0E584; }
@@ -71,6 +71,11 @@
 .centre-block {
   margin-left: auto;
   margin-right: auto;
+}
+
+.degrade-header {
+  background: rgb(35,209,96);
+  background: linear-gradient(0deg, rgba(35,209,96,1) 50%, rgba(255,255,255,1) 100%);
 }
 
 /*# sourceMappingURL=test.css.map */

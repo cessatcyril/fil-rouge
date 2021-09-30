@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use Exception;
 use App\Entity\Image;
 use App\Entity\Produit;
@@ -23,7 +24,7 @@ class CatalogueController extends AbstractController
      * @Route("/", name="categorie")
      */
     public function categories(CategorieRepository $CategorieRepo, Request $request): Response
-    {
+    {    
         $categories = $CategorieRepo->findAll();
 
         return $this->render('catalogue/categories.html.twig', [

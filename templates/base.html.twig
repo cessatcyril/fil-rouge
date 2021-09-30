@@ -23,7 +23,7 @@
 </head>
 
 <body class="has-background-dark">
-    <section class="hero color-primary">
+    <section class="hero is-small degrade-header">
         <!-- Hero head: will stick at the top -->
         <div class="hero-head">
 
@@ -31,19 +31,27 @@
 
         <!-- Hero content: will be in the middle -->
         <div class="hero-body">
-            <div class="container has-text-centered">
-                <p class="title">
-                <h1 class="title is-1">Titre</h1>
-                </p>
-                <p class="subtitle">
-                    Sous-titre
-                </p>
+            <div class="container ">
+                <div class="columns is-desktop">
+                    <div class="column">
+                        <figure class="">
+                            <img src="/images/logos/logo_green_valley_01.png" alt="Image représentative de la catégorie"/>
+                        </figure>
+                    </div>
+                    <div class="column">
+                        <p class="subtitle">
+                            Vente de matériel musical en ligne pour les pros. et les particuliers
+                        </p>
+                    </div>
+                </div>
+                
+                
             </div>
         </div>
 
         <!-- Hero footer: will stick at the bottom -->
         <div class="hero-foot">
-            <nav class="navbar">
+            <nav class="navbar is-success has-background-success">
                 <div class="container">
                     <div class="navbar-brand">
                         <span class="navbar-burger" data-target="navbarMenuHeroA">
@@ -124,11 +132,11 @@
     <div class="has-background-light">
         {% block body %}{% endblock %}
     </div>
-    <footer class="footer has-background-dark">
+    <footer class="footer has-background-dark mt-6">
         <div class="content has-text-centered has-text-grey-light">
             <p>
-                Créé par Samier Fabien. Le code source est sous licence
-                <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. Le contenu du site est sous licence <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+                Créé par Cyril Cessat et Samier Fabien. Le code source est sous licence
+                <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.<br>Les éléments graphiques tels que les images sont sous licence <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
             </p>
             {# lien vers bulma + logo #}
             <a href="https://bulma.io">

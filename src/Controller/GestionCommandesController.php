@@ -330,7 +330,7 @@ class GestionCommandesController extends AbstractController
         return $date;
     }
 
-    public function getDateButoir($dateCommande)
+    public function getDateButoir(Datetime $dateCommande)
     {
         $date = $dateCommande->add(new \DateInterval(GestionCommandesController::INTERVALLE_DATE_BUTOIR));
         $date->format("Y-m-d H:i:s");
