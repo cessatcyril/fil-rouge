@@ -119,7 +119,7 @@ class CatalogueController extends AbstractController
     /**
      * @Route("/recherche/{rech}/{page}", name="categorie_recherche")
      */
-    public function recherche(Request $request, ProduitRepository $repoP, $rech = "", $page = 0): Response
+    public function recherche(Request $request, ProduitRepository $repoP, $rech = "", $page = 0, $nombreProduits = 0, $nombrePages = 0, $previous = 0, $next = 0): Response
     {
 
         if ($rech != "") {
@@ -143,17 +143,9 @@ class CatalogueController extends AbstractController
                 $next = ($page >= $nombrePages) ? $nombrePages : $page + 1;
             } else {
                 $listeProduits = false;
-                $nombreProduits = 0;
-                $nombrePages = 0;
-                $previous = 0;
-                $next = 0;
             }
         } else {
             $listeProduits = False;
-            $nombreProduits = 0;
-            $nombrePages = 0;
-            $previous = 0;
-            $next = 0;
         }
 
 
