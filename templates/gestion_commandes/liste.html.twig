@@ -3,60 +3,51 @@
 {% block title %}Hello CatalogueController!{% endblock %}
 
 {% block body %}
-<div style="border: solid;"></div>
-{% for commande in commandes %}
-    <div>
-        <h1 class="title h1">Commande du {{ commande.date_commande }}</h1>
-        <div>
-            {% for produit in commande.produits %}
-            {% if commande.annulation == false %}
-                <div style="border: solid;">
-                    <ul>
-                        <li>Produit : {{produit.produit}}</li>
-                        <li>{{produit.accroche}}</li>
-                        <li>{{produit.description|nl2br}}</li>
-                        <li>Prix unitaire : {{produit.prix_unitaire}}€</li>
-                        <li>Quantité commandée : {{produit.quantite_commandee}}</li>
-                        <li>Remise : {{produit.remise}}</li>
-                        <li>Sous-total : {{produit.sous_total}}€</li>
-                        <li>Quantité livrée : {{produit.quantite_livree}}</li>
-                        <li>Quantité à livrer : {{produit.quantite_a_livrer}}</li>
-                        {% if commande.paiement == true %}
-                        <li>Paiement : effectué</li>
-                        {% else %}
-                        <li>Paiement : en attente de paiement</li>
-                        {% endif %}  
-                    </ul>
-                    <a href='{{ path('produit', {'produit':produit.id_produit}) }}'><button class="button">Voir le produit</button></a>
-                </div>
-            {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-    <a href='{{ path('commande_detail', {'id':commande.id}) }}'><button class="button">Détail de la commande</button></a>
-{% endfor %}
-</div>
-
 
 <div class="columns is-mobile is-centered">
+    
     <div class="column is-four-fifths">
         <header>
             <div class="content">
                 <h1>Mes commandes :</h1>
             </div>
         </header>
+        <div class="block">
+            {% if commandes is not null %}
+                {% set prixTotal = 0 %}
+                {% for commande in commandes %}
+                <article class="box">
+                    <h1 class="title h1">Commande du {{ commande.date_commande }}</h1>
+                        {% for produit in commande.produits %}
+                        {% if commande.annulation == false %}
+                        <article class="columns is-tablet">
+                            <div class="column is-one-quarter">
+                                <figure class="media-left thumbnailListeBox is-flex is-justify-content-center centre-block">
+                                    <img src="{{ produit.image }}" alt="image du produit" class="thumbnailListe" />
+                                </figure>
+                            </div>
+                            <div class="column enfant-centre">
+                                <div class="content is-vcentered">
+                                    <p class="title is-4 is-family-monospace">{{produit.produit}}</p>
+                                    <div>
+                                        Quantité {{ produit.quantite_commandee }}
+                                    </div>
+                                
+                                <a href='{{ path('produit', {'produit':produit.id_produit}) }}'><button class="button">Voir le produit</button></a>
+                            </div>
+                        </article>
+                    {% endif %}
+                    {% endfor %}
+                    <div class="has-text-centered">
+                        <a href='{{ path('commande_detail', {'id':commande.id}) }}'><button class="button">Détail de la commande</button></a>
+                    </div>
+                </article>
 
-        {% for produit in commande.produits %}
-        {% if commande.annulation == false %}
-        <article>
-
-
-            <div class="box">
-                
-            </div>
-        </article>
-        {% endif %}
-        {% endfor %}
+                {% endfor %}
+            {% else %}
+                <p>Aucune commande.</p>
+            {% endif %}
+        </div>
     </div>
 </div>
 

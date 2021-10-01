@@ -223,6 +223,7 @@ class GestionCommandesController extends AbstractController
                     'sous_total' => $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise(),
                     'quantite_livree' => 0,
                     'quantite_a_livrer' => $commande_detail->getDetQuantite(),
+                    'image' => "/images/produit/".$commande_detail->getProduit()->getImagePrincipale(),
                 ];
                 
             }
@@ -282,6 +283,7 @@ class GestionCommandesController extends AbstractController
                     'sous_total' => $commande_detail->getDetPrixVente() * $commande_detail->getDetQuantite() - $commande_detail->getDetRemise(),
                     'quantite_livree' => 0,
                     'quantite_a_livrer' => $commande_detail->getDetQuantite(),
+                    'image' => "/images/produit/".$commande_detail->getProduit()->getImagePrincipale(),
                 ];
             }
 
