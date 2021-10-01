@@ -35,7 +35,7 @@
                 <div class="columns is-desktop">
                     <div class="column">
                         <figure class="">
-                            <img src="/images/logos/logo_green_valley_01.png" alt="Image représentative de la catégorie"/>
+                            <img src="/images/logos/logo_green_valley_01.png" alt="Image représentative de la catégorie" />
                         </figure>
                     </div>
                     <div class="column">
@@ -44,8 +44,8 @@
                         </p>
                     </div>
                 </div>
-                
-                
+
+
             </div>
         </div>
 
@@ -62,18 +62,18 @@
                     </div>
                     <div id="navbarMenuHeroA" class="navbar-menu">
                         <div class="navbar-start">
-                            <a href="{{ path('categorie') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                            <a href="{{ path('categorie') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %} has-text-black">
                                 Accueil
                             </a>
-                            <a href="{{ path('commande_lister') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                            <a href="{{ path('commande_lister') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %} has-text-black">
                                 Ma commande
                             </a>
-                            <a href="{{ path('jeu_de_test') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                            <a href="{{ path('jeu_de_test') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %} has-text-black">
                                 jeu de test
                             </a>
                         </div>
                         <div class="navbar-end">
-                            <a href="{{ path('panier_liste') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                            <a href="{{ path('panier_liste') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %} has-text-black">
                                 Mon panier
                             </a>
                             {% if app.user %}
@@ -83,10 +83,10 @@
                                     <div class="navbar-item">{{ app.user.email }}</div>
                                 </a>
                                 <div class="navbar-dropdown">
-                                    <a href="{{ path('compte_afficher') }}" class="navbar-item">
+                                    <a href="{{ path('compte_afficher') }}" class="navbar-item has-text-black">
                                         Mes informations
                                     </a>
-                                    <a href="{{ path('commande_lister') }}" class="navbar-item">
+                                    <a href="{{ path('commande_lister') }}" class="navbar-item has-text-black">
                                         Historique de commande
                                     </a>
                                     <a href="{{ path('commande_pdf') }}" class="navbar-item">
@@ -94,14 +94,14 @@
                                     </a>
                                 </div>
                             </div>
-                            <a href="{{ path('app_logout') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                            <a href="{{ path('app_logout') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %} has-text-black">
                                 log-out
                             </a>
                             {% else %}
-                            <a href="{{ path('compte_afficher') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                            <a href="{{ path('compte_afficher') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %} has-text-black">
                                 log-in
                             </a>
-                            <a href="{{ path('compte_creer') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %}">
+                            <a href="{{ path('compte_creer') }}" class="navbar-item {% if menu_actuel is defined and menu_actuel == 'home' %}is-active{% endif %} has-text-black">
                                 Creer un compte
                             </a>
                             {% endif %}

@@ -50,7 +50,8 @@
         </div>
     </div>
 </div>
-
-
+<a href='{{ path("commande_detail", {"id":commande.id}) }}'><button class="button">Détail de la commande</button></a>
+{% endfor %}
+</div>
 
 {% endblock %}
