@@ -33,7 +33,33 @@
             {% endfor %}
         </div>
     </div>
-    <a href='{{ path('commande_detail', {'id':commande.id}) }}''><button class="button">Détail de la commande</button></a>
+    <a href='{{ path('commande_detail', {'id':commande.id}) }}'><button class="button">Détail de la commande</button></a>
 {% endfor %}
 </div>
+
+
+<div class="columns is-mobile is-centered">
+    <div class="column is-four-fifths">
+        <header>
+            <div class="content">
+                <h1>Mes commandes :</h1>
+            </div>
+        </header>
+
+        {% for produit in commande.produits %}
+        {% if commande.annulation == false %}
+        <article>
+
+
+            <div class="box">
+                
+            </div>
+        </article>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+
+
 {% endblock %}

@@ -178,19 +178,8 @@
                 </div>
                 {% endif %}
                 {% endfor %}
-                <div>
-                    <a href="{{ path('paiement_moyen') }}">
-                        <button class="button is-link">Valider les informations</button>
-                    </a>
-                    <a href="{{ path('compte_afficher') }}">
-                        <button class="button is-link">Modifier les informations</button>
-                    </a>
-                </div>
             </div>
-        </div>
-        <br>
-        {% endif %}
-        {% endfor %}
+        </section>
         <div>
             <a href="{{ path('commande_creer') }}">
                 <button class="button is-link">Valider les informations</button>
